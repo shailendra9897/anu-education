@@ -6,11 +6,18 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
+type NavItem = {
+  label: string;
+  href?: string;
+  icon?: string;
+  children?: NavItem[];
+};
+
 export default function SidebarMenu() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { label: "Home", href: "/" },
     {
       label: "Study Abroad",
@@ -74,21 +81,24 @@ export default function SidebarMenu() {
         <div className="absolute top-14 left-0 w-full bg-white shadow-lg z-50 p-4 space-y-4">
           {navItems.map((item, i) => (
             <div key={i}>
-              <Link
-                href={item.href || "#"}
-                className={`block font-medium text-gray-800 py-1 ${
-                  pathname === item.href ? "text-blue-600" : ""
-                }`}
-              >
-                {item.label}
-              </Link>
+              {item.href && (
+                <Link
+                  href={item.href}
+                  className={`block font-medium text-gray-800 py-1 ${
+                    pathname === item.href ? "text-blue-600" : ""
+                  }`}
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              )}
 
               {item.children?.map((child, j) => (
                 <Link
                   key={j}
-                  href={child.href}
+                  href={child.href ?? "#"}
                   className={`flex items-center gap-2 pl-4 text-gray-600 py-1 ${
-                    pathname === child.href ? "text-blue-600" : ""
+                    pathname === child.href ? "text-blue-600 font-semibold" : ""
                   }`}
                   onClick={() => setOpen(false)}
                 >
@@ -109,9 +119,27 @@ export default function SidebarMenu() {
           <div className="pt-4 border-t">
             <p className="text-sm text-gray-500">Follow Us:</p>
             <div className="flex gap-4 mt-2 text-blue-600">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">YouTube</a>
+              <a
+                href="https://instagram.com/anuoverseas"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Instagram
+              </a>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Facebook
+              </a>
+              <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                YouTube
+              </a>
             </div>
           </div>
         </div>
