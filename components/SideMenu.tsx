@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
-import { Menu, X } from "lucide-react"; // optional icons
+import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 export default function SidebarMenu() {
@@ -14,13 +15,13 @@ export default function SidebarMenu() {
     {
       label: "Study Abroad",
       children: [
-        { label: "Canada", href: "/study-in/canada" },
-        { label: "UK", href: "/study-in/uk" },
-        { label: "USA", href: "/study-in/usa" },
-        { label: "Australia", href: "/study-in/australia" },
-        { label: "Germany", href: "/study-in/germany" },
-        { label: "Dubai", href: "/study-in/dubai" },
-        { label: "France", href: "/study-in/france" },
+        { label: "Canada", href: "/study-in/canada", icon: "canada.png" },
+        { label: "UK", href: "/study-in/uk", icon: "uk.png" },
+        { label: "USA", href: "/study-in/usa", icon: "usa.png" },
+        { label: "Australia", href: "/study-in/australia", icon: "australia.png" },
+        { label: "Germany", href: "/study-in/germany", icon: "germany.png" },
+        { label: "Dubai", href: "/study-in/dubai", icon: "uae.png" },
+        { label: "France", href: "/study-in/france", icon: "france.png" },
       ],
     },
     {
@@ -86,11 +87,20 @@ export default function SidebarMenu() {
                 <Link
                   key={j}
                   href={child.href}
-                  className={`block pl-4 text-gray-600 py-1 ${
+                  className={`flex items-center gap-2 pl-4 text-gray-600 py-1 ${
                     pathname === child.href ? "text-blue-600" : ""
                   }`}
+                  onClick={() => setOpen(false)}
                 >
-                  - {child.label}
+                  {child.icon && (
+                    <Image
+                      src={`/icons/${child.icon}`}
+                      alt={child.label}
+                      width={20}
+                      height={14}
+                    />
+                  )}
+                  {child.label}
                 </Link>
               ))}
             </div>
@@ -98,10 +108,10 @@ export default function SidebarMenu() {
 
           <div className="pt-4 border-t">
             <p className="text-sm text-gray-500">Follow Us:</p>
-            <div className="flex gap-4 mt-2">
-              <a href="https://instagram.com" target="_blank">Instagram</a>
-              <a href="https://facebook.com" target="_blank">Facebook</a>
-              <a href="https://youtube.com" target="_blank">YouTube</a>
+            <div className="flex gap-4 mt-2 text-blue-600">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">YouTube</a>
             </div>
           </div>
         </div>

@@ -1,7 +1,6 @@
-// app/layout.tsx
 import './globals.css';
-import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import ClientWrapper from '@/components/ClientWrapper'; // 👈 Wrapper for LeadModal & Header
 
 export const metadata = {
   title: 'ANU Education – Study Abroad & Test Prep',
@@ -12,7 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="bg-white text-gray-900">
-        <Header />
+        <ClientWrapper /> {/* Contains LeadModal + Header */}
         <main className="min-h-screen">{children}</main>
         <Footer />
       </body>
