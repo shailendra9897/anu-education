@@ -106,7 +106,7 @@ export default function LeadForm() {
               >
                 <option value="">Select Course</option>
                 <option value="IELTS Academic">IELTS Academic</option>
-                <option value="IELTS General">IELTS General</option>
+                <option value="FRENCH Basic A1-A2">FRENCH Basic A1-A2</option>
                 <option value="TOEFL">TOEFL</option>
                 <option value="PTE">PTE</option>
                 <option value="GRE">GRE</option>

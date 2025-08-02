@@ -7,11 +7,11 @@ export default function LeadModal() {
   const [formData, setFormData] = useState({ name: '', phone: '', course: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ✅ Auto open after 10 seconds
+  // ✅ Auto open after 3 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 10000); // 10,000 ms = 10 seconds
+    }, 3000); // 3,000 ms = 3 seconds
 
     return () => clearTimeout(timer); // Cleanup on unmount
   }, []);
@@ -96,7 +96,7 @@ export default function LeadModal() {
               >
                 <option value="">Select Course</option>
                 <option value="IELTS Academic">IELTS Academic</option>
-                <option value="IELTS General">IELTS General</option>
+                <option value="FRENCH Basic A1-A2">FRENCH Basic A1-A2</option>
                 <option value="TOEFL">TOEFL</option>
                 <option value="PTE">PTE</option>
                 <option value="GRE">GRE</option>
