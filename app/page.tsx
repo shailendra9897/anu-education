@@ -1,9 +1,9 @@
-// app/page.tsx
 'use client';
 
 import { CountryCard } from '@/components/CountryCard';
 import { TestCard } from '@/components/TestCard';
 import { ServiceCard } from '@/components/ServiceCard';
+import StudyAbroadSteps from '@/components/StudyAbroadSteps'; // ⬅️ import the new component
 
 export default function Home() {
   return (
@@ -57,6 +57,14 @@ export default function Home() {
           <ServiceCard title="Travel Insurance" link="/services/travel-insurance" />
           <ServiceCard title="Know Your Score" link="/services/know-your-score" />
         </div>
+      </section>
+
+      {/* Step by Step Guide */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          Step-by-Step Guide to Studying Abroad with ANU
+        </h2>
+        <StudyAbroadSteps />
       </section>
     </div>
   );
