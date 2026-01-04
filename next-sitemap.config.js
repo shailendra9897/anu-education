@@ -2,5 +2,9 @@
 module.exports = {
   siteUrl: 'https://www.anuedu.in',
   generateRobotsTxt: true,
-  sitemapSize: 5000,
-}
+
+  // 🔴 FORCE SINGLE SITEMAP
+  generateIndexSitemap: false,
+  sitemapSize: 50000,
+  trailingSlash: false,
+};
