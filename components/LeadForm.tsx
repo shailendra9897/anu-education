@@ -41,6 +41,22 @@ export default function LeadForm() {
         body: JSON.stringify(formData),
       });
 
+      // 🔥 Google Analytics Event
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'lead_form_submit', {
+          event_category: 'Lead',
+          event_label: formData.course || 'General',
+        });
+      }
+
+      // 🔥 Meta Pixel Event
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead', {
+          course: formData.course || 'General',
+        });
+      }
+
+      // ✅ WhatsApp Redirect
       const waMessage = `Hi ANU Team! My name is ${formData.name}. I'm interested in ${formData.course} and my dream country is ${formData.country}. Please assist me.`;
       const waUrl = `https://wa.me/919428186817?text=${encodeURIComponent(waMessage)}`;
       window.open(waUrl, '_blank');
@@ -67,7 +83,6 @@ export default function LeadForm() {
       {/* Modal Overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-40 bg-black bg-opacity-50 flex items-center justify-center px-4">
-          {/* Modal Box with animation */}
           <div className="bg-white rounded-2xl p-6 w-full max-w-md relative shadow-xl animate-fadeInUp">
             <button
               onClick={toggleModal}
@@ -76,7 +91,9 @@ export default function LeadForm() {
               ×
             </button>
 
-            <h2 className="text-xl font-semibold mb-4 text-center">Get Started with ANU</h2>
+            <h2 className="text-xl font-semibold mb-4 text-center">
+              Get Started with ANU
+            </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
@@ -107,7 +124,9 @@ export default function LeadForm() {
                 <option value="">Select Course</option>
                 <option value="IELTS Academic">IELTS Academic</option>
                 <option value="FRENCH Basic A1-A2">FRENCH Basic A1-A2</option>
-                <option value="Spoken English Free Demo">Spoken English Free Demo</option>
+                <option value="Spoken English Free Demo">
+                  Spoken English Free Demo
+                </option>
                 <option value="PTE">PTE</option>
                 <option value="GRE">GRE</option>
                 <option value="GMAT">GMAT</option>
