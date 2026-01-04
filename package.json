@@ -14,10 +14,10 @@
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.526.0",
     "mysql2": "^3.14.2",
-    "next": "15.4.4",
+    "next": "14.2.5",
     "npm": "^11.5.1",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-hot-toast": "^2.5.2",
     "run": "^1.5.0",
     "start": "^5.1.0"
