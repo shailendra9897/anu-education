@@ -3,8 +3,9 @@ import { Footer } from '@/components/Footer';
 import ClientWrapper from '@/components/ClientWrapper'; // 👈 Wrapper for LeadModal & Header
 
 export const metadata = {
-  title: 'ANU Education – Study Abroad & Test Prep',
-  description: 'Your trusted partner for studying abroad and test preparation.',
+  title: "Study Abroad & IELTS Coaching | Germany, UK, Canada – ANU Education",
+  description:
+    "Book free demo classes for IELTS & German language. Expert counselling for Study in Germany, UK, Canada & Europe. Start your international education journey with ANU Education.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

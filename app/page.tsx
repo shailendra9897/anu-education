@@ -9,11 +9,38 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4 py-12 space-y-12">
 
-      {/* Hero Section */}
-      <section className="text-center">
-        <h1 className="text-4xl font-bold mb-2">Welcome to ANU Education</h1>
-        <p className="text-lg text-gray-600">Your trusted partner in studying abroad and test prep</p>
-      </section>
+     {/* Hero Section */}
+<section className="text-center space-y-4">
+  <h1 className="text-4xl md:text-5xl font-bold text-blue-700">
+    Study Abroad & Language Coaching for Indian Students
+  </h1>
+
+  <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+    Free demo classes for IELTS & German language, expert counselling for
+    Study in Germany, UK, Canada & Europe — all under one roof.
+  </p>
+
+  <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+    <a
+      href="https://study.anuedu.in/register"
+      target="_blank"
+      className="bg-green-600 text-white px-8 py-3 rounded-xl text-lg hover:bg-green-700"
+    >
+      🎓 Book Free Language Class
+    </a>
+<p className="text-sm text-gray-500 pt-4">
+  ✔ Google-verified education consultant · ✔ Serving students across India · ✔ Online & Offline Support
+</p>
+    <a
+      href="https://anueducation.applyviz.com/walk-in"
+      target="_blank"
+      className="border border-blue-600 text-blue-600 px-8 py-3 rounded-xl text-lg hover:bg-blue-50"
+    >
+      🧭 Free Study Abroad Counselling
+    </a>
+  </div>
+</section>
+
 
       {/* Study Abroad */}
       <section>
