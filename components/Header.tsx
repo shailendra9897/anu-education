@@ -86,9 +86,17 @@ export default function Header() {
         </nav>
 
         {/* Hamburger */}
-        <button onClick={toggleMenu} className="md:hidden text-gray-700">
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+<button
+  onClick={toggleMenu}
+  className="md:hidden text-gray-700"
+  aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+>
+  {isOpen ? (
+    <X size={28} aria-hidden="true" />
+  ) : (
+    <Menu size={28} aria-hidden="true" />
+  )}
+</button>
       </div>
 
       {/* Mobile Menu */}
