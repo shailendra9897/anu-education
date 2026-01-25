@@ -40,7 +40,35 @@ export default function Home() {
     </a>
   </div>
 </section>
+{/* Republic Day Special */}
+<section className="bg-blue-50 rounded-xl p-6 text-center space-y-3">
+  <h2 className="text-2xl font-bold text-blue-700">
+    🇮🇳 Republic Day Special Student Support
+  </h2>
 
+  <p className="text-gray-700 max-w-3xl mx-auto">
+    Supporting Indian students with expert guidance for Study Abroad and
+    Language Coaching for Germany, UK, Canada & Europe.
+  </p>
+
+  <div className="flex flex-col sm:flex-row justify-center gap-4 pt-3">
+    <a
+      href="https://study.anuedu.in/register"
+      target="_blank"
+      className="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700"
+    >
+      🎓 Book Free Course
+    </a>
+
+    <a
+      href="https://anueducation.applyviz.com/walk-in"
+      target="_blank"
+      className="border border-blue-600 text-blue-600 px-6 py-3 rounded-xl hover:bg-blue-100"
+    >
+      🌍 Book Free Counselling
+    </a>
+  </div>
+</section>
 
       {/* Study Abroad */}
       <section>
