@@ -66,12 +66,14 @@ export default function Header() {
   return (
     <header className="w-full px-4 py-3 bg-white shadow-md sticky top-0 z-50">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
+
+        {/* Logo */}
         <div className="text-xl font-bold text-blue-600">
           <Link href="/">ANU Education</Link>
         </div>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex space-x-6 text-gray-700 font-medium">
+        <nav className="hidden md:flex items-center space-x-6 text-gray-700 font-medium">
           {navItems.map((item) =>
             !item.children ? (
               <Link key={item.label} href={item.href!}>
@@ -85,18 +87,35 @@ export default function Header() {
           )}
         </nav>
 
+        {/* 🔥 DESKTOP CTA BUTTONS */}
+        <div className="hidden md:flex items-center gap-3">
+          <a
+            href="https://study.anuedu.in/register"
+            target="_blank"
+            aria-label="Book free language class"
+            className="bg-green-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-green-700"
+          >
+            Book Free Class
+          </a>
+
+          <a
+            href="https://anueducation.applyviz.com/walk-in"
+            target="_blank"
+            aria-label="Free study abroad counselling"
+            className="border border-blue-600 text-blue-600 px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50"
+          >
+            Free Counselling
+          </a>
+        </div>
+
         {/* Hamburger */}
-<button
-  onClick={toggleMenu}
-  className="md:hidden text-gray-700"
-  aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
->
-  {isOpen ? (
-    <X size={28} aria-hidden="true" />
-  ) : (
-    <Menu size={28} aria-hidden="true" />
-  )}
-</button>
+        <button
+          onClick={toggleMenu}
+          className="md:hidden text-gray-700"
+          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+        >
+          {isOpen ? <X size={28} aria-hidden /> : <Menu size={28} aria-hidden />}
+        </button>
       </div>
 
       {/* Mobile Menu */}
@@ -126,6 +145,7 @@ export default function Header() {
                     }`}
                   />
                 </button>
+
                 {openDropdown === item.label && (
                   <ul className="pl-4 mt-2 space-y-2 text-sm text-gray-600">
                     {item.children.map((child) => (
@@ -144,6 +164,27 @@ export default function Header() {
               </div>
             )
           )}
+
+          {/* 🔥 MOBILE CTA BUTTONS */}
+          <div className="pt-4 border-t space-y-3">
+            <a
+              href="https://study.anuedu.in/register"
+              target="_blank"
+              aria-label="Book free language class"
+              className="block text-center bg-green-600 text-white py-3 rounded-lg font-semibold"
+            >
+              Book Free Class
+            </a>
+
+            <a
+              href="https://anueducation.applyviz.com/walk-in"
+              target="_blank"
+              aria-label="Free study abroad counselling"
+              className="block text-center border border-blue-600 text-blue-600 py-3 rounded-lg font-semibold"
+            >
+              Free Counselling
+            </a>
+          </div>
         </div>
       )}
     </header>
