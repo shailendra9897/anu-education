@@ -40,36 +40,41 @@ export default function Home() {
     </a>
   </div>
 </section>
-{/* Republic Day Special */}
-<section className="bg-blue-50 rounded-xl p-6 text-center space-y-3">
-  <h2 className="text-2xl font-bold text-blue-700">
-    🇮🇳 Republic Day Special Student Support
+{/* FREE COUNSELLING SECTION */}
+<section className="bg-blue-50 py-10 px-6 rounded-xl text-center space-y-5">
+  <h2 className="text-2xl md:text-3xl font-bold text-blue-700">
+    Free Study Abroad Counselling & Language Demo Classes
   </h2>
 
   <p className="text-gray-700 max-w-3xl mx-auto">
-    Supporting Indian students with expert guidance for Study Abroad and
-    Language Coaching for Germany, UK, Canada & Europe.
+    Planning to study abroad in 2026? Get expert guidance for
+    <strong> Study in Germany, UK, Canada & Europe</strong>.
+    Attend free demo classes for <strong>IELTS & German language</strong>
+    and get clarity on universities, APS, visa, blocked account & PR options.
   </p>
 
-  <div className="flex flex-col sm:flex-row justify-center gap-4 pt-3">
+  <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
     <a
       href="https://study.anuedu.in/register"
       target="_blank"
-      className="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700"
+      className="bg-green-600 text-white px-8 py-3 rounded-xl text-lg hover:bg-green-700"
     >
-      🎓 Book Free Course
+      🎓 Book Free Language Class
     </a>
 
     <a
       href="https://anueducation.applyviz.com/walk-in"
       target="_blank"
-      className="border border-blue-600 text-blue-600 px-6 py-3 rounded-xl hover:bg-blue-100"
+      className="border border-blue-600 text-blue-600 px-8 py-3 rounded-xl text-lg hover:bg-blue-50"
     >
-      🌍 Book Free Counselling
+      🧭 Book Free Study Abroad Counselling
     </a>
   </div>
-</section>
 
+  <p className="text-sm text-gray-600 italic">
+    Limited slots • No obligation • 100% free guidance
+  </p>
+</section>
       {/* Study Abroad */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Study Abroad Destinations</h2>
