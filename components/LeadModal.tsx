@@ -13,13 +13,13 @@ export default function LeadModal() {
     email: '',
   });
 
-  // ✅ Auto open after 3 seconds (once per session)
+  // ✅ Auto open after 7 seconds (once per session)
   useEffect(() => {
     if (!sessionStorage.getItem('leadModalShown')) {
       const timer = setTimeout(() => {
         setIsOpen(true);
         sessionStorage.setItem('leadModalShown', 'true');
-      }, 3000);
+      }, 7000);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -83,9 +83,13 @@ Please guide me further.`;
               ×
             </button>
 
-            <h2 className="text-xl font-semibold mb-4 text-center text-blue-700">
-              Get Free Guidance
-            </h2>
+            <h2 className="text-xl font-semibold mb-2 text-center">
+          Get Free Study Abroad Guidance
+          </h2>
+
+          <p className="text-sm text-gray-600 text-center mb-4">
+             IELTS • German • France • Canada • Germany
+              </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
