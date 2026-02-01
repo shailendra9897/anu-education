@@ -1,3 +1,5 @@
+import Script from "next/script";
+
 // metadata
 export const metadata = {
   title: "About Us - ANU Education",
@@ -31,12 +33,18 @@ function CertificationSection() {
       </h2>
 
       <div className="flex flex-col md:flex-row items-start gap-6">
-        <img
-          src="/certificates/skill-india-career-counsellor.webp"
-          alt="Skill India certified career and education counsellor certificate"
-          className="w-full md:w-64 rounded-lg shadow-md"
-          loading="lazy"
-        />
+        <div>
+          <img
+            src="/certificates/skill-india-career-counsellor.webp"
+            alt="Skill India certified career and education counsellor certificate"
+            className="w-full md:w-64 rounded-lg shadow-md"
+            loading="lazy"
+          />
+          {/* Visible text under image */}
+          <p className="text-sm text-gray-600 mt-2">
+            Skill India Certified Career & Education Counsellor
+          </p>
+        </div>
 
         <div className="text-gray-700 space-y-3">
           <p>
@@ -59,6 +67,34 @@ function CertificationSection() {
 export default function AboutPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10 space-y-6">
+      {/* Schema for Skill India Credential */}
+      <Script
+        id="skill-india-credential-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "EducationalOccupationalCredential",
+            "name": "Certificate in Career and Education Counselling",
+            "description":
+              "Skill India certified course in Career and Education Counselling, validating professional guidance for students seeking study abroad and language training.",
+            "credentialCategory": "Professional Certification",
+            "recognizedBy": {
+              "@type": "Organization",
+              "name": "Skill India",
+              "url": "https://www.skillindia.gov.in"
+            },
+            "educationalLevel": "Professional",
+            "about": {
+              "@type": "EducationalOrganization",
+              "name": "ANU Education",
+              "url": "https://www.anuedu.in"
+            }
+          }),
+        }}
+      />
+
       <AboutSection />
       <CertificationSection />
     </div>
