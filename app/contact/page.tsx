@@ -48,26 +48,11 @@ export default function ContactPage() {
             ],
             "sameAs": [],
             "makesOffer": [
-              {
-                "@type": "Service",
-                "name": "IELTS Online Coaching",
-              },
-              {
-                "@type": "Service",
-                "name": "PTE Online Coaching",
-              },
-              {
-                "@type": "Service",
-                "name": "German Language Course",
-              },
-              {
-                "@type": "Service",
-                "name": "French Language Course",
-              },
-              {
-                "@type": "Service",
-                "name": "Study Abroad Consultant",
-              }
+              { "@type": "Service", "name": "IELTS Online Coaching" },
+              { "@type": "Service", "name": "PTE Online Coaching" },
+              { "@type": "Service", "name": "German Language Course" },
+              { "@type": "Service", "name": "French Language Course" },
+              { "@type": "Service", "name": "Study Abroad Consultant" }
             ]
           }),
         }}
@@ -88,10 +73,7 @@ export default function ContactPage() {
       <div className="bg-gray-50 rounded-xl p-6 space-y-4">
         <p>
           📞 <strong>Call:</strong>{" "}
-          <a
-            href="tel:+917016497087"
-            className="text-blue-600 hover:underline"
-          >
+          <a href="tel:+917016497087" className="text-blue-600 hover:underline">
             +91 70164 97087
           </a>
         </p>
@@ -148,6 +130,39 @@ export default function ContactPage() {
           <li><strong>Study Abroad Consultant</strong></li>
         </ul>
       </div>
+
+      {/* ===== CERTIFIED COUNSELLOR SECTION ===== */}
+      <section className="bg-gray-50 rounded-xl p-6 space-y-4">
+        <h2 className="text-2xl font-semibold text-blue-700">
+          Certified Career & Education Counselling
+        </h2>
+
+        <p className="text-gray-700">
+          ANU Education is led by a <strong>Skill India certified Career & Education Counsellor</strong>,
+          ensuring students and parents receive ethical, transparent, and career-focused guidance.
+        </p>
+
+        <ul className="list-disc pl-6 text-gray-700 space-y-1">
+          <li>Skill India Certified Career & Education Counsellor</li>
+          <li>Trusted guidance for Study Abroad & Language Courses</li>
+          <li>Student-first counselling (no sales pressure)</li>
+          <li>Online & in-person counselling available</li>
+        </ul>
+
+        <p className="text-sm text-gray-600 italic">
+          Guidance provided by a government-recognised certified counsellor.
+        </p>
+
+        <div className="pt-3">
+          <a
+            href="https://anueducation.applyviz.com/walk-in"
+            target="_blank"
+            className="inline-block bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700"
+          >
+            👉 Book Free Counselling
+          </a>
+        </div>
+      </section>
 
       {/* ===== CTA ===== */}
       <div className="bg-blue-50 p-6 rounded-xl text-center space-y-4">
