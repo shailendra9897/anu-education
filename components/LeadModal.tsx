@@ -84,12 +84,17 @@ Please guide me further.`;
             </button>
 
             <h2 className="text-xl font-semibold mb-2 text-center">
-          Get Free Study Abroad Guidance
-          </h2>
+              Get Free Study Abroad Guidance
+            </h2>
 
-          <p className="text-sm text-gray-600 text-center mb-4">
-             IELTS • German • France • Canada • Germany
-              </p>
+            {/* ✅ New line below heading */}
+            <p className="text-sm text-gray-600 text-center mb-3">
+              Talk to a Skill India Certified Career Counsellor • No obligation
+            </p>
+
+            <p className="text-sm text-gray-600 text-center mb-4">
+              IELTS • German • France • Canada • Germany
+            </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
@@ -143,12 +148,17 @@ Please guide me further.`;
                 className="w-full px-4 py-2 border rounded-lg"
               />
 
+              {/* ✅ New line below phone/email input */}
+              <p className="text-xs text-gray-500 text-center">
+                ✓ Skill India Certified Counsellor • ✓ 1000+ Students Guided
+              </p>
+
               <button
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 rounded-lg transition"
               >
-                {isSubmitting ? 'Please wait…' : 'Get Free Guidance'}
+                {isSubmitting ? 'Please wait…' : 'Get Free Guidance on WhatsApp'}
               </button>
             </form>
           </div>
