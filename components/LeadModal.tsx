@@ -13,13 +13,14 @@ export default function LeadModal() {
     email: '',
   });
 
-  // ✅ Auto open after 7 seconds (once per session)
+  // ✅ Auto open after 5 seconds (once per session)
   useEffect(() => {
     if (!sessionStorage.getItem('leadModalShown')) {
       const timer = setTimeout(() => {
         setIsOpen(true);
         sessionStorage.setItem('leadModalShown', 'true');
-      }, 7000);
+      }, 5000); // ⏱ 5 seconds
+
       return () => clearTimeout(timer);
     }
   }, []);
@@ -32,10 +33,34 @@ export default function LeadModal() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // ✅ Replaced handleSubmit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // ✅ Google Form Submit (no redirect)
+    const formUrl =
+      'https://docs.google.com/forms/d/e/1FAIpQLSfcTM7TBVDB2xjnCRZvcm4Sw_S2VkJnyLYoWFdCeVNgjhKlRA/formResponse';
+
+    const formDataEncoded = new URLSearchParams({
+      'entry.665770361': formData.name,
+      'entry.1214678329': '9999999999', // optional / dummy or add phone later
+      'entry.621978958': formData.email || '',
+      'entry.13793569': formData.course,
+      'entry.266166212': formData.country,
+      'entry.349170966': 'Website',
+    });
+
+    fetch(formUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: formDataEncoded.toString(),
+    });
+
+    // ✅ WhatsApp Redirect
     const message = `Hi ANU Education 👋
 My name is ${formData.name}.
 Preferred course: ${formData.course}.
@@ -43,10 +68,7 @@ Target country: ${formData.country}.
 ${formData.email ? `Email: ${formData.email}` : ''}
 Please guide me further.`;
 
-    const waUrl = `https://wa.me/919428186817?text=${encodeURIComponent(
-      message
-    )}`;
-
+    const waUrl = `https://wa.me/919428186817?text=${encodeURIComponent(message)}`;
     window.open(waUrl, '_blank');
 
     setFormData({
@@ -62,7 +84,7 @@ Please guide me further.`;
 
   return (
     <>
-      {/* Floating CTA */}
+      {/* Floating CTA Button */}
       <button
         onClick={toggleModal}
         className="fixed bottom-5 right-5 z-50 bg-green-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-green-700 transition"
@@ -75,6 +97,8 @@ Please guide me further.`;
       {isOpen && (
         <div className="fixed inset-0 z-40 bg-black bg-opacity-50 flex items-center justify-center px-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md relative shadow-xl">
+            
+            {/* Close */}
             <button
               onClick={toggleModal}
               className="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-2xl"
@@ -83,19 +107,21 @@ Please guide me further.`;
               ×
             </button>
 
+            {/* Heading */}
             <h2 className="text-xl font-semibold mb-2 text-center">
               Get Free Study Abroad Guidance
             </h2>
 
-            {/* ✅ New line below heading */}
-            <p className="text-sm text-gray-600 text-center mb-3">
-              Talk to a Skill India Certified Career Counsellor • No obligation
+            {/* Trust Line */}
+            <p className="text-sm text-gray-600 text-center mb-2">
+              🎓 Skill India Certified Career Counsellor
             </p>
 
             <p className="text-sm text-gray-600 text-center mb-4">
               IELTS • German • France • Canada • Germany
             </p>
 
+            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -148,9 +174,9 @@ Please guide me further.`;
                 className="w-full px-4 py-2 border rounded-lg"
               />
 
-              {/* ✅ New line below phone/email input */}
+              {/* Authority Proof */}
               <p className="text-xs text-gray-500 text-center">
-                ✓ Skill India Certified Counsellor • ✓ 1000+ Students Guided
+                ✓ Skill India Certified • ✓ 1000+ Students Guided
               </p>
 
               <button
