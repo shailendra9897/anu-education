@@ -1,4 +1,5 @@
 import Script from "next/script";
+import ContactForm from "@/components/ContactForm";
 
 export const metadata = {
   title: "Contact ANU Education – Study Abroad & Language Coaching",
@@ -46,7 +47,6 @@ export default function ContactPage() {
                 "availableLanguage": "English",
               }
             ],
-            "sameAs": [],
             "makesOffer": [
               { "@type": "Service", "name": "IELTS Online Coaching" },
               { "@type": "Service", "name": "PTE Online Coaching" },
@@ -65,8 +65,8 @@ export default function ContactPage() {
 
       <p className="text-gray-700 text-lg">
         Get expert guidance for <strong>IELTS, PTE, German & French language courses</strong> and
-        professional <strong>Study Abroad consultancy for Germany</strong>.  
-        We provide online coaching and personalized counselling across India.
+        professional <strong>Study Abroad consultancy for Germany</strong>.
+        We provide online coaching and personalised counselling across India.
       </p>
 
       {/* ===== CONTACT DETAILS ===== */}
@@ -119,6 +119,14 @@ export default function ContactPage() {
         ></iframe>
       </div>
 
+      {/* ===== CONTACT FORM (NEW) ===== */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-4 text-center">
+          Submit Your Enquiry
+        </h2>
+        <ContactForm />
+      </section>
+
       {/* ===== SERVICES ===== */}
       <div>
         <h2 className="text-2xl font-semibold mb-4">Our Services</h2>
@@ -131,7 +139,7 @@ export default function ContactPage() {
         </ul>
       </div>
 
-      {/* ===== CERTIFIED COUNSELLOR SECTION ===== */}
+      {/* ===== CERTIFIED COUNSELLOR ===== */}
       <section className="bg-gray-50 rounded-xl p-6 space-y-4">
         <h2 className="text-2xl font-semibold text-blue-700">
           Certified Career & Education Counselling
@@ -139,38 +147,32 @@ export default function ContactPage() {
 
         <p className="text-gray-700">
           ANU Education is led by a <strong>Skill India certified Career & Education Counsellor</strong>,
-          ensuring students and parents receive ethical, transparent, and career-focused guidance.
+          ensuring ethical, transparent and student-first guidance.
         </p>
 
         <ul className="list-disc pl-6 text-gray-700 space-y-1">
           <li>Skill India Certified Career & Education Counsellor</li>
-          <li>Trusted guidance for Study Abroad & Language Courses</li>
-          <li>Student-first counselling (no sales pressure)</li>
-          <li>Online & in-person counselling available</li>
+          <li>1000+ students guided</li>
+          <li>No sales pressure counselling</li>
+          <li>Online & in-person sessions</li>
         </ul>
 
-        <p className="text-sm text-gray-600 italic">
-          Guidance provided by a government-recognised certified counsellor.
-        </p>
-
-        <div className="pt-3">
-          <a
-            href="https://anueducation.applyviz.com/walk-in"
-            target="_blank"
-            className="inline-block bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700"
-          >
-            👉 Book Free Counselling
-          </a>
-        </div>
+        <a
+          href="https://anueducation.applyviz.com/walk-in"
+          target="_blank"
+          className="inline-block bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700"
+        >
+          👉 Book Free Counselling
+        </a>
       </section>
 
-      {/* ===== CTA ===== */}
+      {/* ===== FINAL CTA ===== */}
       <div className="bg-blue-50 p-6 rounded-xl text-center space-y-4">
         <h3 className="text-xl font-semibold text-blue-700">
           Start Your Journey with ANU Education
         </h3>
         <p className="text-gray-700">
-          Book a <strong>FREE course demo or counselling session</strong> with our experts today.
+          Book a <strong>FREE demo class or counselling session</strong> today.
         </p>
         <a
           href="https://study.anuedu.in/register"
