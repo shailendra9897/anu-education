@@ -19,7 +19,7 @@ export default function LeadModal() {
       const timer = setTimeout(() => {
         setIsOpen(true);
         sessionStorage.setItem('leadModalShown', 'true');
-      }, 5000); // ⏱ 5 seconds
+      }, 5000);
 
       return () => clearTimeout(timer);
     }
@@ -33,10 +33,21 @@ export default function LeadModal() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ Replaced handleSubmit
+  // ✅ SUBMIT HANDLER (UPDATED WITH TRACKING)
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    /* ===============================
+       🔥 GA4 / GTM TRACKING (FORM)
+    =============================== */
+    if (typeof window !== 'undefined' && (window as any).dataLayer) {
+      (window as any).dataLayer.push({
+        event: 'lead_form_submit',
+        course: formData.course,
+        country: formData.country,
+      });
+    }
 
     // ✅ Google Form Submit (no redirect)
     const formUrl =
@@ -44,7 +55,7 @@ export default function LeadModal() {
 
     const formDataEncoded = new URLSearchParams({
       'entry.665770361': formData.name,
-      'entry.1214678329': '9999999999', // optional / dummy or add phone later
+      'entry.1214678329': '9999999999',
       'entry.621978958': formData.email || '',
       'entry.13793569': formData.course,
       'entry.266166212': formData.country,
@@ -59,6 +70,16 @@ export default function LeadModal() {
       },
       body: formDataEncoded.toString(),
     });
+
+    /* ===============================
+       🔥 GA4 / GTM TRACKING (WHATSAPP)
+    =============================== */
+    if (typeof window !== 'undefined' && (window as any).dataLayer) {
+      (window as any).dataLayer.push({
+        event: 'whatsapp_click',
+        source: 'lead_modal',
+      });
+    }
 
     // ✅ WhatsApp Redirect
     const message = `Hi ANU Education 👋
@@ -107,12 +128,10 @@ Please guide me further.`;
               ×
             </button>
 
-            {/* Heading */}
             <h2 className="text-xl font-semibold mb-2 text-center">
               Get Free Study Abroad Guidance
             </h2>
 
-            {/* Trust Line */}
             <p className="text-sm text-gray-600 text-center mb-2">
               🎓 Skill India Certified Career Counsellor
             </p>
@@ -121,7 +140,6 @@ Please guide me further.`;
               IELTS • German • France • Canada • Germany
             </p>
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -173,11 +191,6 @@ Please guide me further.`;
                 onChange={handleChange}
                 className="w-full px-4 py-2 border rounded-lg"
               />
-
-              {/* Authority Proof */}
-              <p className="text-xs text-gray-500 text-center">
-                ✓ Skill India Certified • ✓ 1000+ Students Guided
-              </p>
 
               <button
                 type="submit"
