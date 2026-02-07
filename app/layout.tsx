@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* ✅ GOOGLE TAG MANAGER */}
+        {/* ✅ GOOGLE TAG MANAGER ONLY */}
         <Script
           id="gtm-script"
           strategy="beforeInteractive"
@@ -34,26 +34,10 @@ export default function RootLayout({
             `,
           }}
         />
-
-        {/* ✅ GOOGLE ANALYTICS 4 (KEEP THIS) */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-YQWGP9339T"
-          strategy="afterInteractive"
-        />
-        <Script id="ga4" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-YQWGP9339T', {
-              page_path: window.location.pathname,
-            });
-          `}
-        </Script>
       </head>
 
       <body className="bg-white text-gray-900">
-        {/* ✅ GTM NOSCRIPT (REQUIRED) */}
+        {/* ✅ GTM NOSCRIPT */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-WBZTN4ZV"
