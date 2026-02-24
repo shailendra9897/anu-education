@@ -1,32 +1,27 @@
-import { NextResponse } from "next/server";
-import mysql from "mysql2/promise";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const { name, email, phone, message, source = "contact" } = await req.json();
-
-  if (!name || !email || !phone) {
-    return NextResponse.json({ error: "Missing fields" }, { status: 400 });
-  }
-
+export async function POST(req: NextRequest) {
   try {
-    // Create DB connection inside the handler
-    const db = await mysql.createConnection({
-      host: process.env.DB_HOST!,
-      user: process.env.DB_USER!,
-      password: process.env.DB_PASSWORD!,
-      database: process.env.DB_NAME!,
-    });
+    const body = await req.json();
 
-    await db.execute(
-      "INSERT INTO leads (name, email, phone, message, source) VALUES (?, ?, ?, ?, ?)",
-      [name, email, phone, message || '', source]
-    );
+    const { name, email, message } = body;
 
-    await db.end(); // Good practice to close the connection
+    if (!name || !email) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // You can process data here (email, DB, Google Sheet etc.)
+    console.log("Contact form received:", body);
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Insert Error:", error);
-    return NextResponse.json({ error: "Database error" }, { status: 500 });
+    console.error("Contact API Error:", error);
+    return NextResponse.json(
+      { error: "Server error" },
+      { status: 500 }
+    );
   }
 }
