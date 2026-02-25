@@ -42,7 +42,7 @@ export default function SendTemplatePage() {
         setNumber("");
         setName("");
       } else {
-        setStatus(`❌ Error: ${data.error || "Failed to send"}`);
+        setStatus(`❌ Error: ${JSON.stringify(data)}`);
       }
     } catch (error) {
       setStatus("❌ Server error");
