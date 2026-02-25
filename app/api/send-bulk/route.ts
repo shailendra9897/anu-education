@@ -5,10 +5,10 @@ const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID!;
 
 export async function POST(req: NextRequest) {
   try {
-    const { number, name } = await req.json();
+    const { phone, name } = await req.json();
 
-    if (!number) {
-      return NextResponse.json({ error: "No number provided" }, { status: 400 });
+    if (!phone) {
+      return NextResponse.json({ error: "No phone provided" }, { status: 400 });
     }
 
     const metaResponse = await fetch(
@@ -21,11 +21,24 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           messaging_product: "whatsapp",
-          to: number,
+          to: phone,
           type: "template",
           template: {
             name: "college_students_demo_2026",
-            language: { code: "en" }
+            language: { code: "en" },
+            components: [
+              {
+                type: "header",
+                parameters: [
+                  {
+                    type: "image",
+                    image: {
+                      link: "https://www.anuedu.in/your-image.jpg"
+                    }
+                  }
+                ]
+              }
+            ]
           }
         }),
       }
