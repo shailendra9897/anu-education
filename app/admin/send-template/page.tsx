@@ -30,7 +30,7 @@ export default function SendTemplatePage() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          number,
+          number: number,
           name
         })
       });
