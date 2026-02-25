@@ -25,16 +25,8 @@ export async function POST(req: NextRequest) {
           type: "template",
           template: {
             name: "college_students_demo_2026",
-            language: { code: "en" },
-            components: [
-              {
-                type: "body",
-                parameters: [
-                  { type: "text", text: name || "Student" }
-                ],
-              },
-            ],
-          },
+            language: { code: "en" }
+          }
         }),
       }
     );
