@@ -5,10 +5,15 @@ const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID!;
 
 export async function POST(req: NextRequest) {
   try {
-    const { phone, name } = await req.json();
+    const body = await req.json();
+
+    const phone = body.number;
 
     if (!phone) {
-      return NextResponse.json({ error: "No phone provided" }, { status: 400 });
+      return NextResponse.json(
+        { error: "No phone provided" },
+        { status: 400 }
+      );
     }
 
     const metaResponse = await fetch(
@@ -25,28 +30,13 @@ export async function POST(req: NextRequest) {
           type: "template",
           template: {
             name: "college_students_demo_2026",
-            language: { code: "en" },
-            components: [
-              {
-                type: "header",
-                parameters: [
-                  {
-                    type: "image",
-                    image: {
-                      link: "https://www.anuedu.in/your-image.jpg"
-                    }
-                  }
-                ]
-              }
-            ]
+            language: { code: "en" }
           }
         }),
       }
     );
 
     const data = await metaResponse.json();
-
-    console.log("Meta response:", data);
 
     if (!metaResponse.ok) {
       return NextResponse.json(
@@ -55,10 +45,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      meta: data
-    });
+    return NextResponse.json({ success: true });
 
   } catch (error: any) {
     return NextResponse.json(
