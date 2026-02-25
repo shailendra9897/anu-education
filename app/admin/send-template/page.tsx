@@ -24,7 +24,7 @@ export default function SendTemplatePage() {
     setStatus("Sending...");
 
     try {
-      const res = await fetch("/api/send-template", {
+      const res = await fetch("/api/send-bulk", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
