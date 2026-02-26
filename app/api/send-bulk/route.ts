@@ -8,6 +8,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     const phone = body.number;
+    const name = body.name || "Student"; // ✅ FIX 1
 
     if (!phone) {
       return NextResponse.json(
@@ -29,8 +30,19 @@ export async function POST(req: NextRequest) {
           to: phone,
           type: "template",
           template: {
-            name: "college_students_demo_2026",
-            language: { code: "en" }
+            name: "college_students_demo_text_2026",
+            language: { code: "en" },
+            components: [
+              {
+                type: "body",
+                parameters: [
+                  {
+                    type: "text",
+                    text: name
+                  }
+                ]
+              }
+            ]
           }
         }),
       }

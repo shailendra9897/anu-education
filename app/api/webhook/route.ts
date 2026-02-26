@@ -18,51 +18,91 @@ export async function POST(req: NextRequest) {
     const from = message.from;
 
     // =============================
+    // 🔥 HANDLE QUICK REPLY BUTTON
+    // =============================
+    if (message.type === "button") {
+      const buttonText = message.button?.text;
+
+      if (buttonText === "Yes, Send Details") {
+
+        // Save lead to Google Sheet
+        await fetch(GOOGLE_SHEET_WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            date: new Date().toLocaleString(),
+            phone: from,
+            message: "Interested - Yes, Send Details",
+            source: "Template Button"
+          })
+        });
+
+        await sendReply(from,
+`Great 😊
+
+Book your FREE demo here:
+https://study.anuedu.in/register
+
+Our counsellor will guide you further.`);
+
+        return NextResponse.json({ status: "button yes handled" });
+      }
+
+      if (buttonText === "Not Now") {
+
+        await fetch(GOOGLE_SHEET_WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            date: new Date().toLocaleString(),
+            phone: from,
+            message: "Not Interested - Not Now",
+            source: "Template Button"
+          })
+        });
+
+        await sendReply(from,
+`No problem 😊
+
+If you plan for IELTS / PTE / German later, feel free to message us anytime.`);
+
+        return NextResponse.json({ status: "button no handled" });
+      }
+    }
+
+    // =============================
     // 🔥 HANDLE FLOW SUBMISSION
     // =============================
     if (message?.interactive?.type === "nfm_reply") {
       const flowData = message.interactive.nfm_reply.response_json;
 
-      const payload = {
-        date: new Date().toLocaleString(),
-        phone: from,
-        message: JSON.stringify(flowData),
-        source: "WhatsApp Flow"
-      };
-
-      // Send to Google Sheet
       await fetch(GOOGLE_SHEET_WEBHOOK, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          date: new Date().toLocaleString(),
+          phone: from,
+          message: JSON.stringify(flowData),
+          source: "WhatsApp Flow"
+        })
       });
 
-      // Send confirmation message
       await sendReply(from,
 `🎉 Thank you for booking your FREE Demo!
 
-Our ANU Education counsellor will contact you shortly.
-
-Explore more:
-https://www.anuedu.in`);
+Our ANU Education counsellor will contact you shortly.`);
 
       return NextResponse.json({ status: "flow processed" });
     }
 
     // =============================
-    // 🔥 HANDLE TEXT MENU
+    // 🔥 HANDLE TEXT MESSAGE (Fallback)
     // =============================
-
-    let userReply = "";
-
     if (message.type === "text") {
-      userReply = message.text?.body?.trim();
-    }
+      const userReply = message.text?.body?.trim().toLowerCase();
 
-    if (!userReply || ["hi", "hello", "hey"].includes(userReply.toLowerCase())) {
-      await sendReply(from,
+      if (["hi", "hello", "hey"].includes(userReply)) {
+        await sendReply(from,
 `Hello 👋 Welcome to ANU Education.
 
 Reply with number:
@@ -71,48 +111,7 @@ Reply with number:
 2️⃣ PTE  
 3️⃣ German  
 4️⃣ Study Abroad`);
-    }
-
-    else if (userReply === "1") {
-      await sendReply(from,
-`🎓 FREE 3-Day IELTS Demo Available!
-
-Register here:
-https://study.anuedu.in/register`);
-    }
-
-    else if (userReply === "2") {
-      await sendReply(from,
-`🎯 FREE 3-Day PTE Demo Available!
-
-Register here:
-https://study.anuedu.in/register`);
-    }
-
-    else if (userReply === "3") {
-      await sendReply(from,
-`🇩🇪 FREE German Language Demo!
-
-Register here:
-https://study.anuedu.in/register`);
-    }
-
-    else if (userReply === "4") {
-      await sendReply(from,
-`🌍 FREE Study Abroad Counselling!
-
-Book here:
-https://study.anuedu.in/register`);
-    }
-
-    else {
-      await sendReply(from,
-`Please reply with:
-
-1️⃣ IELTS  
-2️⃣ PTE  
-3️⃣ German  
-4️⃣ Study Abroad`);
+      }
     }
 
     return NextResponse.json({ status: "ok" });
