@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from "next/server";
 
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN!;

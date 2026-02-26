@@ -14,7 +14,6 @@ export default function SendTemplatePage() {
       return;
     }
 
-    // Basic phone validation (India format)
     if (!/^91\d{10}$/.test(number)) {
       setStatus("❌ Phone must be like 9198XXXXXXXX");
       return;
@@ -29,10 +28,7 @@ export default function SendTemplatePage() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          number: number,
-          name
-        })
+        body: JSON.stringify({ number, name })
       });
 
       const data = await res.json();
@@ -42,10 +38,10 @@ export default function SendTemplatePage() {
         setNumber("");
         setName("");
       } else {
-        setStatus(`❌ Error: ${JSON.stringify(data)}`);
+        setStatus(`❌ ${data?.error?.error?.message || "Failed to send"}`);
       }
     } catch (error) {
-      setStatus("❌ Server error");
+      setStatus("❌ Server connection error");
     }
 
     setLoading(false);
