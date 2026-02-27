@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from "next/server";
 
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN!;
@@ -8,6 +10,8 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
+    console.log("WEBHOOK BODY:", JSON.stringify(body, null, 2));
+
     const message =
       body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
 
@@ -16,54 +20,87 @@ export async function POST(req: NextRequest) {
     }
 
     const from = message.from;
+    let userMessage = "";
+    let source = "Unknown";
 
     // ===========================
-    // BUTTON REPLY HANDLING
+    // BUTTON REPLY
     // ===========================
-
     if (message?.interactive?.type === "button_reply") {
+      userMessage = message.interactive.button_reply.title;
+      source = "Marketing Button";
+    }
 
-      const reply = message.interactive.button_reply.title;
+    // ===========================
+    // NORMAL TEXT MESSAGE
+    // ===========================
+    else if (message?.type === "text") {
+      userMessage = message.text.body;
+      source = "Text Reply";
+    }
 
-      const payload = {
-        date: new Date().toLocaleString(),
-        phone: from,
-        message: reply,
-        source: "Marketing Button"
-      };
+    else {
+      return NextResponse.json({ status: "unsupported message type" });
+    }
 
+    // ===========================
+    // SAVE TO GOOGLE SHEET
+    // ===========================
+    const payload = {
+      date: new Date().toLocaleString(),
+      phone: from,
+      message: userMessage,
+      source: source
+    };
+
+    if (GOOGLE_SHEET_WEBHOOK) {
       await fetch(GOOGLE_SHEET_WEBHOOK, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
+    }
 
-      // Auto Reply Logic
-      if (reply.toLowerCase().includes("yes")) {
-        await sendReply(from,
+    // ===========================
+    // AUTO REPLY LOGIC
+    // ===========================
+
+    if (userMessage.toLowerCase().includes("yes")) {
+      await sendReply(from,
 `🎉 Great!
 
 Please register here:
 https://study.anuedu.in/register
 
 Our counsellor will contact you shortly.`);
-      } else {
-        await sendReply(from,
+    }
+
+    else if (userMessage.toLowerCase().includes("not")) {
+      await sendReply(from,
 `No problem 😊
 
 If you need guidance anytime, just message us.`);
-      }
-
-      return NextResponse.json({ status: "button processed" });
     }
 
-    return NextResponse.json({ status: "ok" });
+    else {
+      // Generic fallback
+      await sendReply(from,
+`Thank you for your response.
+
+Our team will contact you shortly.`);
+    }
+
+    return NextResponse.json({ status: "processed" });
 
   } catch (error) {
     console.error("Webhook error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
+
+// ===========================
+// SEND REPLY FUNCTION
+// ===========================
 
 async function sendReply(to: string, message: string) {
   await fetch(
