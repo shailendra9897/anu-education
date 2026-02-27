@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function SendTemplatePage() {
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
+  const [templateName, setTemplateName] = useState("student_demo_invite_2026");
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,7 +29,11 @@ export default function SendTemplatePage() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ number, name })
+        body: JSON.stringify({
+          number,
+          name,
+          templateName
+        })
       });
 
       const data = await res.json();
@@ -51,6 +56,26 @@ export default function SendTemplatePage() {
     <div style={{ padding: 40, maxWidth: 500 }}>
       <h2 style={{ marginBottom: 20 }}>Send WhatsApp Template</h2>
 
+      {/* Template Dropdown */}
+      <select
+        value={templateName}
+        onChange={(e) => setTemplateName(e.target.value)}
+        style={{ width: "100%", padding: 10, marginBottom: 15 }}
+      >
+        <option value="student_demo_invite_2026">
+          🎓 Student Demo Invite
+        </option>
+        <option value="consultant_collaboration_2026">
+          🤝 Consultant Collaboration
+        </option>
+        <option value="college_faculty_program_2026">
+          👩‍🏫 College Faculty Program
+        </option>
+        <option value="study_abroad_counselling_2026">
+          🌍 Study Abroad Counselling
+        </option>
+      </select>
+
       <input
         type="text"
         placeholder="Phone (9198XXXXXXXX)"
@@ -61,7 +86,7 @@ export default function SendTemplatePage() {
 
       <input
         type="text"
-        placeholder="Student Name (Optional)"
+        placeholder="Name (Optional)"
         value={name}
         onChange={(e) => setName(e.target.value)}
         style={{ width: "100%", padding: 10, marginBottom: 15 }}
