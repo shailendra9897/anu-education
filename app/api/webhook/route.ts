@@ -21,60 +21,30 @@ export async function POST(req: NextRequest) {
 
     const from = message.from;
     let userMessage = "";
-    let source = "Unknown";
+    let source = "";
 
     // ===========================
-// HANDLE QUICK REPLY BUTTON
-// ===========================
+    // QUICK REPLY BUTTON
+    // ===========================
+    if (message.type === "interactive" && message.interactive?.button_reply) {
 
-if (message?.type === "interactive" && message?.interactive?.button_reply) {
+      userMessage = message.interactive.button_reply.title;
+      source = "Quick Reply";
 
-  const reply = message.interactive.button_reply.title;
-
-  console.log("BUTTON CLICKED:", reply);
-
-  const payload = {
-    date: new Date().toLocaleString(),
-    phone: from,
-    message: reply,
-    source: "Quick Reply Button"
-  };
-
-  await fetch(GOOGLE_SHEET_WEBHOOK, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-
-  // Auto reply
-  if (reply.toLowerCase().includes("yes")) {
-    await sendReply(from,
-`🎉 Great!
-
-Please register here:
-https://study.anuedu.in/register
-
-Our counsellor will contact you shortly.`);
-  } else {
-    await sendReply(from,
-`No problem 😊
-
-If you need guidance anytime, just message us.`);
-  }
-
-  return NextResponse.json({ status: "button processed" });
-}
+    }
 
     // ===========================
-    // NORMAL TEXT MESSAGE
+    // NORMAL TEXT
     // ===========================
-    else if (message?.type === "text") {
+    else if (message.type === "text") {
+
       userMessage = message.text.body;
       source = "Text Reply";
+
     }
 
     else {
-      return NextResponse.json({ status: "unsupported message type" });
+      return NextResponse.json({ status: "unsupported type" });
     }
 
     // ===========================
@@ -96,10 +66,10 @@ If you need guidance anytime, just message us.`);
     }
 
     // ===========================
-    // AUTO REPLY LOGIC
+    // AUTO REPLY
     // ===========================
-
     if (userMessage.toLowerCase().includes("yes")) {
+
       await sendReply(from,
 `🎉 Great!
 
@@ -107,21 +77,21 @@ Please register here:
 https://study.anuedu.in/register
 
 Our counsellor will contact you shortly.`);
-    }
 
-    else if (userMessage.toLowerCase().includes("not")) {
+    } else if (userMessage.toLowerCase().includes("not")) {
+
       await sendReply(from,
 `No problem 😊
 
 If you need guidance anytime, just message us.`);
-    }
 
-    else {
-      // Generic fallback
+    } else {
+
       await sendReply(from,
 `Thank you for your response.
 
 Our team will contact you shortly.`);
+
     }
 
     return NextResponse.json({ status: "processed" });
@@ -131,10 +101,6 @@ Our team will contact you shortly.`);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
-
-// ===========================
-// SEND REPLY FUNCTION
-// ===========================
 
 async function sendReply(to: string, message: string) {
   await fetch(
