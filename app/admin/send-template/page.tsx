@@ -7,15 +7,20 @@ export default function SendTemplatePage() {
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
+
+  const handleLogin = async () => {
+    if (password === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
+      setAuthenticated(true);
+    } else {
+      alert("Wrong password");
+    }
+  };
 
   const handleSend = async () => {
     if (!number) {
       setStatus("❌ Please enter phone number");
-      return;
-    }
-
-    if (!/^91\d{10}$/.test(number)) {
-      setStatus("❌ Phone must be like 9198XXXXXXXX");
       return;
     }
 
@@ -25,9 +30,7 @@ export default function SendTemplatePage() {
     try {
       const res = await fetch("/api/send-bulk", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ number, name })
       });
 
@@ -40,49 +43,55 @@ export default function SendTemplatePage() {
       } else {
         setStatus(`❌ ${data?.error?.error?.message || "Failed to send"}`);
       }
-    } catch (error) {
-      setStatus("❌ Server connection error");
+    } catch {
+      setStatus("❌ Server error");
     }
 
     setLoading(false);
   };
 
+  if (!authenticated) {
+    return (
+      <div style={{ padding: 40 }}>
+        <h2>Admin Login</h2>
+        <input
+          type="password"
+          placeholder="Enter admin password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={{ padding: 10, marginBottom: 10 }}
+        />
+        <br />
+        <button onClick={handleLogin}>Login</button>
+      </div>
+    );
+  }
+
   return (
     <div style={{ padding: 40, maxWidth: 500 }}>
-      <h2 style={{ marginBottom: 20 }}>Send WhatsApp Template</h2>
+      <h2>Send WhatsApp Template</h2>
 
       <input
         type="text"
-        placeholder="Phone (e.g. 9198XXXXXXXX)"
+        placeholder="Phone (9198XXXXXXXX)"
         value={number}
         onChange={(e) => setNumber(e.target.value)}
-        style={{ width: "100%", padding: 10, marginBottom: 15 }}
+        style={{ width: "100%", padding: 10, marginBottom: 10 }}
       />
 
       <input
         type="text"
-        placeholder="Student Name (Optional)"
+        placeholder="Student Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        style={{ width: "100%", padding: 10, marginBottom: 15 }}
+        style={{ width: "100%", padding: 10, marginBottom: 10 }}
       />
 
-      <button
-        onClick={handleSend}
-        disabled={loading}
-        style={{
-          padding: 12,
-          width: "100%",
-          background: loading ? "#999" : "#16a34a",
-          color: "white",
-          border: "none",
-          cursor: "pointer"
-        }}
-      >
+      <button onClick={handleSend} disabled={loading}>
         {loading ? "Sending..." : "Send Template"}
       </button>
 
-      <p style={{ marginTop: 20 }}>{status}</p>
+      <p>{status}</p>
     </div>
   );
 }
