@@ -24,12 +24,46 @@ export async function POST(req: NextRequest) {
     let source = "Unknown";
 
     // ===========================
-    // BUTTON REPLY
-    // ===========================
-    if (message?.interactive?.type === "button_reply") {
-      userMessage = message.interactive.button_reply.title;
-      source = "Marketing Button";
-    }
+// HANDLE QUICK REPLY BUTTON
+// ===========================
+
+if (message?.type === "interactive" && message?.interactive?.button_reply) {
+
+  const reply = message.interactive.button_reply.title;
+
+  console.log("BUTTON CLICKED:", reply);
+
+  const payload = {
+    date: new Date().toLocaleString(),
+    phone: from,
+    message: reply,
+    source: "Quick Reply Button"
+  };
+
+  await fetch(GOOGLE_SHEET_WEBHOOK, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  // Auto reply
+  if (reply.toLowerCase().includes("yes")) {
+    await sendReply(from,
+`🎉 Great!
+
+Please register here:
+https://study.anuedu.in/register
+
+Our counsellor will contact you shortly.`);
+  } else {
+    await sendReply(from,
+`No problem 😊
+
+If you need guidance anytime, just message us.`);
+  }
+
+  return NextResponse.json({ status: "button processed" });
+}
 
     // ===========================
     // NORMAL TEXT MESSAGE
