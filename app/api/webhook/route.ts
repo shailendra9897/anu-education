@@ -9,7 +9,6 @@ const GOOGLE_SHEET_WEBHOOK = process.env.GOOGLE_SHEET_WEBHOOK!;
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-
     console.log("WEBHOOK BODY:", JSON.stringify(body, null, 2));
 
     const message =
@@ -21,35 +20,36 @@ export async function POST(req: NextRequest) {
 
     const from = message.from;
     let userMessage = "";
-    let source = "";
+    let source = "Unknown";
 
-    // ===========================
-    // QUICK REPLY BUTTON
-    // ===========================
-    if (message.type === "interactive" && message.interactive?.button_reply) {
+    // =============================
+    // ✅ QUICK REPLY BUTTON
+    // =============================
+    if (message.type === "button") {
 
-      userMessage = message.interactive.button_reply.title;
-      source = "Quick Reply";
+      userMessage = message.button.text;
+      source = "Quick Reply Button";
 
+      console.log("BUTTON CLICKED:", userMessage);
     }
 
-    // ===========================
-    // NORMAL TEXT
-    // ===========================
+    // =============================
+    // ✅ NORMAL TEXT
+    // =============================
     else if (message.type === "text") {
 
       userMessage = message.text.body;
       source = "Text Reply";
-
     }
 
     else {
       return NextResponse.json({ status: "unsupported type" });
     }
 
-    // ===========================
+    // =============================
     // SAVE TO GOOGLE SHEET
-    // ===========================
+    // =============================
+
     const payload = {
       date: new Date().toLocaleString(),
       phone: from,
@@ -65,9 +65,10 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // ===========================
-    // AUTO REPLY
-    // ===========================
+    // =============================
+    // AUTO REPLY LOGIC
+    // =============================
+
     if (userMessage.toLowerCase().includes("yes")) {
 
       await sendReply(from,
@@ -77,21 +78,14 @@ Please register here:
 https://study.anuedu.in/register
 
 Our counsellor will contact you shortly.`);
+    }
 
-    } else if (userMessage.toLowerCase().includes("not")) {
-
-      await sendReply(from,
-`No problem 😊
-
-If you need guidance anytime, just message us.`);
-
-    } else {
+    else {
 
       await sendReply(from,
 `Thank you for your response.
 
-Our team will contact you shortly.`);
-
+Our ANU Education team will contact you soon.`);
     }
 
     return NextResponse.json({ status: "processed" });
@@ -113,7 +107,7 @@ async function sendReply(to: string, message: string) {
       },
       body: JSON.stringify({
         messaging_product: "whatsapp",
-        to: to,
+        to,
         type: "text",
         text: { body: message },
       }),
