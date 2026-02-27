@@ -10,10 +10,12 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     const phone = body.number;
+    const name = body.name || "Student";
+    const templateName = body.templateName;
 
-    if (!phone) {
+    if (!phone || !templateName) {
       return NextResponse.json(
-        { error: "No phone provided" },
+        { error: "Missing phone or template" },
         { status: 400 }
       );
     }
@@ -31,9 +33,20 @@ export async function POST(req: NextRequest) {
           to: phone,
           type: "template",
           template: {
-            name: "hello_world",
-            language: { code: "en_US" }
-          }
+            name: templateName,
+            language: { code: "en" },
+            components: [
+              {
+                type: "body",
+                parameters: [
+                  {
+                    type: "text",
+                    text: name,
+                  },
+                ],
+              },
+            ],
+          },
         }),
       }
     );
@@ -41,13 +54,10 @@ export async function POST(req: NextRequest) {
     const data = await metaResponse.json();
 
     if (!metaResponse.ok) {
-      return NextResponse.json(
-        { error: data },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: data }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, data });
+    return NextResponse.json({ success: true });
 
   } catch (error: any) {
     return NextResponse.json(
