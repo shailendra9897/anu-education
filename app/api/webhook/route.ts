@@ -51,11 +51,15 @@ export async function POST(req: NextRequest) {
     // =============================
 
     const payload = {
-      date: new Date().toLocaleString(),
-      phone: from,
-      message: userMessage,
-      source: source
-    };
+  date: new Date().toLocaleString(),
+  phone: from,
+  name: "",
+  message: userMessage,
+  source: source,
+  status: "New",
+  followup: "",
+  notes: ""
+};
 
     if (GOOGLE_SHEET_WEBHOOK) {
       await fetch(GOOGLE_SHEET_WEBHOOK, {
