@@ -319,6 +319,23 @@ strategies to improve band scores quickly.
 </div>
 </section>
 
+ <section className="py-12 bg-gray-50">
+<div className="max-w-4xl mx-auto px-4 text-center">
+
+<h2 className="text-3xl font-bold mb-6">
+Watch IELTS Preparation Tips
+</h2>
+
+<iframe
+className="w-full h-64 md:h-96 rounded-xl"
+src="https://www.youtube.com/embed/https://youtube.com/shorts/hTOiQqKBQNc?si=vtZyPU-VmLlYSUaK"
+title="IELTS Preparation Tips"
+allowFullScreen
+/>
+
+</div>
+</section>
+
         {/* FINAL CTA */}
         <section className="py-14 bg-green-600 text-white text-center">
           <h2 className="text-3xl font-bold mb-4">
