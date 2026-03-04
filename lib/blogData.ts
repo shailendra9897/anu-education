@@ -1,5 +1,13 @@
 export const blogs = [
   {
+    title: "IELTS Writing Task 2 Samples: Band 9 Guide for 2026",
+    description:
+      "Learn how to write Band 7–9 IELTS essays with real samples, strategies, and practice topics.",
+    slug: "ielts-writing-task-2-samples",
+    image: "/blog/ielts-online-guide.jpg",
+    category: "IELTS",
+  },
+  {
     title: "Study Abroad Prep 2026: IELTS, PTE, German & French Compared",
     description:
       "Daily routines, course comparison, success stories and a 12-week preparation plan for study abroad aspirants.",

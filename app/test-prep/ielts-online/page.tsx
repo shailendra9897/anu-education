@@ -137,6 +137,16 @@ export default function IELTSOnlinePage() {
           </div>
         </section>
 
+  <section className="py-8">
+  <div className="max-w-6xl mx-auto px-4 text-center">
+    <p className="text-gray-700">
+      Looking for more IELTS resources?  
+      Explore our <a href="/blog/best-ielts-online-coaching-india" className="text-green-600 font-semibold">IELTS Band 7 Guide</a> 
+      and <a href="/blog/ielts-writing-task-2-samples" className="text-green-600 font-semibold">IELTS Writing Samples</a>.
+    </p>
+  </div>
+</section>
+
         {/* PREMIUM FEATURE GRID */}
         <section className="py-12 bg-gray-50">
           <div className="max-w-6xl mx-auto px-4">
@@ -226,6 +236,88 @@ export default function IELTSOnlinePage() {
             </p>
           </div>
         </section>
+
+      <section className="py-10">
+  <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-4 gap-6 text-center">
+
+  <div>
+  <h3 className="text-2xl font-bold text-green-600">1000+</h3>
+      <p className="text-gray-600">Students Trained</p>
+      </div>
+
+        <div>
+    <h3 className="text-2xl font-bold text-green-600">15</h3>
+    <p className="text-gray-600">Full Mock Tests</p>
+    </div>
+
+<div>
+<h3 className="text-2xl font-bold text-green-600">4.9⭐</h3>
+<p className="text-gray-600">Student Rating</p>
+</div>
+
+<div>
+<h3 className="text-2xl font-bold text-green-600">5+</h3>
+<p className="text-gray-600">Years Experience</p>
+</div>
+
+</div>
+</section>
+
+              <section className="py-12 bg-gray-50">
+<div className="max-w-4xl mx-auto px-4">
+
+<h2 className="text-3xl font-bold mb-6 text-center">
+Frequently Asked Questions
+</h2>
+
+<div className="space-y-4">
+
+<div>
+<h3 className="font-semibold">How long does IELTS preparation take?</h3>
+<p className="text-gray-600">
+Most students prepare in 4–6 weeks with structured practice and mock tests.
+</p>
+</div>
+
+<div>
+<h3 className="font-semibold">What IELTS band score is required for study abroad?</h3>
+<p className="text-gray-600">
+Most universities require Band 6.5–7 depending on the program.
+</p>
+</div>
+
+<div>
+<h3 className="font-semibold">Do you provide speaking practice?</h3>
+<p className="text-gray-600">
+Yes, our course includes live speaking mock tests with band score evaluation.
+</p>
+</div>
+
+</div>
+
+</div>
+</section>
+              <section className="py-10">
+<div className="max-w-4xl mx-auto px-4 text-gray-700">
+
+<h2 className="text-2xl font-bold mb-4">
+Why Choose ANU Education for IELTS Online Coaching?
+</h2>
+
+<p className="mb-4">
+ANU Education provides structured IELTS online coaching designed for students 
+planning to study abroad. Our training includes live classes, AI-based scoring, 
+expert writing feedback, and real exam simulation mock tests.
+</p>
+
+<p>
+Students preparing for IELTS often struggle with speaking confidence and 
+writing structure. Our expert trainers guide students with personalized 
+strategies to improve band scores quickly.
+</p>
+
+</div>
+</section>
 
         {/* FINAL CTA */}
         <section className="py-14 bg-green-600 text-white text-center">
