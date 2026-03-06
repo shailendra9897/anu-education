@@ -7,9 +7,10 @@ const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID!;
 const GOOGLE_SHEET_WEBHOOK = process.env.GOOGLE_SHEET_WEBHOOK!;
 
 export async function POST(req: NextRequest) {
+
   try {
+
     const body = await req.json();
-    console.log("WEBHOOK BODY:", JSON.stringify(body, null, 2));
 
     const message =
       body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
@@ -19,88 +20,136 @@ export async function POST(req: NextRequest) {
     }
 
     const from = message.from;
+
     let userMessage = "";
-    let source = "Unknown";
+    let source = "Text";
 
-    // =============================
-    // ✅ QUICK REPLY BUTTON
-    // =============================
-    if (message.type === "button") {
+    // ==========================
+    // QUICK REPLY BUTTON
+    // ==========================
 
-      userMessage = message.button.text;
-      source = "Quick Reply Button";
+    if (
+      message.type === "interactive" &&
+      message.interactive?.button_reply
+    ) {
 
-      console.log("BUTTON CLICKED:", userMessage);
+      userMessage = message.interactive.button_reply.title;
+      source = "Button Click";
+
+      // Save to Google Sheet
+      await saveLead(from, userMessage, source);
+
+      // IELTS
+      if (userMessage.toLowerCase().includes("ielts")) {
+        await sendReply(
+          from,
+`🎓 IELTS Demo Class
+
+Join our FREE 3-day IELTS demo.
+
+Register here:
+https://study.anuedu.in/register`
+        );
+      }
+
+      // PTE
+      else if (userMessage.toLowerCase().includes("pte")) {
+        await sendReply(
+          from,
+`🎯 PTE Demo Class
+
+Join our FREE PTE demo class.
+
+Register here:
+https://study.anuedu.in/register`
+        );
+      }
+
+      // Study Abroad
+      else if (userMessage.toLowerCase().includes("study")) {
+        await sendReply(
+          from,
+`🌍 Study Abroad Counselling
+
+Get FREE counselling for:
+UK 🇬🇧
+Canada 🇨🇦
+Germany 🇩🇪
+Australia 🇦🇺
+
+Book here:
+https://study.anuedu.in/register`
+        );
+      }
+
+      return NextResponse.json({ status: "button processed" });
     }
 
-    // =============================
-    // ✅ NORMAL TEXT
-    // =============================
-    else if (message.type === "text") {
+    // ==========================
+    // NORMAL TEXT MESSAGE
+    // ==========================
+
+    if (message.type === "text") {
 
       userMessage = message.text.body;
-      source = "Text Reply";
+      source = "Text Message";
+
+      await saveLead(from, userMessage, source);
+
+      await sendReply(
+        from,
+`Thank you for messaging ANU Education.
+
+Our team will contact you shortly.`
+      );
+
+      return NextResponse.json({ status: "text processed" });
+
     }
 
-    else {
-      return NextResponse.json({ status: "unsupported type" });
-    }
-
-    // =============================
-    // SAVE TO GOOGLE SHEET
-    // =============================
-
-    const payload = {
-  date: new Date().toLocaleString(),
-  phone: from,
-  name: "",
-  message: userMessage,
-  source: source,
-  status: "New",
-  followup: "",
-  notes: ""
-};
-
-    if (GOOGLE_SHEET_WEBHOOK) {
-      await fetch(GOOGLE_SHEET_WEBHOOK, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-    }
-
-    // =============================
-    // AUTO REPLY LOGIC
-    // =============================
-
-    if (userMessage.toLowerCase().includes("yes")) {
-
-      await sendReply(from,
-`🎉 Great!
-
-Please register here:
-https://study.anuedu.in/register
-
-Our counsellor will contact you shortly.`);
-    }
-
-    else {
-
-      await sendReply(from,
-`Thank you for your response.
-
-Our ANU Education team will contact you soon.`);
-    }
-
-    return NextResponse.json({ status: "processed" });
+    return NextResponse.json({ status: "ignored" });
 
   } catch (error) {
+
     console.error("Webhook error:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+
+    return NextResponse.json(
+      { error: "Server error" },
+      { status: 500 }
+    );
+
   }
 }
 
+// ==========================
+// SAVE TO GOOGLE SHEET
+// ==========================
+
+async function saveLead(phone: string, message: string, source: string) {
+
+  if (!GOOGLE_SHEET_WEBHOOK) return;
+
+  await fetch(GOOGLE_SHEET_WEBHOOK, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      date: new Date().toLocaleString(),
+      phone: phone,
+      message: message,
+      source: source
+    })
+  });
+
+}
+
+// ==========================
+// SEND WHATSAPP MESSAGE
+// ==========================
+
 async function sendReply(to: string, message: string) {
+
   await fetch(
     `https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`,
     {
@@ -111,10 +160,13 @@ async function sendReply(to: string, message: string) {
       },
       body: JSON.stringify({
         messaging_product: "whatsapp",
-        to,
+        to: to,
         type: "text",
-        text: { body: message },
+        text: {
+          body: message
+        },
       }),
     }
   );
+
 }
