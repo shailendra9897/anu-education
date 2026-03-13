@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     let source = "Text";
 
     // ==========================
-    // QUICK REPLY BUTTON
+    // BUTTON CLICK HANDLING
     // ==========================
 
     if (
@@ -36,50 +36,60 @@ export async function POST(req: NextRequest) {
       userMessage = message.interactive.button_reply.title;
       source = "Button Click";
 
-      // Save to Google Sheet
       await saveLead(from, userMessage, source);
 
-      // IELTS
-      if (userMessage.toLowerCase().includes("ielts")) {
+      const msg = userMessage.toLowerCase();
+
+      if (msg.includes("ielts")) {
+
         await sendReply(
           from,
 `🎓 IELTS Demo Class
 
 Join our FREE 3-day IELTS demo.
 
-Register here:
-https://study.anuedu.in/register`
+Reply:
+
+1️⃣ Today
+2️⃣ Tomorrow
+3️⃣ Weekend Batch`
         );
+
       }
 
-      // PTE
-      else if (userMessage.toLowerCase().includes("pte")) {
+      else if (msg.includes("pte")) {
+
         await sendReply(
           from,
 `🎯 PTE Demo Class
 
 Join our FREE PTE demo class.
 
-Register here:
-https://study.anuedu.in/register`
+Reply:
+
+1️⃣ Today
+2️⃣ Tomorrow
+3️⃣ Weekend Batch`
         );
+
       }
 
-      // Study Abroad
-      else if (userMessage.toLowerCase().includes("study")) {
+      else if (msg.includes("study")) {
+
         await sendReply(
           from,
 `🌍 Study Abroad Counselling
 
-Get FREE counselling for:
-UK 🇬🇧
-Canada 🇨🇦
-Germany 🇩🇪
-Australia 🇦🇺
+We guide students for:
 
-Book here:
-https://study.anuedu.in/register`
+🇩🇪 Germany
+🇬🇧 UK
+🇨🇦 Canada
+🇦🇺 Australia
+
+Reply with country name.`
         );
+
       }
 
       return NextResponse.json({ status: "button processed" });
@@ -91,17 +101,98 @@ https://study.anuedu.in/register`
 
     if (message.type === "text") {
 
-      userMessage = message.text.body;
+      userMessage = message.text.body.trim().toLowerCase();
       source = "Text Message";
 
       await saveLead(from, userMessage, source);
 
-      await sendReply(
-        from,
-`Thank you for messaging ANU Education.
+      // MAIN MENU
 
-Our team will contact you shortly.`
-      );
+      if (
+        userMessage === "hi" ||
+        userMessage === "hello" ||
+        userMessage === "menu"
+      ) {
+
+        await sendMenu(from);
+
+        return NextResponse.json({ status: "menu sent" });
+
+      }
+
+      // IELTS
+
+      else if (userMessage === "1") {
+
+        await sendReply(
+          from,
+`🎓 IELTS FREE Demo
+
+Register here:
+https://study.anuedu.in/register`
+        );
+
+      }
+
+      // PTE
+
+      else if (userMessage === "2") {
+
+        await sendReply(
+          from,
+`🎯 PTE FREE Demo
+
+Register here:
+https://study.anuedu.in/register`
+        );
+
+      }
+
+      // Study Abroad
+
+      else if (userMessage === "3") {
+
+        await sendReply(
+          from,
+`🌍 Study Abroad Counselling
+
+Book FREE counselling:
+https://study.anuedu.in/register`
+        );
+
+      }
+
+      // Demo
+
+      else if (userMessage === "4") {
+
+        await sendReply(
+          from,
+`🎓 FREE Demo Classes
+
+Choose course:
+
+1️⃣ IELTS
+2️⃣ PTE`
+        );
+
+      }
+
+      // YES from marketing template
+
+      else if (userMessage.includes("yes")) {
+
+        await sendMenu(from);
+
+      }
+
+      // UNKNOWN MESSAGE
+
+      else {
+
+        await sendMenu(from);
+
+      }
 
       return NextResponse.json({ status: "text processed" });
 
@@ -119,6 +210,28 @@ Our team will contact you shortly.`
     );
 
   }
+}
+
+// ==========================
+// SEND MAIN MENU
+// ==========================
+
+async function sendMenu(to: string) {
+
+  await sendReply(
+    to,
+`Hello 👋 Welcome to ANU Education.
+
+How can we help you?
+
+Reply with number:
+
+1️⃣ IELTS Coaching
+2️⃣ PTE Coaching
+3️⃣ Study Abroad Counselling
+4️⃣ Book FREE Demo`
+  );
+
 }
 
 // ==========================
