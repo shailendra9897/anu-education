@@ -34,6 +34,42 @@ return (
       })
     }}
   />
+  <Script
+id="faq-schema"
+type="application/ld+json"
+dangerouslySetInnerHTML={{
+__html: JSON.stringify({
+"@context":"https://schema.org",
+"@type":"FAQPage",
+"mainEntity":[
+{
+"@type":"Question",
+"name":"What is the IELTS exam?",
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"IELTS is an international English language test required for study, work and migration in countries like Canada, UK and Australia."
+}
+},
+{
+"@type":"Question",
+"name":"Is 30 days enough to prepare for IELTS?",
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"Yes, with a structured study plan many students prepare for IELTS in 30 days by practicing reading, writing, listening and speaking daily."
+}
+},
+{
+"@type":"Question",
+"name":"What is a good IELTS band score?",
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"Most universities require IELTS band scores between 6.5 and 7.5 depending on the course and country."
+}
+}
+]
+})
+}}
+/>
 
   {/* ================= PAGE ================= */}
 
