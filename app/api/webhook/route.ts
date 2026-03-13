@@ -12,8 +12,13 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
 
-    const message =
-      body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+    const change = body?.entry?.[0]?.changes?.[0]?.value;
+
+    if (!change) {
+      return NextResponse.json({ status: "no change" });
+    }
+
+    const message = change?.messages?.[0];
 
     if (!message) {
       return NextResponse.json({ status: "no message" });
@@ -40,7 +45,32 @@ export async function POST(req: NextRequest) {
 
       const msg = userMessage.toLowerCase();
 
-      if (msg.includes("ielts")) {
+      // YES BUTTON
+
+      if (msg.includes("yes")) {
+
+        await sendMenu(from);
+
+      }
+
+      // NO BUTTON
+
+      else if (msg.includes("no")) {
+
+        await sendReply(
+          from,
+`No problem 🙂
+
+You can register anytime here:
+
+https://study.anuedu.in/register`
+        );
+
+      }
+
+      // IELTS
+
+      else if (msg.includes("ielts")) {
 
         await sendReply(
           from,
@@ -56,6 +86,8 @@ Reply:
         );
 
       }
+
+      // PTE
 
       else if (msg.includes("pte")) {
 
@@ -73,6 +105,8 @@ Reply:
         );
 
       }
+
+      // STUDY ABROAD
 
       else if (msg.includes("study")) {
 
@@ -93,6 +127,7 @@ Reply with country name.`
       }
 
       return NextResponse.json({ status: "button processed" });
+
     }
 
     // ==========================
@@ -106,7 +141,7 @@ Reply with country name.`
 
       await saveLead(from, userMessage, source);
 
-      // MAIN MENU
+      // GREETING
 
       if (
         userMessage === "hi" ||
@@ -115,8 +150,6 @@ Reply with country name.`
       ) {
 
         await sendMenu(from);
-
-        return NextResponse.json({ status: "menu sent" });
 
       }
 
@@ -148,7 +181,7 @@ https://study.anuedu.in/register`
 
       }
 
-      // Study Abroad
+      // STUDY ABROAD
 
       else if (userMessage === "3") {
 
@@ -162,7 +195,7 @@ https://study.anuedu.in/register`
 
       }
 
-      // Demo
+      // DEMO MENU
 
       else if (userMessage === "4") {
 
@@ -178,7 +211,42 @@ Choose course:
 
       }
 
-      // YES from marketing template
+      // DEMO SLOT
+
+      else if (userMessage === "today") {
+
+        await sendReply(
+          from,
+`✅ Demo slot booked for TODAY.
+
+Our counsellor will contact you shortly.`
+        );
+
+      }
+
+      else if (userMessage === "tomorrow") {
+
+        await sendReply(
+          from,
+`✅ Demo slot booked for TOMORROW.
+
+Our counsellor will contact you shortly.`
+        );
+
+      }
+
+      else if (userMessage === "weekend") {
+
+        await sendReply(
+          from,
+`✅ Weekend demo slot reserved.
+
+Our team will contact you shortly.`
+        );
+
+      }
+
+      // TEMPLATE YES TEXT
 
       else if (userMessage.includes("yes")) {
 
