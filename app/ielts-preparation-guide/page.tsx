@@ -149,6 +149,96 @@ return (
         confidence.
       </p>
     </section>
+{/* ================= IELTS FAQ ================= */}
+
+<section className="space-y-6"><h2 className="text-3xl font-bold">
+IELTS Preparation FAQs
+</h2><div className="space-y-4 text-gray-700"><div>
+<h3 className="font-semibold">What is the IELTS exam?</h3>
+<p>
+IELTS (International English Language Testing System) is a global English proficiency
+test required for studying, working or immigrating to countries such as
+Canada, UK, Australia and Germany.
+</p>
+</div><div>
+<h3 className="font-semibold">Is IELTS Academic harder than General Training?</h3>
+<p>
+IELTS Academic focuses on university-level English including essays,
+reports and academic reading passages, while General Training tests
+everyday English used in workplaces and daily communication.
+</p>
+</div><div>
+<h3 className="font-semibold">How many times can I take the IELTS exam?</h3>
+<p>
+There is no limit to the number of times you can take IELTS.
+Students can retake the exam whenever they want after registering again
+and paying the exam fee.
+</p>
+</div><div>
+<h3 className="font-semibold">Is 30 days enough to prepare for IELTS?</h3>
+<p>
+Yes. Students with a good English foundation can prepare for IELTS in
+30 days by following a structured study plan that includes daily
+practice for reading, writing, listening and speaking.
+</p>
+</div><div>
+<h3 className="font-semibold">What is a good IELTS band score?</h3>
+<p>
+IELTS scores range from Band 1 to Band 9. Most universities and visa
+programs require Band 6.5 to Band 7.5 depending on the course and country.
+</p>
+</div><div>
+<h3 className="font-semibold">How can I prepare for IELTS at home?</h3>
+<p>
+Students can prepare at home using Cambridge IELTS books, online
+practice tests, vocabulary apps and regular speaking practice.
+Mock tests help simulate the real exam environment.
+</p>
+</div><div>
+<h3 className="font-semibold">How many hours should I study daily for IELTS?</h3>
+<p>
+Studying 2–3 focused hours daily is recommended. Students should divide
+time between reading practice, writing essays, listening tests and
+speaking practice.
+</p>
+</div><div>
+<h3 className="font-semibold">What are common IELTS speaking topics?</h3>
+<p>
+Common speaking topics include hobbies, family, work, education,
+travel experiences and future plans. Cue cards may ask you to describe
+a person, place, book or experience.
+</p>
+</div><div>
+<h3 className="font-semibold">How is IELTS scored?</h3>
+<p>
+Each IELTS section (Listening, Reading, Writing and Speaking) is scored
+from Band 0 to Band 9. The overall band score is the average of all four
+sections.
+</p>
+</div><div>
+<h3 className="font-semibold">Can I use American English in IELTS?</h3>
+<p>
+Yes. Both British and American English are accepted in IELTS. However,
+students should remain consistent with spelling and grammar style.
+</p>
+</div><div>
+<h3 className="font-semibold">How long does it take to get IELTS results?</h3>
+<p>
+Paper-based IELTS results are released in about 13 days, while
+computer-delivered IELTS results are usually available within
+3–5 days.
+</p>
+</div><div>
+<h3 className="font-semibold">Which is easier: IELTS or TOEFL?</h3>
+<p>
+The difficulty depends on the student. IELTS includes a face-to-face
+speaking interview with an examiner, while TOEFL is completely
+computer-based. Many students prefer IELTS because the speaking
+test feels more natural.
+</p>
+</div>
+</div>
+</section>
 
     {/* Final CTA */}
     <section className="bg-blue-50 p-6 rounded-xl text-center">
