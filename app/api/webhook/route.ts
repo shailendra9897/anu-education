@@ -30,50 +30,48 @@ export async function POST(req: NextRequest) {
     let source = "Text";
 
     // ==========================
-    // BUTTON CLICK HANDLING
-    // ==========================
+// BUTTON CLICK HANDLING
+// ==========================
 
-    if (
-      message.type === "interactive" &&
-      message.interactive?.button_reply
-    ) {
+if (message.type === "interactive") {
 
-      userMessage = message.interactive.button_reply.title;
-      source = "Button Click";
+  const reply =
+    message.interactive?.button_reply?.title ||
+    message.interactive?.list_reply?.title ||
+    "";
 
-      await saveLead(from, userMessage, source);
+  userMessage = reply;
+  source = "Button Click";
 
-      const msg = userMessage.toLowerCase();
+  await saveLead(from, userMessage, source);
 
-      // YES BUTTON
+  const msg = reply.toLowerCase();
 
-      if (msg.includes("yes")) {
+  // YES BUTTON
+  if (msg.includes("yes")) {
 
-        await sendMenu(from);
+    await sendMenu(from);
 
-      }
+  }
 
-      // NO BUTTON
+  // NO BUTTON
+  else if (msg.includes("no")) {
 
-      else if (msg.includes("no")) {
-
-        await sendReply(
-          from,
+    await sendReply(
+      from,
 `No problem 🙂
 
 You can register anytime here:
-
 https://study.anuedu.in/register`
-        );
+    );
 
-      }
+  }
 
-      // IELTS
+  // IELTS
+  else if (msg.includes("ielts")) {
 
-      else if (msg.includes("ielts")) {
-
-        await sendReply(
-          from,
+    await sendReply(
+      from,
 `🎓 IELTS Demo Class
 
 Join our FREE 3-day IELTS demo.
@@ -83,16 +81,15 @@ Reply:
 1️⃣ Today
 2️⃣ Tomorrow
 3️⃣ Weekend Batch`
-        );
+    );
 
-      }
+  }
 
-      // PTE
+  // PTE
+  else if (msg.includes("pte")) {
 
-      else if (msg.includes("pte")) {
-
-        await sendReply(
-          from,
+    await sendReply(
+      from,
 `🎯 PTE Demo Class
 
 Join our FREE PTE demo class.
@@ -102,16 +99,15 @@ Reply:
 1️⃣ Today
 2️⃣ Tomorrow
 3️⃣ Weekend Batch`
-        );
+    );
 
-      }
+  }
 
-      // STUDY ABROAD
+  // STUDY ABROAD
+  else if (msg.includes("study")) {
 
-      else if (msg.includes("study")) {
-
-        await sendReply(
-          from,
+    await sendReply(
+      from,
 `🌍 Study Abroad Counselling
 
 We guide students for:
@@ -122,13 +118,13 @@ We guide students for:
 🇦🇺 Australia
 
 Reply with country name.`
-        );
+    );
 
-      }
+  }
 
-      return NextResponse.json({ status: "button processed" });
+  return NextResponse.json({ status: "button processed" });
 
-    }
+}
 
     // ==========================
     // NORMAL TEXT MESSAGE
