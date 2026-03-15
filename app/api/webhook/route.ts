@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     if (!message) {
       return NextResponse.json({ status: "no message" });
     }
-
+console.log("BUTTON DATA:", JSON.stringify(message));
     const from = message.from;
 
     let userMessage = "";
