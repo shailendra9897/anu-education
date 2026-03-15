@@ -29,18 +29,21 @@ console.log("BUTTON DATA:", JSON.stringify(message));
     let userMessage = "";
     let source = "Text";
 
-    // ==========================
+   // ==========================
 // BUTTON CLICK HANDLING
 // ==========================
 
-if (message.type === "interactive") {
-const reply =
-  message.interactive?.button_reply?.title ||
-  message.interactive?.button_reply?.id ||
-  message.interactive?.list_reply?.title ||
-  message.interactive?.list_reply?.id ||
-  "";
-  
+if (message.type === "button" || message.type === "interactive") {
+
+  const reply =
+    message.button?.payload ||
+    message.button?.text ||
+    message.interactive?.button_reply?.title ||
+    message.interactive?.button_reply?.id ||
+    message.interactive?.list_reply?.title ||
+    message.interactive?.list_reply?.id ||
+    "";
+
   userMessage = reply;
   source = "Button Click";
 
@@ -49,10 +52,7 @@ const reply =
   const msg = reply.toLowerCase();
 
   // YES BUTTON
-  if (
-  msg.includes("yes") ||
-  msg.includes("details")
-) {
+  if (msg.includes("yes") || msg.includes("details")) {
 
     await sendMenu(from);
 
