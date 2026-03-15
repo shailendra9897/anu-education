@@ -34,12 +34,13 @@ export async function POST(req: NextRequest) {
 // ==========================
 
 if (message.type === "interactive") {
-
-  const reply =
-    message.interactive?.button_reply?.title ||
-    message.interactive?.list_reply?.title ||
-    "";
-
+const reply =
+  message.interactive?.button_reply?.title ||
+  message.interactive?.button_reply?.id ||
+  message.interactive?.list_reply?.title ||
+  message.interactive?.list_reply?.id ||
+  "";
+  
   userMessage = reply;
   source = "Button Click";
 
@@ -48,7 +49,10 @@ if (message.type === "interactive") {
   const msg = reply.toLowerCase();
 
   // YES BUTTON
-  if (msg.includes("yes")) {
+  if (
+  msg.includes("yes") ||
+  msg.includes("details")
+) {
 
     await sendMenu(from);
 
