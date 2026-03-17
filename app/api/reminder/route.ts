@@ -36,9 +36,9 @@ export async function GET() {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            phone,
-            status: "Reminder Sent"
-          })
+  rowIndex: lead.rowIndex,
+  status: "Reminder Sent"
+})
         });
 
       }
