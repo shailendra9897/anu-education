@@ -1,5 +1,13 @@
 export const blogs = [
   {
+  slug: "ielts-speaking-topics-2026",
+  title: "IELTS Speaking Topics 2026 (Cue Cards + Answers)",
+  description:
+    "Latest IELTS Speaking topics 2026 with cue cards, sample answers and Band 7+ tips to improve your score.",
+  image: "/blog/ielts-speaking.jpg",
+  category: "IELTS"
+},
+  {
     title: "IELTS Writing Task 2 Samples: Band 9 Guide for 2026",
     description:
       "Learn how to write Band 7–9 IELTS essays with real samples, strategies, and practice topics.",
