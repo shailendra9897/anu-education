@@ -182,12 +182,18 @@ export default function HomeClient() {
             </div>
 
             {/* Main Heading */}
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight animate-up stagger-1">
-              IELTS Coaching, PTE Classes & <br />
-              <span className="bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
-                Study Abroad Guidance
-              </span>
-            </h1>
+<h1 className="text-4xl md:text-6xl font-bold leading-tight animate-up stagger-1">
+  <a href="/test-prep/ielts-coaching-india" className="hover:underline">
+    IELTS Coaching
+  </a>,{" "}
+  <a href="/test-prep/pte" className="hover:underline">
+    PTE Classes
+  </a>{" "}
+  & <br />
+  <span className="bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
+    Study Abroad Guidance in India
+  </span>
+</h1>
 
             {/* Description */}
             <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed animate-up stagger-2">
