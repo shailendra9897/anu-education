@@ -47,7 +47,7 @@ if (message.type === "button" || message.type === "interactive") {
   userMessage = reply;
   source = "Button Click";
 
-  await saveLead(from, userMessage, source);
+  await saveLead(from, userMessage, source, "Interested");
 
   const msg = reply.toLowerCase();
 
@@ -136,10 +136,33 @@ Reply with country name.`
 
     if (message.type === "text") {
 
-      userMessage = message.text.body.trim().toLowerCase();
-      source = "Text Message";
+  userMessage = message.text.body.trim().toLowerCase();
+  source = "Text Message";
 
-      await saveLead(from, userMessage, source);
+  await saveLead(from, userMessage, source);
+
+  // 🔥 HOT LEAD DETECTION (ADD HERE)
+  if (
+    userMessage.includes("yes") ||
+    userMessage.includes("interested") ||
+    userMessage.includes("join") ||
+    userMessage.includes("demo")
+  ) {
+
+    await saveLead(from, userMessage, source, "Interested");
+
+    await sendReply(
+      from,
+`Great 👍  
+
+Your seat is almost reserved.  
+
+👉 Complete registration:
+https://study.anuedu.in/register`
+    );
+
+    return NextResponse.json({ status: "hot lead handled" });
+  }
 
       // GREETING
 
@@ -214,7 +237,7 @@ Choose course:
       // DEMO SLOT
 
       else if (userMessage === "today") {
-
+await saveLead(from, "Demo Booked Today", source, "Converted");
         await sendReply(
           from,
 `✅ Demo slot booked for TODAY.
@@ -306,8 +329,12 @@ Reply with number:
 // SAVE TO GOOGLE SHEET
 // ==========================
 
-async function saveLead(phone: string, message: string, source: string) {
-
+async function saveLead(
+  phone: string,
+  message: string,
+  source: string,
+  status: string = "New"
+) {
   if (!GOOGLE_SHEET_WEBHOOK) return;
 
   await fetch(GOOGLE_SHEET_WEBHOOK, {
@@ -317,13 +344,12 @@ async function saveLead(phone: string, message: string, source: string) {
     },
     body: JSON.stringify({
       date: new Date().toLocaleString(),
-      phone: phone,
-      message: message,
-      source: source
+      phone,
+      message,
+      source,
+      status
     })
-  });
-
-}
+  });}
 
 // ==========================
 // SEND WHATSAPP MESSAGE
