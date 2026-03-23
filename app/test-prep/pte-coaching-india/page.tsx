@@ -233,16 +233,20 @@ export default function PTECoachingPage() {
                 ⭐ AI-Based Scoring | Results in 48 Hours
               </div>
               <h1 className="animate-up stagger-1 text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                PTE Academic Online Coaching
+                Best PTE Online Coaching in India
                 <br />
                 <span className="bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
                   Score 65+ in 2-4 Weeks
                 </span>
               </h1>
               <p className="animate-up stagger-2 text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-                AI-based practice, real exam simulations, and expert guidance. 
-                Join India's best PTE online coaching with FREE demo class.
-              </p>
+Master PTE with AI-powered practice, real exam simulations, and expert trainers. 
+Join India’s best PTE online coaching and book your FREE demo class today.
+</p>
+
+<p className="text-center max-w-3xl mx-auto text-lg mb-10">
+Looking for the best PTE coaching in India? ANU Education offers top-rated PTE classes in Gujarat and across India with live sessions, AI mock tests, and personalized strategies. Achieve 65+ score in just 2–4 weeks.
+</p>
               <div className="animate-up stagger-3 flex flex-col sm:flex-row justify-center gap-4 mt-8">
                 <a
                   href="/free-demo"
@@ -273,7 +277,7 @@ export default function PTECoachingPage() {
         <div className="max-w-6xl mx-auto px-4 py-12 space-y-16">
           
           {/* ================= WHAT IS PTE? ================= */}
-          <section className="bg-white rounded-3xl shadow-xl p-8 md:p-10">
+                    <section className="bg-white rounded-3xl shadow-xl p-8 md:p-10">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="animate-left stagger-1">
                 <h2 className="text-3xl font-bold mb-4 text-gray-800">What is PTE Academic & Why It Matters?</h2>
