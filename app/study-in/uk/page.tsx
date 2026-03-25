@@ -1,39 +1,54 @@
+import StudyInUKClient from './StudyInUKClient';
+
 export const metadata = {
-  title: "Study in UK - ANU Education",
-  description: "Study in the UK with expert guidance. Apply to top universities, get scholarships & 2-year PSW. Start your UK study journey today with ANU Education.",
+  title: "Study in UK for Indian Students | 1-Year Masters | 2-Year PSW Visa – ANU Education",
+  description:
+    "Study in UK with ANU Education. Expert guidance for 1-year masters, top UK universities, student visa, post-study work visa, and scholarships. Free counseling & IELTS coaching available.",
+  keywords: "study in UK, study in UK for Indian students, masters in UK, UK student visa, UK universities, post study work visa UK, study abroad consultant",
+  openGraph: {
+    title: "Study in UK – Complete Guide for Indian Students | ANU Education",
+    description: "Get expert guidance to study in UK. Top universities, 1-year masters, UK student visa, 2-year PSW visa, and scholarships. Book free counseling today!",
+    url: "https://www.anuedu.in/study-in/uk",
+    siteName: "ANU Education",
+    images: [
+      {
+        url: "/images/study-in-uk-og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Study in UK with ANU Education"
+      }
+    ],
+    locale: "en_IN",
+    type: "website",
+    publishedTime: "2026-03-25",
+    modifiedTime: "2026-03-25",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Study in UK for Indian Students | ANU Education",
+    description: "Complete guide to study in UK: 1-year masters, top universities, student visa, and 2-year PSW visa.",
+    images: ["/images/study-in-uk-twitter.jpg"],
+    site: "@anueducation",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://www.anuedu.in/study-in/uk",
+  },
+  verification: {
+    google: "your-google-verification-code",
+  },
 };
-export default function UKPage() {
-  return (
-    <div className="max-w-5xl mx-auto px-4 py-10 space-y-6">
-      <h1 className="text-3xl font-bold text-blue-700">Study in the UK</h1>
-      <p>The UK is home to some of the world's most prestigious universities, offering globally recognized degrees and a vibrant campus life.</p>
 
-      <h2 className="text-xl font-semibold">Why Study in the UK?</h2>
-      <ul className="list-disc pl-6 space-y-2 text-gray-700">
-        <li>1-year Master's programs</li>
-        <li>Post-study work visa (2 years for UG/PG)</li>
-        <li>Diverse cultural exposure and historical cities</li>
-        <li>World-ranked universities and research facilities</li>
-      </ul>
-
-      <h2 className="text-xl font-semibold">Popular Courses</h2>
-      <ul className="list-disc pl-6 space-y-2 text-gray-700">
-        <li>Finance, Law, and Business</li>
-        <li>Engineering and Design</li>
-        <li>Health Sciences</li>
-      </ul>
-
-      <h2 className="text-xl font-semibold">Intakes</h2>
-      <p>September (main), January (secondary)</p>
-
-      <h2 className="text-xl font-semibold">Eligibility</h2>
-      <ul className="list-disc pl-6 text-gray-700">
-        <li>60%+ in academics</li>
-        <li>IELTS 6.0+ (some universities accept MOI)</li>
-        <li>SOP, LORs, and financial proof</li>
-      </ul>
-
-      <a href="/contact" className="inline-block mt-6 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700">Get Started</a>
-    </div>
-  );
+export default function Page() {
+  return <StudyInUKClient />;
 }
