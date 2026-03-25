@@ -151,10 +151,10 @@ export default function HomeClient() {
               "addressCountry": "India"
             },
             "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "4.8",
-              "reviewCount": "Google Reviews"
-            }
+  "@type": "AggregateRating",
+  "ratingValue": 4.8,
+  "reviewCount": 17
+}
           })
         }}
       />
