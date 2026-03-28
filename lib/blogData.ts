@@ -1,12 +1,12 @@
 export const blogs = [
   {
-  slug: "ielts-speaking-topics-2026",
-  title: "IELTS Speaking Topics 2026 (Cue Cards + Answers)",
-  description:
-    "Latest IELTS Speaking topics 2026 with cue cards, sample answers and Band 7+ tips to improve your score.",
-  image: "/blog/ielts-speaking.jpg",
-  category: "IELTS"
-},
+    slug: "ielts-speaking-topics-2026",
+    title: "IELTS Speaking Topics 2026 (Cue Cards + Answers)",
+    description:
+      "Latest IELTS Speaking topics 2026 with cue cards, sample answers and Band 7+ tips to improve your score.",
+    image: "/blog/ielts-speaking.jpg",
+    category: "IELTS"
+  },
   {
     title: "IELTS Writing Task 2 Samples: Band 9 Guide for 2026",
     description:
@@ -31,4 +31,12 @@ export const blogs = [
     image: "/blog/ielts-online-guide.jpg",
     category: "IELTS",
   },
+  {
+  title: "IELTS vs PTE 2026: Which is Better for Indian Students? Fees, Format & One Skill Retake",
+  description:
+    "Updated for 2026: Compare IELTS vs PTE fees, format, acceptance, and the new IELTS One Skill Retake feature. Learn which test suits your study abroad goals.",
+    slug: "ielts-vs-pte-2026",
+    // No image property – this blog will display without an image
+    category: "Test Prep",
+  }
 ];
