@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "postbuild": "next-sitemap",
-  "start": "next start",
-  "lint": "next lint"
-},
+    "dev": "next dev",
+    "build": "next build",
+    "postbuild": "next-sitemap",
+    "start": "next start",
+    "lint": "next lint"
+  },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "build": "^0.1.4",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.526.0",
