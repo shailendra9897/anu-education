@@ -7,7 +7,7 @@ const templates = [
   {
     name: "Teacher Collaboration",
     id: "teacher_collaboration_primary",
-    variables: ["teacher_name", "school_name"],
+    variables: [],
   },
   {
     name: "Free Demo Offer",
