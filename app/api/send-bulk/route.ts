@@ -6,27 +6,49 @@ const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN!;
 const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID!;
 const GOOGLE_SHEET_WEBHOOK = process.env.GOOGLE_SHEET_WEBHOOK!;
 
-// SAVE TO SHEET
-async function saveLead(phone: string, message: string, source: string) {
+// SAVE TO GOOGLE SHEET
+async function saveLead(phone: string, message: string, source: string, status: string) {
   if (!GOOGLE_SHEET_WEBHOOK) return;
 
   await fetch(GOOGLE_SHEET_WEBHOOK, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       date: new Date().toLocaleString(),
       phone,
       message,
       source,
-      status: "Sent",
+      status,
     }),
   });
 }
 
-// SEND TEMPLATE FUNCTION
-async function sendTemplate(phone: string, templateName: string, name: string) {
+// SEND TEMPLATE (SMART HANDLING)
+async function sendTemplate(
+  phone: string,
+  templateName: string,
+  variables: Record<string, string>
+) {
+  let templatePayload: any = {
+    name: templateName,
+    language: { code: "en" },
+  };
+
+  const variableValues = Object.values(variables || {}).filter(v => v?.trim());
+
+  // 👉 ONLY add components if variables exist
+  if (variableValues.length > 0) {
+    templatePayload.components = [
+      {
+        type: "body",
+        parameters: variableValues.map((val) => ({
+          type: "text",
+          text: val,
+        })),
+      },
+    ];
+  }
+
   return fetch(`https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`, {
     method: "POST",
     headers: {
@@ -37,21 +59,7 @@ async function sendTemplate(phone: string, templateName: string, name: string) {
       messaging_product: "whatsapp",
       to: phone,
       type: "template",
-      template: {
-        name: templateName,
-        language: { code: "en" },
-        components: [
-          {
-            type: "body",
-            parameters: [
-              {
-                type: "text",
-                text: name || "Student",
-              },
-            ],
-          },
-        ],
-      },
+      template: templatePayload,
     }),
   });
 }
@@ -61,7 +69,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     const numbers: string[] = body.numbers;
-    const templateName = body.templateName;
+    const templateName: string = body.templateName;
+    const templateVariables: Record<string, string> = body.templateVariables || {};
 
     if (!numbers || numbers.length === 0 || !templateName) {
       return NextResponse.json(
@@ -70,38 +79,41 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let successCount = 0;
-    let failCount = 0;
+    let sentCount = 0;
+    let failedCount = 0;
 
     for (const phone of numbers) {
       try {
-        const res = await sendTemplate(phone, templateName, "Student");
-
+        const res = await sendTemplate(phone, templateName, templateVariables);
         const data = await res.json();
 
         if (res.ok) {
-          successCount++;
+          sentCount++;
 
           // SAVE SENT DATA
-          await saveLead(phone, templateName, "Template Sent");
+          await saveLead(phone, templateName, "Template Sent", "Sent");
         } else {
-          failCount++;
+          failedCount++;
           console.error("Send error:", data);
+
+          await saveLead(phone, templateName, "Template Failed", "Error");
         }
 
-        // DELAY (VERY IMPORTANT 🔥)
+        // 🔥 DELAY (IMPORTANT)
         await new Promise((r) => setTimeout(r, 700));
 
       } catch (err) {
-        failCount++;
+        failedCount++;
         console.error("Loop error:", err);
+
+        await saveLead(phone, templateName, "Template Failed", "Error");
       }
     }
 
     return NextResponse.json({
       success: true,
-      sent: successCount,
-      failed: failCount,
+      sentCount,
+      failedCount,
     });
 
   } catch (error: any) {
