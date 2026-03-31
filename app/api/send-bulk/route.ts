@@ -6,7 +6,12 @@ const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN!;
 const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID!;
 const GOOGLE_SHEET_WEBHOOK = process.env.GOOGLE_SHEET_WEBHOOK!;
 
+// 🔥 TEMP USER TYPE STORAGE
+const userTypeMap: Record<string, string> = {};
+
+// ==========================
 // SAVE TO GOOGLE SHEET
+// ==========================
 async function saveLead(phone: string, message: string, source: string, status: string) {
   if (!GOOGLE_SHEET_WEBHOOK) return;
 
@@ -23,7 +28,9 @@ async function saveLead(phone: string, message: string, source: string, status: 
   });
 }
 
-// SEND TEMPLATE (SMART HANDLING)
+// ==========================
+// SEND TEMPLATE
+// ==========================
 async function sendTemplate(
   phone: string,
   templateName: string,
@@ -36,7 +43,6 @@ async function sendTemplate(
 
   const variableValues = Object.values(variables || {}).filter(v => v?.trim());
 
-  // 👉 ONLY add components if variables exist
   if (variableValues.length > 0) {
     templatePayload.components = [
       {
@@ -64,6 +70,9 @@ async function sendTemplate(
   });
 }
 
+// ==========================
+// MAIN API
+// ==========================
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -90,7 +99,9 @@ export async function POST(req: NextRequest) {
         if (res.ok) {
           sentCount++;
 
-          // SAVE SENT DATA
+          // 🔥 STORE USER TYPE HERE (IMPORTANT)
+          userTypeMap[phone] = templateName;
+
           await saveLead(phone, templateName, "Template Sent", "Sent");
         } else {
           failedCount++;
@@ -99,7 +110,6 @@ export async function POST(req: NextRequest) {
           await saveLead(phone, templateName, "Template Failed", "Error");
         }
 
-        // 🔥 DELAY (IMPORTANT)
         await new Promise((r) => setTimeout(r, 700));
 
       } catch (err) {

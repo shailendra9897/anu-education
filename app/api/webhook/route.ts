@@ -51,85 +51,91 @@ if (message.type === "button" || message.type === "interactive") {
 
   const msg = reply.toLowerCase();
 
+  // 🔥 DETECT TYPE USING CONTEXT (TEMP LOGIC)
+  const contextId = message.context?.id || "";
+
+  let userType = "student";
+
+  // 👉 If you sent teacher template recently → treat as teacher
+  if (msg.includes("collaborate") || msg.includes("teacher")) {
+    userType = "teacher";
+  }
+
+  // ==========================
   // YES BUTTON
+  // ==========================
   if (msg.includes("yes") || msg.includes("details")) {
 
-    await sendMenu(from);
+    if (userType === "teacher") {
 
+      await sendReply(
+        from,
+`Great 👍  
+
+We offer:
+✔ Student counselling  
+✔ Admission support  
+✔ Visa guidance  
+
+You can refer students and earn commission 💰  
+
+Shall we connect for details?`
+      );
+
+    } else {
+
+      await sendReply(
+        from,
+`🎓 Great!
+
+Choose your course:
+
+1️⃣ IELTS Coaching  
+2️⃣ PTE Coaching  
+3️⃣ Study Abroad`
+      );
+
+    }
+
+    return NextResponse.json({ status: "YES handled" });
   }
 
+  // ==========================
   // NO BUTTON
-  else if (msg.includes("no")) {
+  // ==========================
+  if (msg.includes("no")) {
 
     await sendReply(
       from,
-`No problem 🙂
+`No problem 🙂  
 
-You can register anytime here:
-https://study.anuedu.in/register`
+You can connect anytime if needed.`
     );
 
+    return NextResponse.json({ status: "NO handled" });
   }
 
-  // IELTS
-  else if (msg.includes("ielts")) {
+  // ==========================
+  // OTHER BUTTONS
+  // ==========================
 
-    await sendReply(
-      from,
-`🎓 IELTS Demo Class
-
-Join our FREE 3-day IELTS demo.
-
-Reply:
-
-1️⃣ Today
-2️⃣ Tomorrow
-3️⃣ Weekend Batch`
-    );
-
+  if (msg.includes("ielts")) {
+    await sendReply(from, `🎓 IELTS Demo\n\nReply:\n1️⃣ Today\n2️⃣ Tomorrow\n3️⃣ Weekend`);
+    return NextResponse.json({ status: "IELTS handled" });
   }
 
-  // PTE
-  else if (msg.includes("pte")) {
-
-    await sendReply(
-      from,
-`🎯 PTE Demo Class
-
-Join our FREE PTE demo class.
-
-Reply:
-
-1️⃣ Today
-2️⃣ Tomorrow
-3️⃣ Weekend Batch`
-    );
-
+  if (msg.includes("pte")) {
+    await sendReply(from, `🎯 PTE Demo\n\nReply:\n1️⃣ Today\n2️⃣ Tomorrow\n3️⃣ Weekend`);
+    return NextResponse.json({ status: "PTE handled" });
   }
 
-  // STUDY ABROAD
-  else if (msg.includes("study")) {
-
-    await sendReply(
-      from,
-`🌍 Study Abroad Counselling
-
-We guide students for:
-
-🇩🇪 Germany
-🇬🇧 UK
-🇨🇦 Canada
-🇦🇺 Australia
-
-Reply with country name.`
-    );
-
+  if (msg.includes("study")) {
+    await sendReply(from, `🌍 Study Abroad\n\nReply with country name.`);
+    return NextResponse.json({ status: "Study handled" });
   }
 
   return NextResponse.json({ status: "button processed" });
-
 }
-
     // ==========================
     // NORMAL TEXT MESSAGE
     // ==========================
