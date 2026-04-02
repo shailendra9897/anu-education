@@ -293,7 +293,7 @@ export default function HomeClient() {
             <CountryCard name="Germany" image="/icons/germany.png" link="/study-in/germany" />
             <CountryCard name="Australia" image="/icons/australia.png" link="/study-in/australia" />
             <CountryCard name="USA" image="/icons/usa.png" link="/study-in/usa" />
-            <CountryCard name="New Zealand" image="/icons/new-zealand.png" link="/study-in/new-zealand" />
+            <CountryCard name="Dubai" image="/icons/dubai.png" link="/study-in/dubai" />
             <CountryCard name="Ireland" image="/icons/ireland.png" link="/study-in/ireland" />
             <CountryCard name="France" image="/icons/france.png" link="/study-in/france" />
           </div>
