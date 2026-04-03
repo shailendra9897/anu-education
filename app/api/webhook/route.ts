@@ -1,37 +1,95 @@
 export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 import { getUserTemplate } from "@/lib/getUserTemplate";
 import { saveLead } from "@/lib/saveLead";
 
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN!;
 const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID!;
+const APP_SECRET = process.env.WHATSAPP_APP_SECRET!; // from Meta App Dashboard
 
+// Simple in‑memory duplicate cache (use Redis in production)
+const processedMessages = new Map<string, number>();
+
+// ==========================
+// TEMPLATE → REPLY MAPPING
+// ==========================
+const TEMPLATE_REPLIES: Record<string, { yesReply: string; interestedReply: string }> = {
+  teacher_collaboration_primary: {
+    yesReply: `Great 👍 You can refer students and earn commission 💰\n\nShall we connect for details?`,
+    interestedReply: `Great 👍 You can earn commission by referring students 💰`,
+  },
+  college_faculty_program_2026: {
+    yesReply: `Great 👍 Faculty partnership program\n\nRefer students and earn rewards 💰`,
+    interestedReply: `You're eligible for faculty referral rewards!`,
+  },
+  consultant_collaboration_2026: {
+    yesReply: `Let’s connect for partnership 🤝`,
+    interestedReply: `Let’s discuss how we can work together 🤝`,
+  },
+  default: {
+    yesReply: `🎓 Great!\n\nChoose your course:\n1️⃣ IELTS Coaching\n2️⃣ PTE Coaching\n3️⃣ Study Abroad`,
+    interestedReply: `👉 Complete registration:\nhttps://study.anuedu.in/register`,
+  },
+};
+
+// ==========================
+// SIGNATURE VERIFICATION
+// ==========================
+function verifySignature(body: string, signatureHeader: string | null): boolean {
+  if (!signatureHeader || !APP_SECRET) return false;
+  const expected = crypto
+    .createHmac("sha256", APP_SECRET)
+    .update(body)
+    .digest("hex");
+  return crypto.timingSafeEqual(Buffer.from(signatureHeader), Buffer.from(expected));
+}
+
+// ==========================
+// DUPLICATE CHECK
+// ==========================
+function isDuplicate(messageId: string): boolean {
+  const now = Date.now();
+  const lastSeen = processedMessages.get(messageId);
+  if (lastSeen && now - lastSeen < 300000) return true; // 5 minutes
+  processedMessages.set(messageId, now);
+  return false;
+}
+
+// ==========================
+// MAIN WEBHOOK
+// ==========================
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-
-    const change = body?.entry?.[0]?.changes?.[0]?.value;
-
-    if (!change) {
-      return NextResponse.json({ status: "no change" });
+    // 1. Verify signature
+    const rawBody = await req.text();
+    const signature = req.headers.get("x-hub-signature-256");
+    if (!verifySignature(rawBody, signature)) {
+      console.error("Invalid signature");
+      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const message = change?.messages?.[0];
+    const body = JSON.parse(rawBody);
+    const change = body?.entry?.[0]?.changes?.[0]?.value;
+    if (!change) return NextResponse.json({ status: "no change" });
 
-    if (!message) {
-      return NextResponse.json({ status: "no message" });
+    const message = change?.messages?.[0];
+    if (!message) return NextResponse.json({ status: "no message" });
+
+    // 2. Duplicate prevention
+    const messageId = message.id;
+    if (isDuplicate(messageId)) {
+      return NextResponse.json({ status: "duplicate" });
     }
 
     const from = message.from;
-
     let userMessage = "";
     let source = "Text";
 
     // ==========================
     // BUTTON CLICK HANDLING
     // ==========================
-
     if (message.type === "button" || message.type === "interactive") {
       const reply =
         message.button?.payload ||
@@ -41,95 +99,36 @@ export async function POST(req: NextRequest) {
         message.interactive?.list_reply?.title ||
         message.interactive?.list_reply?.id ||
         "";
-
       userMessage = reply;
       source = "Button Click";
 
-      await saveLead(from, "unknown", userMessage, source, "Interested");
+      await safeSaveLead(from, "unknown", userMessage, source, "Interested");
 
       const msg = reply.toLowerCase();
-console.log("👉 BUTTON CLICK:", msg);
-      // 🔥 GET LAST TEMPLATE FROM DB
       const lastTemplate = await getUserTemplate(from);
+      const replyConfig = TEMPLATE_REPLIES[lastTemplate as keyof typeof TEMPLATE_REPLIES] || TEMPLATE_REPLIES.default;
 
-      // ==========================
-      // YES BUTTON (SMART LOGIC)
-      // ==========================
+      // YES / DETAILS
       if (msg.includes("yes") || msg.includes("details")) {
-
-        // 👨‍🏫 TEACHER FLOW
-        const template = (lastTemplate || "").toLowerCase().trim();
-
-if (
-  template.includes("teacher") ||
-  template.includes("faculty")
-)  {
-
-          await sendReply(
-            from,
-`Great 👍  
-
-You can refer students and earn commission 💰  
-
-Shall we connect for details?`
-          );
-
-        }
-
-        // 🤝 CONSULTANT FLOW
-        else if (
-          lastTemplate === "consultant_collaboration_2026"
-        ) {
-
-          await sendReply(
-            from,
-`Let’s connect for partnership 🤝`
-          );
-
-        }
-
-        // 🎓 STUDENT FLOW
-        else {
-
-          await sendReply(
-            from,
-`🎓 Great!
-
-Choose your course:
-
-1️⃣ IELTS Coaching  
-2️⃣ PTE Coaching  
-3️⃣ Study Abroad`
-          );
-
-        }
-
+        await sendReply(from, replyConfig.yesReply);
         return NextResponse.json({ status: "YES handled" });
       }
 
-      // NO BUTTON
+      // NO
       if (msg.includes("no")) {
-        await sendReply(
-          from,
-`No problem 🙂  
-
-You can connect anytime if needed.`
-        );
-
+        await sendReply(from, `No problem 🙂\n\nYou can connect anytime if needed.`);
         return NextResponse.json({ status: "NO handled" });
       }
 
-      // OTHER BUTTONS
+      // Specific buttons
       if (msg.includes("ielts")) {
         await sendReply(from, `🎓 IELTS Demo\n\nReply:\n1️⃣ Today\n2️⃣ Tomorrow\n3️⃣ Weekend`);
         return NextResponse.json({ status: "IELTS handled" });
       }
-
       if (msg.includes("pte")) {
         await sendReply(from, `🎯 PTE Demo\n\nReply:\n1️⃣ Today\n2️⃣ Tomorrow\n3️⃣ Weekend`);
         return NextResponse.json({ status: "PTE handled" });
       }
-
       if (msg.includes("study")) {
         await sendReply(from, `🌍 Study Abroad\n\nReply with country name.`);
         return NextResponse.json({ status: "Study handled" });
@@ -139,70 +138,50 @@ You can connect anytime if needed.`
     }
 
     // ==========================
-    // NORMAL TEXT MESSAGE
+    // TEXT MESSAGE HANDLING
     // ==========================
-
     if (message.type === "text") {
       userMessage = message.text.body.trim().toLowerCase();
       source = "Text Message";
 
-      await saveLead(from, "unknown", userMessage, source, "New");
+      await safeSaveLead(from, "unknown", userMessage, source, "New");
 
-      // 🔥 GET LAST TEMPLATE
+      // OPT‑OUT HANDLING
+      if (userMessage === "stop" || userMessage === "unsubscribe") {
+        await safeSaveLead(from, "OPT_OUT", userMessage, source, "Unsubscribed");
+        await sendReply(from, "You have been unsubscribed. You won't receive further messages.");
+        return NextResponse.json({ status: "opt-out handled" });
+      }
+
       const lastTemplate = await getUserTemplate(from);
-console.log("📞 FROM:", from);
-console.log("💬 USER MESSAGE:", userMessage);
-console.log("📦 TEMPLATE FROM DB:", lastTemplate);
-      // HOT LEAD
+      const replyConfig = TEMPLATE_REPLIES[lastTemplate as keyof typeof TEMPLATE_REPLIES] || TEMPLATE_REPLIES.default;
+
+      // HOT LEAD DETECTION
       if (
         userMessage.includes("yes") ||
         userMessage.includes("interested") ||
         userMessage.includes("join") ||
         userMessage.includes("demo")
       ) {
-
-        await saveLead(from, lastTemplate || "unknown", userMessage, source, "Interested");
-
-        // SMART REPLY BASED ON TEMPLATE
-        if (
-          lastTemplate === "teacher_collaboration_primary" ||
-          lastTemplate === "college_faculty_program_2026"
-        ) {
-          await sendReply(from, `Great 👍 You can earn commission by referring students 💰`);
-        } else {
-          await sendReply(from, `👉 Complete registration:\nhttps://study.anuedu.in/register`);
-        }
-
+        await safeSaveLead(from, lastTemplate || "unknown", userMessage, source, "Interested");
+        await sendReply(from, replyConfig.interestedReply);
         return NextResponse.json({ status: "hot lead handled" });
       }
 
-      // GREETING
-      if (
-        userMessage === "hi" ||
-        userMessage === "hello" ||
-        userMessage === "menu"
-      ) {
+      // GREETING / MENU
+      if (userMessage === "hi" || userMessage === "hello" || userMessage === "menu") {
         await sendMenu(from);
       }
-
       // MENU OPTIONS
       else if (userMessage === "1") {
         await sendReply(from, `🎓 IELTS Demo\nhttps://study.anuedu.in/register`);
-      }
-
-      else if (userMessage === "2") {
+      } else if (userMessage === "2") {
         await sendReply(from, `🎯 PTE Demo\nhttps://study.anuedu.in/register`);
-      }
-
-      else if (userMessage === "3") {
+      } else if (userMessage === "3") {
         await sendReply(from, `🌍 Study Abroad\nhttps://study.anuedu.in/register`);
-      }
-
-      else if (userMessage === "4") {
+      } else if (userMessage === "4") {
         await sendReply(from, `🎓 Demo\n1️⃣ IELTS\n2️⃣ PTE`);
-      }
-
-      else {
+      } else {
         await sendMenu(from);
       }
 
@@ -210,43 +189,28 @@ console.log("📦 TEMPLATE FROM DB:", lastTemplate);
     }
 
     return NextResponse.json({ status: "ignored" });
-
   } catch (error) {
     console.error("Webhook error:", error);
-
-    return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
 
 // ==========================
-// MENU
+// HELPER: SEND MENU
 // ==========================
-
 async function sendMenu(to: string) {
   await sendReply(
     to,
-`Hello 👋 Welcome to ANU Education.
-
-Reply with:
-
-1️⃣ IELTS  
-2️⃣ PTE  
-3️⃣ Study Abroad  
-4️⃣ Demo`
+    `Hello 👋 Welcome to ANU Education.\n\nReply with:\n\n1️⃣ IELTS\n2️⃣ PTE\n3️⃣ Study Abroad\n4️⃣ Demo`
   );
 }
 
 // ==========================
-// SEND MESSAGE
+// HELPER: SEND TEXT REPLY
 // ==========================
-
 async function sendReply(to: string, message: string) {
-  await fetch(
-    `https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`,
-    {
+  try {
+    await fetch(`https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${WHATSAPP_TOKEN}`,
@@ -258,6 +222,19 @@ async function sendReply(to: string, message: string) {
         type: "text",
         text: { body: message },
       }),
-    }
-  );
+    });
+  } catch (err) {
+    console.error("Failed to send reply:", err);
+  }
+}
+
+// ==========================
+// HELPER: SAFE LEAD SAVE (non‑blocking)
+// ==========================
+async function safeSaveLead(phone: string, template: string, message: string, source: string, status: string) {
+  try {
+    await saveLead(phone, template, message, source, status);
+  } catch (err) {
+    console.error("Failed to save lead:", err);
+  }
 }
