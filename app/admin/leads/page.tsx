@@ -91,6 +91,23 @@ export default function LeadsPage() {
     URL.revokeObjectURL(url);
   };
 
+  const deleteLead = async (id: number) => {
+    if (!confirm("Delete this lead?")) return;
+
+    const res = await fetch("/api/leads/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+
+    if (res.ok) {
+      // Refresh the current view (preserve filters)
+      fetchLeads(true);
+    } else {
+      alert("Failed to delete lead.");
+    }
+  };
+
   const statusColors: Record<string, string> = {
     New: "bg-blue-100 text-blue-800",
     Interested: "bg-green-100 text-green-800",
@@ -176,6 +193,7 @@ export default function LeadsPage() {
               <th className="p-2 text-left">Source</th>
               <th className="p-2 text-left">Status</th>
               <th className="p-2 text-left">Date</th>
+              <th className="p-2 text-left">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -193,11 +211,19 @@ export default function LeadsPage() {
                 <td className="p-2 whitespace-nowrap">
                   {new Date(lead.created_at).toLocaleString()}
                 </td>
+                <td className="p-2">
+                  <button
+                    onClick={() => deleteLead(lead.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
             {leads.length === 0 && !loading && (
               <tr>
-                <td colSpan={6} className="p-4 text-center text-gray-500">
+                <td colSpan={7} className="p-4 text-center text-gray-500">
                   No leads found
                 </td>
               </tr>
