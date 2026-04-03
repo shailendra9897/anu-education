@@ -102,35 +102,38 @@ export async function POST(req: NextRequest) {
       userMessage = reply;
       source = "Button Click";
 
+      console.log("🔘 Button clicked:", { from, reply, fullMessage: message });
+
       await safeSaveLead(from, "unknown", userMessage, source, "Interested");
 
       const msg = reply.toLowerCase();
       const lastTemplate = await getUserTemplate(from);
+      console.log("📦 Last template for", from, ":", lastTemplate);
+
       const replyConfig = TEMPLATE_REPLIES[lastTemplate as keyof typeof TEMPLATE_REPLIES] || TEMPLATE_REPLIES.default;
 
-      // YES / DETAILS
-      if (msg.includes("yes") || msg.includes("details")) {
-        await sendReply(from, replyConfig.yesReply);
+      // Match "yes", "interested", "details", "confirm", "ok", "sure"
+      if (msg.match(/\b(yes|interested|details|confirm|ok|sure)\b/)) {
+        console.log("✅ YES match – sending:", replyConfig.yesReply);
+        await safeSendReply(from, replyConfig.yesReply);
         return NextResponse.json({ status: "YES handled" });
       }
 
-      // NO
       if (msg.includes("no")) {
-        await sendReply(from, `No problem 🙂\n\nYou can connect anytime if needed.`);
+        await safeSendReply(from, `No problem 🙂\n\nYou can connect anytime if needed.`);
         return NextResponse.json({ status: "NO handled" });
       }
 
-      // Specific buttons
       if (msg.includes("ielts")) {
-        await sendReply(from, `🎓 IELTS Demo\n\nReply:\n1️⃣ Today\n2️⃣ Tomorrow\n3️⃣ Weekend`);
+        await safeSendReply(from, `🎓 IELTS Demo\n\nReply:\n1️⃣ Today\n2️⃣ Tomorrow\n3️⃣ Weekend`);
         return NextResponse.json({ status: "IELTS handled" });
       }
       if (msg.includes("pte")) {
-        await sendReply(from, `🎯 PTE Demo\n\nReply:\n1️⃣ Today\n2️⃣ Tomorrow\n3️⃣ Weekend`);
+        await safeSendReply(from, `🎯 PTE Demo\n\nReply:\n1️⃣ Today\n2️⃣ Tomorrow\n3️⃣ Weekend`);
         return NextResponse.json({ status: "PTE handled" });
       }
       if (msg.includes("study")) {
-        await sendReply(from, `🌍 Study Abroad\n\nReply with country name.`);
+        await safeSendReply(from, `🌍 Study Abroad\n\nReply with country name.`);
         return NextResponse.json({ status: "Study handled" });
       }
 
@@ -146,17 +149,21 @@ export async function POST(req: NextRequest) {
 
       await safeSaveLead(from, "unknown", userMessage, source, "New");
 
-      // OPT‑OUT HANDLING
+      // Opt-out handling
       if (userMessage === "stop" || userMessage === "unsubscribe") {
         await safeSaveLead(from, "OPT_OUT", userMessage, source, "Unsubscribed");
-        await sendReply(from, "You have been unsubscribed. You won't receive further messages.");
+        await safeSendReply(from, "You have been unsubscribed. You won't receive further messages.");
         return NextResponse.json({ status: "opt-out handled" });
       }
 
       const lastTemplate = await getUserTemplate(from);
+      console.log("📞 FROM:", from);
+      console.log("💬 USER MESSAGE:", userMessage);
+      console.log("📦 TEMPLATE FROM DB:", lastTemplate);
+
       const replyConfig = TEMPLATE_REPLIES[lastTemplate as keyof typeof TEMPLATE_REPLIES] || TEMPLATE_REPLIES.default;
 
-      // HOT LEAD DETECTION
+      // Hot lead detection
       if (
         userMessage.includes("yes") ||
         userMessage.includes("interested") ||
@@ -164,23 +171,21 @@ export async function POST(req: NextRequest) {
         userMessage.includes("demo")
       ) {
         await safeSaveLead(from, lastTemplate || "unknown", userMessage, source, "Interested");
-        await sendReply(from, replyConfig.interestedReply);
+        await safeSendReply(from, replyConfig.interestedReply);
         return NextResponse.json({ status: "hot lead handled" });
       }
 
-      // GREETING / MENU
+      // Greeting / menu
       if (userMessage === "hi" || userMessage === "hello" || userMessage === "menu") {
         await sendMenu(from);
-      }
-      // MENU OPTIONS
-      else if (userMessage === "1") {
-        await sendReply(from, `🎓 IELTS Demo\nhttps://study.anuedu.in/register`);
+      } else if (userMessage === "1") {
+        await safeSendReply(from, `🎓 IELTS Demo\nhttps://study.anuedu.in/register`);
       } else if (userMessage === "2") {
-        await sendReply(from, `🎯 PTE Demo\nhttps://study.anuedu.in/register`);
+        await safeSendReply(from, `🎯 PTE Demo\nhttps://study.anuedu.in/register`);
       } else if (userMessage === "3") {
-        await sendReply(from, `🌍 Study Abroad\nhttps://study.anuedu.in/register`);
+        await safeSendReply(from, `🌍 Study Abroad\nhttps://study.anuedu.in/register`);
       } else if (userMessage === "4") {
-        await sendReply(from, `🎓 Demo\n1️⃣ IELTS\n2️⃣ PTE`);
+        await safeSendReply(from, `🎓 Demo\n1️⃣ IELTS\n2️⃣ PTE`);
       } else {
         await sendMenu(from);
       }
@@ -196,21 +201,21 @@ export async function POST(req: NextRequest) {
 }
 
 // ==========================
-// HELPER: SEND MENU
+// MENU
 // ==========================
 async function sendMenu(to: string) {
-  await sendReply(
+  await safeSendReply(
     to,
     `Hello 👋 Welcome to ANU Education.\n\nReply with:\n\n1️⃣ IELTS\n2️⃣ PTE\n3️⃣ Study Abroad\n4️⃣ Demo`
   );
 }
 
 // ==========================
-// HELPER: SEND TEXT REPLY
+// SAFE SEND REPLY (with logging)
 // ==========================
-async function sendReply(to: string, message: string) {
+async function safeSendReply(to: string, message: string) {
   try {
-    await fetch(`https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`, {
+    const response = await fetch(`https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${WHATSAPP_TOKEN}`,
@@ -223,13 +228,19 @@ async function sendReply(to: string, message: string) {
         text: { body: message },
       }),
     });
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`❌ Failed to send reply to ${to}:`, errorText);
+    } else {
+      console.log(`✅ Reply sent to ${to}`);
+    }
   } catch (err) {
-    console.error("Failed to send reply:", err);
+    console.error(`❌ Exception sending reply to ${to}:`, err);
   }
 }
 
 // ==========================
-// HELPER: SAFE LEAD SAVE (non‑blocking)
+// SAFE LEAD SAVE (non‑blocking)
 // ==========================
 async function safeSaveLead(phone: string, template: string, message: string, source: string, status: string) {
   try {
