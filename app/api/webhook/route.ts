@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       await saveLead(from, "unknown", userMessage, source, "Interested");
 
       const msg = reply.toLowerCase();
-
+console.log("👉 BUTTON CLICK:", msg);
       // 🔥 GET LAST TEMPLATE FROM DB
       const lastTemplate = await getUserTemplate(from);
 
@@ -58,10 +58,12 @@ export async function POST(req: NextRequest) {
       if (msg.includes("yes") || msg.includes("details")) {
 
         // 👨‍🏫 TEACHER FLOW
-        if (
-          lastTemplate === "teacher_collaboration_primary" ||
-          lastTemplate === "college_faculty_program_2026"
-        ) {
+        const template = (lastTemplate || "").toLowerCase().trim();
+
+if (
+  template.includes("teacher") ||
+  template.includes("faculty")
+)  {
 
           await sendReply(
             from,
@@ -148,7 +150,9 @@ You can connect anytime if needed.`
 
       // 🔥 GET LAST TEMPLATE
       const lastTemplate = await getUserTemplate(from);
-
+console.log("📞 FROM:", from);
+console.log("💬 USER MESSAGE:", userMessage);
+console.log("📦 TEMPLATE FROM DB:", lastTemplate);
       // HOT LEAD
       if (
         userMessage.includes("yes") ||
