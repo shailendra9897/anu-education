@@ -1,9 +1,9 @@
 // lib/db.ts
-import mysql from 'mysql2/promise';
+import { Pool } from "pg";
 
-export const db = mysql.createPool({
-  host: 'localhost',         // ✅ or your hosting DB hostname (check in OVIPanel)
-  user: 'your_db_user',
-  password: 'your_db_password',
-  database: 'your_db_name',
+export const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
