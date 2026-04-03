@@ -37,17 +37,18 @@ export default function WhatsAppPage() {
 
         alert("Message Sent ✅");
       } else {
-        const numberArray = parseNumbers(numbers);
+        const list = parseNumbers(numbers);
 
-        await fetch("/api/send-bulk", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            numbers: numberArray,
-            templateName: templateId,
-          }),
-        });
-
+await fetch("/api/send", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    numbers: list,   // ✅ THIS
+    templateName: templateId,
+  }),
+});
         alert("Bulk Sent ✅");
       }
     } catch (err) {

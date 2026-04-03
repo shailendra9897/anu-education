@@ -1,3 +1,4 @@
+console.log("🚀 SEND API HIT");
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { saveLead } from "@/lib/saveLead";
