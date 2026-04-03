@@ -7,7 +7,7 @@ import { saveLead } from "@/lib/saveLead";
 
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN!;
 const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID!;
-const APP_SECRET = process.env.WHATSAPP_APP_SECRET!; // from Meta App Dashboard
+const APP_SECRET = process.env.WHATSAPP_APP_SECRET!;
 
 // Simple in‑memory duplicate cache (use Redis in production)
 const processedMessages = new Map<string, number>();
@@ -35,15 +35,38 @@ const TEMPLATE_REPLIES: Record<string, { yesReply: string; interestedReply: stri
 };
 
 // ==========================
-// SIGNATURE VERIFICATION
+// FIXED SIGNATURE VERIFICATION
 // ==========================
 function verifySignature(body: string, signatureHeader: string | null): boolean {
-  if (!signatureHeader || !APP_SECRET) return false;
+  if (!signatureHeader) {
+    console.error("Missing signature header");
+    return false;
+  }
+  if (!APP_SECRET) {
+    console.error("WHATSAPP_APP_SECRET is not set");
+    return false;
+  }
+
+  // Remove "sha256=" prefix if present
+  const signature = signatureHeader.replace(/^sha256=/, "");
+
+  // Compute expected hash
   const expected = crypto
     .createHmac("sha256", APP_SECRET)
     .update(body)
     .digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(signatureHeader), Buffer.from(expected));
+
+  // Check lengths match before comparing
+  if (signature.length !== expected.length) {
+    console.error("Signature length mismatch");
+    return false;
+  }
+
+  // Use timingSafeEqual with Buffer objects (same length guaranteed)
+  return crypto.timingSafeEqual(
+    Buffer.from(signature, "hex"),
+    Buffer.from(expected, "hex")
+  );
 }
 
 // ==========================
@@ -62,7 +85,7 @@ function isDuplicate(messageId: string): boolean {
 // ==========================
 export async function POST(req: NextRequest) {
   try {
-    // 1. Verify signature
+    // 1. Read raw body for signature verification
     const rawBody = await req.text();
     const signature = req.headers.get("x-hub-signature-256");
     if (!verifySignature(rawBody, signature)) {
