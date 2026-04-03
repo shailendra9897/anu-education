@@ -8,13 +8,16 @@ export async function saveLead(
   status: string
 ) {
   try {
-    await db.query(
+    const res = await db.query(
       `INSERT INTO whatsapp_leads 
       (phone, template_name, message, source, status) 
-      VALUES ($1, $2, $3, $4, $5)`,
+      VALUES ($1, $2, $3, $4, $5) RETURNING *`,
       [phone, templateName, message, source, status]
     );
-  } catch (error) {
-    console.error("DB Save Error:", error);
+
+    console.log("✅ DB INSERTED:", res.rows[0]);
+
+  } catch (error: any) {
+    console.error("❌ DB ERROR FULL:", error);
   }
 }
