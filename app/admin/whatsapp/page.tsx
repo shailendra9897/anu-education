@@ -111,12 +111,12 @@ await fetch("/api/send", {
       {/* BULK */}
       {mode === "bulk" && (
         <textarea
-          className="w-full border p-2 rounded"
-          rows={6}
-          placeholder="Enter numbers (one per line)"
-          value={numbers}
-          onChange={(e) => setNumbers(e.target.value)}
-        />
+  className="w-full border p-3 rounded"
+  rows={8}
+  placeholder="Enter data like:\nName,Number\nRahul,9876543210\nAmit,9123456789"
+  value={numbers}
+  onChange={(e) => setNumbers(e.target.value)}
+/>
       )}
 
       {/* SEND */}
