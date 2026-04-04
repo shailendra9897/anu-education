@@ -6,11 +6,11 @@ export const whatsappTemplates = [
     variables: [],
   },
   {
-    name: "Student Demo Invite",
-    id: "student_demo_invite_2026",
-    category: "student",
-    variables: [],
-  },
+  name: "₹19 Demo Campaign",
+  id: "student_class_19rs",
+  category: "student",
+  variables: ["name"], // ✅ important
+},
   {
     name: "College Faculty Program",
     id: "college_faculty_program_2026",
@@ -27,6 +27,6 @@ export const whatsappTemplates = [
     name: "College Students Demo",
     id: "college_students_demo_2026",
     category: "student",
-    variables: [],
+    variables: ["name"], // ✅ IMPORTANT
   },
 ];
