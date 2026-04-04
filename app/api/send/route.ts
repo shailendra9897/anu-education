@@ -36,11 +36,13 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
+console.log("📥 BODY RECEIVED:", body);
 
     // ✅ NEW INPUT
     const contacts: { name: string; phone: string }[] = body.contacts || [];
     const templateName: string = body.templateName;
-
+console.log("📞 CONTACTS:", contacts);
+console.log("📄 TEMPLATE:", templateName);
     if (!contacts.length || !templateName) {
       return NextResponse.json(
         { success: false, error: "Missing contacts or templateName" },
@@ -72,29 +74,29 @@ export async function POST(req: NextRequest) {
         }
 
         const name = contact.name || "Student";
-
+console.log("➡️ SENDING TO:", digits, "NAME:", name);
         // ✅ TEMPLATE (ONLY 1 PARAM)
         const payload = {
-          messaging_product: "whatsapp",
-          to: digits,
-          type: "template",
-          template: {
-            name: templateName,
-            language: { code: "en" },
-            components: [
-              {
-                type: "body",
-                parameters: [
-                  {
-                    type: "text",
-                    text: name,
-                  },
-                ],
-              },
-            ],
+  messaging_product: "whatsapp",
+  to: digits,
+  type: "template",
+  template: {
+    name: "student_class_19rs_1",
+    language: { code: "en" },
+    components: [
+      {
+        type: "body",
+        parameters: [
+          {
+            type: "text",
+            text: name || "Student",
           },
-        };
-
+        ],
+      },
+    ],
+  },
+};
+console.log("📤 PAYLOAD:", JSON.stringify(payload, null, 2));
         const res = await fetch(
           `https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`,
           {
@@ -107,8 +109,15 @@ export async function POST(req: NextRequest) {
           }
         );
 
-        const data = await res.json();
+        const text = await res.text();
+console.log("📡 WHATSAPP RESPONSE:", text);
 
+let data;
+try {
+  data = JSON.parse(text);
+} catch {
+  data = { error: { message: text } };
+}
         if (res.ok) {
           sent++;
 

@@ -7,7 +7,7 @@ export const whatsappTemplates = [
   },
   {
   name: "₹19 Demo Campaign",
-  id: "student_class_19rs",
+  id: "student_class_19rs_1",
   category: "student",
   variables: ["name"], // ✅ important
 },
