@@ -214,7 +214,7 @@ Message anytime if needed 👍`
 
         await safeSaveLead(from, lastTemplate || "unknown", userMessage, source, "Hot");
 
-        if (lastTemplate === "student_class_19rs") {
+        if (lastTemplate === "student_class_19rs_1") {
 
           await safeSendReply(
             from,
