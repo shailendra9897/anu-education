@@ -13,16 +13,36 @@ export default function PayCoursePage() {
   const [course, setCourse] = useState('');
   const [coupon, setCoupon] = useState('');
   const [discount, setDiscount] = useState(0);
+  const [appliedCoupon, setAppliedCoupon] = useState('');
 
   const baseAmount = course ? COURSE_FEES[course] : 0;
-  const finalAmount = baseAmount - discount;
+  const finalAmount = Math.max(0, Math.round(baseAmount - discount));
 
   const applyCoupon = () => {
-    if (coupon.trim().toUpperCase() === 'ANU10') {
-      setDiscount(Math.round(baseAmount * 0.1));
-    } else {
+    const code = coupon.trim().toUpperCase();
+
+    if (!course) {
+      alert('Please select a course first');
+      return;
+    }
+
+    // 🎯 COUPON LOGIC
+    if (code === 'ANU10') {
+      const d = Math.round(baseAmount * 0.1);
+      setDiscount(d);
+      setAppliedCoupon('ANU10');
+    } 
+    
+    else if (code === 'B2BPARTNER') {
+      const d = Math.round(baseAmount * 0.625); // 62.5% OFF
+      setDiscount(d);
+      setAppliedCoupon('B2BPARTNER');
+    } 
+    
+    else {
       alert('Invalid or expired coupon');
       setDiscount(0);
+      setAppliedCoupon('');
     }
   };
 
@@ -46,6 +66,7 @@ export default function PayCoursePage() {
         onChange={(e) => {
           setCourse(e.target.value);
           setDiscount(0);
+          setAppliedCoupon('');
         }}
         className="w-full border rounded-lg px-4 py-2"
       >
@@ -56,7 +77,7 @@ export default function PayCoursePage() {
         <option value="French A1">French A1</option>
       </select>
 
-      {/* Price */}
+      {/* Price Box */}
       {course && (
         <div className="bg-gray-50 p-4 rounded-lg space-y-2">
           <p>
@@ -64,9 +85,14 @@ export default function PayCoursePage() {
           </p>
 
           {discount > 0 && (
-            <p className="text-green-600">
-              Discount Applied: −₹{discount}
-            </p>
+            <>
+              <p className="text-green-600">
+                Coupon Applied: {appliedCoupon}
+              </p>
+              <p className="text-green-600">
+                Discount: −₹{discount}
+              </p>
+            </>
           )}
 
           <p className="text-lg font-semibold">
@@ -80,7 +106,7 @@ export default function PayCoursePage() {
         <div className="space-y-2">
           <input
             type="text"
-            placeholder="Coupon Code (After Demo)"
+            placeholder="Enter Coupon Code"
             value={coupon}
             onChange={(e) => setCoupon(e.target.value)}
             className="w-full border rounded-lg px-4 py-2"
@@ -93,7 +119,7 @@ export default function PayCoursePage() {
           </button>
 
           <p className="text-xs text-gray-500 text-center">
-            Coupon valid only after demo class • One-time use
+            Coupon valid after demo • Limited offers
           </p>
         </div>
       )}
