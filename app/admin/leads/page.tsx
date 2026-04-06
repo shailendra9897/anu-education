@@ -1,160 +1,269 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { whatsappTemplates } from "@/lib/whatsappTemplates";
+import { useEffect, useState, useCallback } from "react";
 
-export default function WhatsAppPage() {
-  const [numbers, setNumbers] = useState("");
-  const [templateId, setTemplateId] = useState(whatsappTemplates[0]?.id || "");
-  const [variables, setVariables] = useState<Record<string, string>>({});
+type Lead = {
+  id: number;
+  phone: string;
+  template_name: string;
+  message: string;
+  source: string;
+  status: string;
+  created_at: string;
+};
+
+type ApiResponse = {
+  leads: Lead[];
+  total: number;
+  limit: number;
+  offset: number;
+  hasMore: boolean;
+};
+
+export default function LeadsPage() {
+  const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(false);
-  const [optInConfirmed, setOptInConfirmed] = useState(false);
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [search, setSearch] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [offset, setOffset] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
 
-  const selectedTemplate = whatsappTemplates.find((t) => t.id === templateId);
+  const limit = 50;
 
-  useEffect(() => {
-    if (selectedTemplate?.variables) {
-      const initial: Record<string, string> = {};
-      selectedTemplate.variables.forEach((v) => (initial[v] = ""));
-      setVariables(initial);
+  const fetchLeads = useCallback(async (resetOffset = true) => {
+  setLoading(true);
+  const newOffset = resetOffset ? 0 : offset;
+  const params = new URLSearchParams({
+    limit: limit.toString(),
+    offset: newOffset.toString(),
+    status: filterStatus,
+    ...(search && { search }),
+    ...(fromDate && { from: fromDate }),
+    ...(toDate && { to: toDate }),
+  });
+
+  try {
+    const res = await fetch(`/api/leads?${params}`);
+    
+    // 👇 Check if response is OK and content-type is JSON
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("API error:", res.status, errorText);
+      throw new Error(`API returned ${res.status}`);
     }
-  }, [templateId, selectedTemplate]);
+    
+    const contentType = res.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await res.text();
+      console.error("Non-JSON response:", text);
+      throw new Error("Expected JSON but got " + contentType);
+    }
+    
+    const data: ApiResponse = await res.json();
 
-  // ==========================
-  // NEW PARSE FUNCTION (supports "Name, 9876543210")
-  // ==========================
-  const parseData = (text: string) => {
-    return text
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .map((line) => {
-        const [name, number] = line.split(",");
-        let digits = number?.replace(/\D/g, "") || "";
+    if (resetOffset) {
+      setLeads(data.leads);
+      setOffset(0);
+    } else {
+      setLeads((prev) => [...prev, ...data.leads]);
+    }
+    setTotal(data.total);
+    setHasMore(data.hasMore);
+  } catch (error) {
+    console.error("Fetch leads failed:", error);
+    alert("Failed to load leads. Check console for details.");
+  } finally {
+    setLoading(false);
+  }
+}, [filterStatus, search, fromDate, toDate, offset, limit]);
+  useEffect(() => {
+    fetchLeads(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterStatus, search, fromDate, toDate]);
 
-        if (digits.length === 10) digits = "91" + digits;
-
-        return {
-          name: name?.trim() || "Student",
-          phone: digits,
-        };
-      })
-      .filter((item) => item.phone.length >= 12);
+  const loadMore = () => {
+    const newOffset = offset + limit;
+    setOffset(newOffset);
+    fetchLeads(false);
   };
 
-  const handleSend = async () => {
-    if (!optInConfirmed) {
-      alert("⚠️ You must confirm that all recipients have opted in.");
-      return;
+  const exportToCSV = () => {
+    const headers = ["ID", "Phone", "Template", "Message", "Source", "Status", "Date"];
+    const rows = leads.map((lead) => [
+      lead.id,
+      lead.phone,
+      lead.template_name,
+      lead.message,
+      lead.source,
+      lead.status,
+      new Date(lead.created_at).toLocaleString(),
+    ]);
+    const csvContent = [headers, ...rows].map((row) => row.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `leads_${new Date().toISOString()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const deleteLead = async (id: number) => {
+    if (!confirm("Delete this lead?")) return;
+
+    const res = await fetch("/api/leads/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+
+    if (res.ok) {
+      // Refresh the current view (preserve filters)
+      fetchLeads(true);
+    } else {
+      alert("Failed to delete lead.");
     }
+  };
 
-    const contacts = parseData(numbers);
-    if (contacts.length === 0) {
-      alert("Please enter valid data (Name, Phone) – one per line.");
-      return;
-    }
-
-    if (selectedTemplate?.variables?.length) {
-      const missing = selectedTemplate.variables.filter((v) => !variables[v]?.trim());
-      if (missing.length) {
-        alert(`Missing values for: ${missing.join(", ")}`);
-        return;
-      }
-    }
-
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contacts,           // 👈 new structure
-          templateName: templateId,
-          templateVariables: variables,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        alert(`✅ Sent: ${data.sent} / ${contacts.length}\nFailed: ${data.failedCount || 0}`);
-        setNumbers("");
-        setOptInConfirmed(false);
-      } else {
-        alert(`❌ Error: ${data.error || "Unknown error"}`);
-      }
-    } catch (err) {
-      alert("Server error. Check console.");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+  const statusColors: Record<string, string> = {
+    New: "bg-blue-100 text-blue-800",
+    Interested: "bg-green-100 text-green-800",
+    Converted: "bg-purple-100 text-purple-800",
+    Sent: "bg-gray-100 text-gray-800",
+    Unsubscribed: "bg-red-100 text-red-800",
   };
 
   return (
-    <div className="max-w-xl mx-auto py-10 space-y-4">
-      <h1 className="text-2xl font-bold">WhatsApp Campaign (Pro)</h1>
+    <div className="p-6 max-w-7xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">📊 WhatsApp Leads</h1>
 
-      <label className="flex items-center gap-2 text-sm text-gray-700">
-        <input
-          type="checkbox"
-          checked={optInConfirmed}
-          onChange={(e) => setOptInConfirmed(e.target.checked)}
-        />
-        I confirm that all numbers have explicitly opted in to receive WhatsApp messages.
-      </label>
+      {/* Filters */}
+      <div className="flex flex-wrap gap-3 mb-4 items-end">
+        <div>
+          <label className="block text-xs font-semibold mb-1">Status</label>
+          <select
+            className="border rounded px-3 py-1"
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="New">New</option>
+            <option value="Interested">Interested</option>
+            <option value="Converted">Converted</option>
+            <option value="Sent">Sent</option>
+            <option value="Unsubscribed">Unsubscribed</option>
+          </select>
+        </div>
 
-      <select
-        className="w-full border p-2 rounded"
-        value={templateId}
-        onChange={(e) => setTemplateId(e.target.value)}
-      >
-        {whatsappTemplates.map((t) => (
-          <option key={t.id} value={t.id}>
-            {t.name}
-          </option>
-        ))}
-      </select>
+        <div>
+          <label className="block text-xs font-semibold mb-1">Search (Phone/Message)</label>
+          <input
+            type="text"
+            placeholder="Search..."
+            className="border rounded px-3 py-1 w-48"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
 
-      {selectedTemplate?.variables && selectedTemplate.variables.length > 0 && (
-        <div className="border p-3 rounded bg-gray-50 space-y-2">
-          <p className="font-medium">Template Variables:</p>
-          {selectedTemplate.variables.map((varName) => (
-            <input
-              key={varName}
-              type="text"
-              placeholder={`{{${varName}}}`}
-              className="w-full border p-2 rounded"
-              value={variables[varName] || ""}
-              onChange={(e) =>
-                setVariables({ ...variables, [varName]: e.target.value })
-              }
-            />
-          ))}
+        <div>
+          <label className="block text-xs font-semibold mb-1">From Date</label>
+          <input
+            type="date"
+            className="border rounded px-3 py-1"
+            value={fromDate}
+            onChange={(e) => setFromDate(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold mb-1">To Date</label>
+          <input
+            type="date"
+            className="border rounded px-3 py-1"
+            value={toDate}
+            onChange={(e) => setToDate(e.target.value)}
+          />
+        </div>
+
+        <button
+          onClick={exportToCSV}
+          className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+        >
+          📎 Export CSV
+        </button>
+      </div>
+
+      {/* Stats */}
+      <div className="mb-4 text-sm text-gray-600">
+        Showing {leads.length} of {total} leads
+      </div>
+
+      {/* Table */}
+      <div className="overflow-x-auto border rounded">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-2 text-left">Phone</th>
+              <th className="p-2 text-left">Template</th>
+              <th className="p-2 text-left">Message</th>
+              <th className="p-2 text-left">Source</th>
+              <th className="p-2 text-left">Status</th>
+              <th className="p-2 text-left">Date</th>
+              <th className="p-2 text-left">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leads.map((lead) => (
+              <tr key={lead.id} className="border-t hover:bg-gray-50">
+                <td className="p-2 font-mono text-xs">{lead.phone}</td>
+                <td className="p-2 max-w-xs truncate">{lead.template_name || "-"}</td>
+                <td className="p-2 max-w-md truncate">{lead.message}</td>
+                <td className="p-2">{lead.source}</td>
+                <td className="p-2">
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${statusColors[lead.status] || "bg-gray-100"}`}>
+                    {lead.status}
+                  </span>
+                </td>
+                <td className="p-2 whitespace-nowrap">
+                  {new Date(lead.created_at).toLocaleString()}
+                </td>
+                <td className="p-2">
+                  <button
+                    onClick={() => deleteLead(lead.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+            {leads.length === 0 && !loading && (
+              <tr>
+                <td colSpan={7} className="p-4 text-center text-gray-500">
+                  No leads found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Load More */}
+      {hasMore && (
+        <div className="mt-4 text-center">
+          <button
+            onClick={loadMore}
+            disabled={loading}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          >
+            {loading ? "Loading..." : "Load More"}
+          </button>
         </div>
       )}
-
-      <textarea
-        className="w-full border p-3 rounded font-mono"
-        rows={8}
-        placeholder="Enter one contact per line:&#10;Raj, 9876543210&#10;Priya, +919876543210&#10;Amit, 9876543211"
-        value={numbers}
-        onChange={(e) => setNumbers(e.target.value)}
-      />
-
-      <button
-        onClick={handleSend}
-        className="bg-green-600 text-white px-6 py-2 rounded w-full disabled:opacity-50"
-        disabled={loading || !optInConfirmed}
-      >
-        {loading ? "Sending..." : "Send Campaign"}
-      </button>
-
-      <p className="text-xs text-gray-500 text-center">
-        ⚠️ You must have explicit consent from every recipient. Unsolicited messages
-        will result in permanent WhatsApp API ban.
-      </p>
     </div>
   );
 }
