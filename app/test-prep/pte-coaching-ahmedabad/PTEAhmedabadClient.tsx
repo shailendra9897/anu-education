@@ -273,7 +273,7 @@ export default function PTEAhmedabadClient() {
           {/* Internal Link to Gandhinagar Page */}
           <div className="bg-blue-50 p-6 rounded-2xl text-center">
             <h3 className="text-xl font-bold mb-2">📍 Also serving nearby cities</h3>
-            <p className="text-gray-700 mb-4">If you're in Gandhinagar, explore our dedicated PTE coaching there.</p>
+            <p className="text-gray-700 mb-4">If you're in Gandhinagar, you can join our online coaching from home.</p>
             <Link href="/test-prep/pte-coaching-gandhinagar" className="inline-block bg-blue-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-blue-700 transition">
               View PTE Coaching in Gandhinagar →
             </Link>
