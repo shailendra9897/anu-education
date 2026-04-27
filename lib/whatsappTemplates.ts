@@ -24,6 +24,13 @@ export const whatsappTemplates = [
     variables: [],
   },
   {
+    name: "Free Classes + Counselling",
+    id: "free_classes_counselling_2026", // ⚠️ MUST match Meta EXACTLY
+    category: "student",
+    variables: [], // ✅ no variables
+  },
+
+  {
     name: "College Students Demo",
     id: "college_students_demo_2026",
     category: "student",
