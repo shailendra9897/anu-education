@@ -175,32 +175,7 @@ export default function IELTSAhmedabadClient() {
           }),
         }}
       />
-
-      {/* ================= NEW: AggregateRating Schema ================= */}
-      <Script
-        id="rating-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: "IELTS Coaching in Ahmedabad",
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: "4.8",
-              reviewCount: "347",
-              bestRating: "5",
-              worstRating: "1",
-            },
-            offers: {
-              "@type": "Offer",
-              price: "0",
-              priceCurrency: "INR",
-              availability: "https://schema.org/OnlineOnly",
-            },
-          }),
-        }}
-      />
+      
 
       {/* ================= NEW: Speakable Schema ================= */}
       <Script
