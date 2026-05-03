@@ -264,7 +264,7 @@ export default function IELTSAhmedabadClient() {
               
               {/* Executive Summary (voice‑answer class for Speakable) */}
               <div className="voice-answer max-w-3xl mx-auto mb-6 text-lg bg-white/10 backdrop-blur-sm p-6 rounded-2xl text-left">
-                <p className="font-bold text-xl mb-3">📌 Executive summary – what you get here:</p>
+                <p className="font-bold text-xl mb-3"> Executive summary – what you get here:</p>
                 <ul className="list-disc pl-5 space-y-1">
                   <li>✅ <strong>What is this page?</strong> – Online IELTS coaching specially for Ahmedabad students.</li>
                   <li>✅ <strong>Who is it for?</strong> – Students in Satellite, Maninagar, Navrangpura, Gota, Vastrapur & all Ahmedabad areas.</li>

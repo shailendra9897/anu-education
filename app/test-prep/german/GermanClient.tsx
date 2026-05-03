@@ -21,9 +21,9 @@ export default function GermanClient() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Course",
-            name: "German Language Course (A1 to B2)",
+            name: "German Language Course (A1 to B2) – India",
             description:
-              "CEFR‑aligned online German classes with live interactive sessions, Goethe exam preparation, and flexible timings for students in Gujarat.",
+              "Live online German classes from A1 to B2 levels with Goethe‑aligned curriculum, expert trainers, and free 3‑day demo. For students in Ahmedabad, Gandhinagar, Vadodara, Surat and across Gujarat.",
             provider: {
               "@type": "Organization",
               name: "ANU Education",
@@ -31,7 +31,7 @@ export default function GermanClient() {
             },
             offers: {
               "@type": "Offer",
-              price: "7500",
+              price: "10000",
               priceCurrency: "INR",
               availability: "https://schema.org/OnlineOnly",
               validFrom: "2026-04-01",
@@ -39,14 +39,14 @@ export default function GermanClient() {
             hasCourseInstance: {
               "@type": "CourseInstance",
               courseMode: "Online",
-              courseWorkload: "PT60H",
-              startDate: "2026-04-15",
+              courseWorkload: "PT90H",
+              startDate: "2026-05-10",
             },
           }),
         }}
       />
 
-      {/* FAQ Schema */}
+      {/* Updated FAQ Schema (new Q&A) */}
       <Script
         id="faq-schema-german"
         type="application/ld+json"
@@ -57,42 +57,98 @@ export default function GermanClient() {
             mainEntity: [
               {
                 "@type": "Question",
-                name: "What makes ANU the best for “learn German” in Gujarat?",
+                name: "Is German required for studying in Germany?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Our Gujarat-centric scheduling, proven results (2000+ students trained), and live interactive classes stand out.",
+                  text: "Yes. Many public universities and some job roles in Germany require proof of German language proficiency (usually B1/B2 or higher). For English‑taught programs, basic German is still helpful for daily life and part‑time jobs.",
                 },
               },
               {
                 "@type": "Question",
-                name: "How do “German classes near me” work online?",
+                name: "Can I learn German online in Ahmedabad?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Fully virtual – join from Ahmedabad, Vadodara, or Surat via our app. Live video chats make it feel like in‑person.",
+                  text: "Yes, our online German classes are designed for Gujarat students in Ahmedabad, Gandhinagar, Vadodara, and nearby cities. You can attend live sessions from home and access recorded lessons anytime.",
                 },
               },
               {
                 "@type": "Question",
-                name: "Details on “online German classes free 3 day classes”?",
+                name: "How long does German A1 take in Ahmedabad?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Three live 1‑hour sessions (Mon‑Wed) covering A1 introduction. Register at anuedu.in – spots fill fast!",
+                  text: "German A1 usually takes 4–6 weeks with regular practice, depending on your schedule and prior language exposure. Our structured online course in Ahmedabad keeps you on track for faster progress.",
                 },
               },
               {
                 "@type": "Question",
-                name: "Certification and job support?",
+                name: "Do you provide certification support for German exams?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Yes, we prepare you for Goethe‑Zertifikat exams and provide guidance for visas and jobs in Germany.",
+                  text: "Yes. We prepare students for internationally recognized German exams like Goethe‑Zertifikat A1, A2, B1, B2 and can help with exam strategy, mock tests, and application guidance.",
                 },
               },
               {
                 "@type": "Question",
-                name: "Batch timings for Vadodara/Surat?",
+                name: "Can I go to Germany for study after learning German in Ahmedabad?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Evening batches (IST): 7–8 PM or 8–9 PM; weekend options available.",
+                  text: "Yes. After reaching B1/B2 level, you can apply to German universities, vocational programs, or language‑integrated courses. We also guide Ahmedabad students on admission pathways, documents, and language requirements.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Which German level is needed for jobs in Germany?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "For most jobs in Germany, at least B1 basic communication skills are expected; many roles require B2 or higher. We design our courses for Ahmedabad students to reach job‑ready conversational and professional German.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Do you offer German classes for beginners in Ahmedabad?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes. We offer German A1 starters’ batches for complete beginners from Ahmedabad and Gujarat. Our online classes focus on speaking, listening, grammar, and daily‑use vocabulary.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Are your online German classes batch‑based or 1‑to‑1?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "We offer both group batches (for better practice and affordability) and 1‑to‑1 private classes for focused attention. Students from Ahmedabad, Gandhinagar, and nearby cities can choose the best fit.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "How are online German classes conducted in Ahmedabad?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Classes are held live via Zoom or our learning platform. You get interactive sessions, homework, speech practice, and weekly tests. All materials are shared digitally, so you can study from anywhere in Gujarat.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Germany study visa vs. language requirement – what do Ahmedabad students need to know?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Most German student visas require either an English‑taught program acceptance or proof of German language level (B1/B2). We help Ahmedabad students plan their language path early so they meet visa and university deadlines.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Can working professionals in Ahmedabad learn German online?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes. Our evening and weekend batches are designed for working professionals in Ahmedabad who want to improve German for career growth, study in Germany, or migration plans.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "How do online German classes help with Germany ranking and LLP/Germany‑focused search queries?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Our structured, exam‑oriented online German classes in Ahmedabad are optimised for long‑tail queries like “German classes in Ahmedabad,” “learn German online for Germany,” and “German course for study in Germany.” Clear metadata, local keywords, and FAQ‑rich content help Gujarati students find the right course.",
                 },
               },
             ],
@@ -150,28 +206,31 @@ export default function GermanClient() {
         }
         .price-card { transition: all 0.3s ease; }
         .price-card:hover { transform: translateY(-10px); box-shadow: 0 25px 40px -12px rgba(0,0,0,0.2); }
+        .course-highlight { background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); }
       `}</style>
 
       <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
         
-        {/* Hero Section */}
+        {/* Hero Section - Updated H1 and intro */}
         <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-600 text-white">
           <div className="max-w-6xl mx-auto px-4 py-16 md:py-20">
             <div className="text-center">
               <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-semibold mb-4 float">
-                🇩🇪 CEFR A1‑B2 | Live Classes | Free 3‑Day Demo
+                🇩🇪 Live Online | A1‑B2 | Free 3‑Day Demo
               </div>
               <h1 className="animate-up stagger-1 text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                Learn German with ANU Education
-                <br />
-                <span className="bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
-                  Gujarat’s Top Choice
-                </span>
+                German Language Course in India – A1 to B2 Online Classes 🇩🇪
               </h1>
-              <p className="animate-up stagger-2 text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-                ANU Education offers <strong>top‑rated online German classes</strong> tailored for students and professionals in 
-                Ahmedabad, Vadodara, and Surat. Flexible, expert‑led courses that fit your schedule – including a free 3‑day demo.
-              </p>
+              <h2 className="text-3xl font-bold mb-4 section-title">
+               Join live online German classes from anywhere in India, including Ahmedabad, Vadodara, Surat, and across Gujarat. 
+              </h2>
+              {/* Executive Intro */}
+              <div className="voice-answer max-w-3xl mx-auto mb-6 text-lg bg-white/10 backdrop-blur-sm p-6 rounded-2xl text-left text-white/95">
+                <p>
+                  Looking for the best German language course in Ahmedabad or Gujarat? ANU Education offers live online German classes from A1 to B2 levels with expert trainers, Goethe‑aligned curriculum, and free 3‑day demo classes.
+                  Students from Ahmedabad, Vadodara, Surat, Gandhinagar, and across Gujarat can join from home and prepare for study, jobs, or migration to Germany.
+                </p>
+              </div>
               <div className="animate-up stagger-3 flex flex-col sm:flex-row justify-center gap-4 mt-8">
                 <a
                   href="/free-demo"
@@ -199,77 +258,84 @@ export default function GermanClient() {
 
         <div className="max-w-6xl mx-auto px-4 py-12 space-y-16">
           
-          {/* Why Choose ANU */}
+          {/* Why Learn German */}
+          <section className="bg-white p-8 rounded-3xl shadow-md">
+            <h2 className="text-3xl font-bold mb-4 section-title">🇩🇪 Why Learn German?</h2>
+            <p className="text-gray-700 text-lg leading-relaxed">
+              Germany is one of the top destinations for higher education and job opportunities. Many public universities offer low-cost or free education, making Germany a popular choice for Indian students.
+              Learning German improves your chances of admission, part-time jobs, and long-term career opportunities in Germany.
+            </p>
+          </section>
+
+          {/* German Course Levels */}
           <section>
-            <h2 className="text-3xl font-bold mb-8 text-center section-title-center">Why Choose ANU for Learning German?</h2>
+            <h2 className="text-3xl font-bold mb-6 text-center section-title-center">📚 German Course Levels (A1 to B2)</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {["A1 – Beginner (basic communication)", "A2 – Elementary level", "B1 – Intermediate level", "B2 – Advanced level"].map((level, idx) => (
+                <div key={idx} className="bg-white rounded-xl p-5 text-center shadow-md hover:shadow-lg transition">
+                  <p className="font-semibold text-gray-800">{level}</p>
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-gray-600 mt-4">Each level includes speaking, reading, writing, and listening training with real-life practice.</p>
+          </section>
+
+          {/* Why Choose ANU (Features) */}
+          <section>
+            <h2 className="text-3xl font-bold mb-6 text-center section-title-center">Why Choose ANU Education?</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { icon: "📚", title: "CEFR‑Aligned Levels (A1–B2)", desc: "Structured curriculum covering speaking, reading, writing, and listening." },
-                { icon: "🎥", title: "Interactive Live Classes", desc: "Small batches with native‑trained instructors for personalised attention." },
-                { icon: "💼", title: "Practical Skills", desc: "Focus on study abroad, jobs in Germany, or travel." },
-                { icon: "📱", title: "Better Than Apps", desc: "Real‑time practice and feedback, not just recorded videos." },
-              ].map((item, idx) => (
-                <div key={idx} className={`animate-up stagger-${idx+1} feature-card bg-white rounded-2xl p-6 shadow-md border border-gray-100`}>
-                  <div className="text-4xl mb-3">{item.icon}</div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
-                  <p className="text-gray-600">{item.desc}</p>
+                "✅ Live interactive classes",
+                "✅ Goethe-aligned curriculum",
+                "✅ Small batch size",
+                "✅ Daily speaking practice",
+                "✅ Mock exams",
+                "✅ 24/7 doubt support",
+                "✅ Study abroad guidance",
+              ].map((feature, idx) => (
+                <div key={idx} className="bg-white p-4 rounded-xl shadow-md text-center">
+                  <span className="text-green-600 text-xl">✔</span> {feature.replace("✅ ", "")}
                 </div>
               ))}
             </div>
           </section>
 
-          {/* Free Demo Details */}
-          <section className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl p-8 text-center">
-            <h2 className="text-3xl font-bold mb-4">✨ Free 3‑Day Demo Classes</h2>
-            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-              Experience our teaching style with <strong>three live sessions (Mon–Wed, 1 hour each)</strong>. 
-              Learn greetings, numbers, and simple conversations – no prior knowledge needed.
-            </p>
-            <a href="/free-demo" className="mt-6 inline-block bg-green-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-green-700 transition">
-              👉 Register at anuedu.in
-            </a>
-          </section>
-
-          {/* Course Highlights */}
-          <section>
-            <h2 className="text-3xl font-bold mb-6 section-title">📚 Course Highlights</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <ul className="space-y-3 text-gray-700">
-                <li>✅ <strong>Levels & Duration:</strong> A1 (60 hours) up to B2. Weekly live Zoom classes + recordings.</li>
-                <li>✅ <strong>Pricing:</strong> Affordable packages starting at <strong>₹7,500</strong> (includes materials + certification prep).</li>
-                <li>✅ <strong>Locations Served:</strong> Optimised for Gujarat (Ahmedabad, Vadodara, Surat) with timezone‑friendly timings.</li>
-                <li>✅ <strong>Extras:</strong> Job guidance for Germany, mock Goethe exams, and 24/7 doubt support.</li>
-              </ul>
-              <div className="bg-white p-6 rounded-2xl shadow-md">
-                <h3 className="text-xl font-bold mb-3">🎯 Upcoming Batches</h3>
-                <p><strong>Weekday batch:</strong> Mon–Wed, 7–8 PM IST</p>
-                <p className="mt-2"><strong>Weekend batch:</strong> Sat–Sun, 10–11 AM IST</p>
-                <p className="mt-2"><strong>Free Demo:</strong> Every Monday (3 days)</p>
+          {/* Course Highlights (Detailed Pricing, Timings, etc.) */}
+          <section className="course-highlight rounded-3xl p-8">
+            <h2 className="text-3xl font-bold mb-6 text-center">📚 Course Highlights</h2>
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-xl font-bold mb-3">🎯 Packages & Pricing</h3>
+                <ul className="space-y-2 text-gray-700">
+                  <li><strong>German Basic + A1:</strong> ₹10,000</li>
+                  <li><strong>German Basic + A1 + A2:</strong> ₹16,000</li>
+                </ul>
+                <h3 className="text-xl font-bold mt-6 mb-3">🕒 Batch Timings</h3>
+                <ul className="space-y-1 text-gray-700">
+                  <li><strong>Basic:</strong> 7:30 PM</li>
+                  <li><strong>A1:</strong> 9:00 PM</li>
+                  <li><strong>A2:</strong> 9:00 PM</li>
+                </ul>
+                <h3 className="text-xl font-bold mt-6 mb-3">⏱️ Class Duration</h3>
+                <p>90 minutes per session &nbsp;|&nbsp; Monday to Friday (5 days/week)</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-3">👨‍🏫 Trainer Qualification</h3>
+                <p>Certified C1 Level German Trainer</p>
+                <h3 className="text-xl font-bold mt-6 mb-3">💻 Mode</h3>
+                <p>100% Live Online Classes with recordings</p>
+                <h3 className="text-xl font-bold mt-6 mb-3">📦 Includes</h3>
+                <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                  <li>Study materials</li>
+                  <li>Speaking practice</li>
+                  <li>Mock test preparation</li>
+                  <li>Goethe exam guidance</li>
+                </ul>
               </div>
             </div>
           </section>
 
-          {/* Comparison Table */}
-          <section className="overflow-x-auto">
-            <h2 className="text-3xl font-bold mb-6 text-center section-title-center">🔎 Comparison</h2>
-            <table className="w-full border-collapse shadow-lg rounded-2xl overflow-hidden">
-              <thead className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-                <tr>
-                  <th className="p-4 text-left">Feature</th>
-                  <th className="p-4 text-left">ANU Education</th>
-                  <th className="p-4 text-left">Typical Competitors</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y">
-                <tr><td className="p-4 font-semibold">Free Trial</td><td className="p-4">3 full days live</td><td className="p-4">1 session or none</td></tr>
-                <tr><td className="p-4 font-semibold">Gujarat Focus</td><td className="p-4">Ahmedabad/Vadodara/Surat</td><td className="p-4">Generic national batches</td></tr>
-                <tr><td className="p-4 font-semibold">Live Interaction</td><td className="p-4">Daily practice + feedback</td><td className="p-4">Mostly self‑paced</td></tr>
-                <tr><td className="p-4 font-semibold">Certification</td><td className="p-4">Goethe‑aligned</td><td className="p-4">Varies</td></tr>
-              </tbody>
-            </table>
-          </section>
-
-          {/* Internal Link to Study in Germany */}
+          {/* Internal Link to Study in Germany (unchanged) */}
           <div className="bg-blue-50 p-6 rounded-2xl text-center">
             <h3 className="text-xl font-bold mb-2">🇩🇪 Planning to study or work in Germany?</h3>
             <p className="text-gray-700 mb-4">German language skills are your first step. Combine our course with expert study abroad guidance.</p>
@@ -278,16 +344,23 @@ export default function GermanClient() {
             </Link>
           </div>
 
-          {/* FAQ Section */}
+          {/* FAQ Section (fully updated) */}
           <section>
             <h2 className="text-3xl font-bold mb-6 text-center">❓ Frequently Asked Questions</h2>
             <div className="max-w-3xl mx-auto space-y-4">
               {[
-                { q: "What makes ANU the best for “learn German” in Gujarat?", a: "Our Gujarat‑centric scheduling and proven results (2000+ students trained) stand out, unlike metro‑only institutes." },
-                { q: "How do “German classes near me” work online?", a: "Fully virtual – no travel needed. Join from Ahmedabad or Surat via app; feels like in‑person with video chats." },
-                { q: "Details on “online German classes free 3 day classes”?", a: "Three live 1‑hour sessions (Mon‑Wed) covering A1 intro. Register at anuedu.in – spots fill fast!" },
-                { q: "Certification and job support?", a: "Yes, we prepare you for Goethe‑Zertifikat and guide visas/jobs in Germany." },
-                { q: "Batch timings for Vadodara/Surat?", a: "Evenings (IST): 7–8 PM or 8–9 PM; weekend options available." },
+                { q: "Is German required for studying in Germany?", a: "Yes. Many public universities and some job roles in Germany require proof of German language proficiency (usually B1/B2 or higher). For English‑taught programs, basic German is still helpful for daily life and part‑time jobs." },
+                { q: "Can I learn German online in Ahmedabad?", a: "Yes, our online German classes are designed for Gujarat students in Ahmedabad, Gandhinagar, Vadodara, and nearby cities. You can attend live sessions from home and access recorded lessons anytime." },
+                { q: "How long does German A1 take in Ahmedabad?", a: "German A1 usually takes 4–6 weeks with regular practice, depending on your schedule and prior language exposure. Our structured online course in Ahmedabad keeps you on track for faster progress." },
+                { q: "Do you provide certification support for German exams?", a: "Yes. We prepare students for internationally recognized German exams like Goethe‑Zertifikat A1, A2, B1, B2 and can help with exam strategy, mock tests, and application guidance." },
+                { q: "Can I go to Germany for study after learning German in Ahmedabad?", a: "Yes. After reaching B1/B2 level, you can apply to German universities, vocational programs, or language‑integrated courses. We also guide Ahmedabad students on admission pathways, documents, and language requirements." },
+                { q: "Which German level is needed for jobs in Germany?", a: "For most jobs in Germany, at least B1 basic communication skills are expected; many roles require B2 or higher. We design our courses for Ahmedabad students to reach job‑ready conversational and professional German." },
+                { q: "Do you offer German classes for beginners in Ahmedabad?", a: "Yes. We offer German A1 starters’ batches for complete beginners from Ahmedabad and Gujarat. Our online classes focus on speaking, listening, grammar, and daily‑use vocabulary." },
+                { q: "Are your online German classes batch‑based or 1‑to‑1?", a: "We offer both group batches (for better practice and affordability) and 1‑to‑1 private classes for focused attention. Students from Ahmedabad, Gandhinagar, and nearby cities can choose the best fit." },
+                { q: "How are online German classes conducted in Ahmedabad?", a: "Classes are held live via Zoom or our learning platform. You get interactive sessions, homework, speech practice, and weekly tests. All materials are shared digitally, so you can study from anywhere in Gujarat." },
+                { q: "Germany study visa vs. language requirement – what do Ahmedabad students need to know?", a: "Most German student visas require either an English‑taught program acceptance or proof of German language level (B1/B2). We help Ahmedabad students plan their language path early so they meet visa and university deadlines." },
+                { q: "Can working professionals in Ahmedabad learn German online?", a: "Yes. Our evening and weekend batches are designed for working professionals in Ahmedabad who want to improve German for career growth, study in Germany, or migration plans." },
+                { q: "How do online German classes help with Germany ranking and LLP/Germany‑focused search queries?", a: "Our structured, exam‑oriented online German classes in Ahmedabad are optimised for long‑tail queries like “German classes in Ahmedabad,” “learn German online for Germany,” and “German course for study in Germany.” Clear metadata, local keywords, and FAQ‑rich content help Gujarati students find the right course." },
               ].map((faq, idx) => (
                 <div key={idx} className="bg-white rounded-2xl shadow-md overflow-hidden">
                   <button
