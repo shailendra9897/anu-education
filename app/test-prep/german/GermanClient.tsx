@@ -227,8 +227,8 @@ export default function GermanClient() {
               {/* Executive Intro */}
               <div className="voice-answer max-w-3xl mx-auto mb-6 text-lg bg-white/10 backdrop-blur-sm p-6 rounded-2xl text-left text-white/95">
                 <p>
-                  Looking for the best German language course in Ahmedabad or Gujarat? ANU Education offers live online German classes from A1 to B2 levels with expert trainers, Goethe‑aligned curriculum, and free 3‑day demo classes.
-                  Students from Ahmedabad, Vadodara, Surat, Gandhinagar, and across Gujarat can join from home and prepare for study, jobs, or migration to Germany.
+                  Looking for the best German language course in India? ANU Education offers live online German classes from A1 to B2 levels with expert trainers, Goethe‑aligned curriculum, and free 3‑day demo classes.
+                  Students from Anywhere in India, and across Gujarat, Punjab, Hariyana, Delhi  can join from home and prepare for study, jobs, or migration to Germany.
                 </p>
               </div>
               <div className="animate-up stagger-3 flex flex-col sm:flex-row justify-center gap-4 mt-8">
