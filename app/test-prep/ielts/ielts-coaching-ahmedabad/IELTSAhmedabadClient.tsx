@@ -15,37 +15,33 @@ export default function IELTSAhmedabadClient() {
     <>
       {/* ================= SCHEMA: Course ================= */}
       <Script
-        id="course-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Course",
-            name: "IELTS Coaching in Ahmedabad",
-            description:
-              "Online IELTS coaching for Ahmedabad students with expert trainers, speaking practice, mock tests, and study abroad support. Free 4‑day demo.",
-            provider: {
-              "@type": "Organization",
-              name: "ANU Education",
-              sameAs: "https://www.anuedu.in",
-            },
-            offers: {
-              "@type": "Offer",
-              price: "0",
-              priceCurrency: "INR",
-              availability: "https://schema.org/OnlineOnly",
-              validFrom: "2026-04-01",
-            },
-            hasCourseInstance: {
-              "@type": "CourseInstance",
-              courseMode: "Online",
-              courseWorkload: "PT3H",
-              startDate: "2026-05-01",
-            },
-          }),
-        }}
-      />
-
+  id="course-schema"
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Course",
+      name: "Online IELTS Coaching in Ahmedabad",
+      description:
+        "Online IELTS coaching for Ahmedabad students with expert trainers, speaking practice, mock tests, and study abroad support. Free 4-day demo.",
+      provider: {
+        "@type": "Organization",
+        name: "ANU Education",
+        url: "https://www.anuedu.in",
+      },
+      areaServed: {
+        "@type": "Place",
+        name: "Ahmedabad, Gujarat, India",
+      },
+      hasCourseInstance: {
+        "@type": "CourseInstance",
+        courseMode: "Online",
+        courseWorkload: "PT3H",
+        startDate: "2026-05-01",
+      },
+    }),
+  }}
+/>
       {/* ================= SCHEMA: FAQ (10 questions) ================= */}
       <Script
         id="faq-schema-ielts-ahmedabad"
