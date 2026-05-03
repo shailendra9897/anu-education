@@ -173,19 +173,44 @@ export default function IELTSAhmedabadClient() {
       />
       
 
-      {/* ================= NEW: Speakable Schema ================= */}
       <Script
-        id="speakable-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SpeakableSpecification",
-            cssSelector: [".voice-answer", ".faq-question-highlight"],
-          }),
-        }}
-      />
-
+  id="local-business-schema"
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      name: "ANU Education",
+      url: "https://www.anuedu.in",
+      logo: "https://www.anuedu.in/logo.png", // update if needed
+      contactPoint: {
+        "@type": "ContactPoint",
+        telephone: "+91 7016497087",
+        contactType: "customer support",
+        areaServed: "IN",
+        availableLanguage: ["English", "Gujarati"],
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Modasa",
+        addressRegion: "Gujarat",
+        addressCountry: "IN",
+      },
+      areaServed: [
+        "Ahmedabad",
+        "Gandhinagar",
+        "Vadodara",
+        "Surat",
+        "Gujarat",
+        "India",
+      ],
+      sameAs: [
+        "https://www.instagram.com/", 
+        "https://www.facebook.com/" 
+      ]
+    }),
+  }}
+/>
       <style jsx>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(30px); }
