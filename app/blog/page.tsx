@@ -297,9 +297,6 @@ export default function BlogPage() {
                       <span className="flex items-center gap-1">
                         <span>📅</span> Updated 2026
                       </span>
-                      <span className="flex items-center gap-1">
-                        <span>👁️</span> 148 reads
-                      </span>
                     </div>
 
                     {/* Tags */}

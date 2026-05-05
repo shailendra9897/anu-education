@@ -2,6 +2,7 @@ import './globals.css';
 import { Footer } from '@/components/Footer';
 import ClientWrapper from '@/components/ClientWrapper';
 import Script from 'next/script';
+import CookieConsent from '@/components/CookieConsent';
 
 export const metadata = {
   title: "Study Abroad & IELTS Coaching | Germany, UK, Canada – ANU Education",
@@ -17,7 +18,27 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* ✅ GOOGLE TAG MANAGER ONLY */}
+        {/* ✅ Consent Mode Default */}
+        <Script
+          id="consent-default"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = gtag;
+
+              gtag('consent', 'default', {
+                ad_storage: 'denied',
+                analytics_storage: 'denied',
+                ad_user_data: 'denied',
+                ad_personalization: 'denied'
+              });
+            `,
+          }}
+        />
+
+        {/* ✅ GOOGLE TAG MANAGER */}
         <Script
           id="gtm-script"
           strategy="beforeInteractive"
@@ -48,8 +69,13 @@ export default function RootLayout({
         </noscript>
 
         <ClientWrapper />
+
         <main className="min-h-screen">{children}</main>
+
         <Footer />
+
+        {/* ✅ Cookie Consent (CORRECT PLACE) */}
+        <CookieConsent />
       </body>
     </html>
   );

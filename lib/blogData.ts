@@ -1,4 +1,13 @@
 export const blogs = [
+  // ========== LATEST BLOG (top) ==========
+  {
+    title: "German A1 Course Duration, Fees & Syllabus in India (2026 Guide)",
+    description:
+      "Complete guide to German A1 course in India: duration (4-6 weeks), fees (₹8,000-15,000), syllabus, online classes & career benefits. Start your German journey today.",
+    slug: "german-a1-course-duration-fees-syllabus-india",
+    image: "/blog/german-a1-guide.jpg",  // optional – remove if no image
+    category: "German",
+  },
   {
     slug: "ielts-speaking-topics-2026",
     title: "IELTS Speaking Topics 2026 (Cue Cards + Answers)",
@@ -32,11 +41,11 @@ export const blogs = [
     category: "IELTS",
   },
   {
-  title: "IELTS vs PTE 2026: Which is Better for Indian Students? Fees, Format & One Skill Retake",
-  description:
-    "Updated for 2026: Compare IELTS vs PTE fees, format, acceptance, and the new IELTS One Skill Retake feature. Learn which test suits your study abroad goals.",
+    title: "IELTS vs PTE 2026: Which is Better for Indian Students? Fees, Format & One Skill Retake",
+    description:
+      "Updated for 2026: Compare IELTS vs PTE fees, format, acceptance, and the new IELTS One Skill Retake feature. Learn which test suits your study abroad goals.",
     slug: "ielts-vs-pte-2026",
     // No image property – this blog will display without an image
     category: "Test Prep",
-  }
+  },
 ];
