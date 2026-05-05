@@ -310,12 +310,14 @@ export default function IELTSAhmedabadClient() {
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </a>
                 <a
-                  href="https://wa.me/919428186817"
-                  target="_blank"
-                  className="group bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-all inline-flex items-center justify-center gap-2"
-                >
-                  💬 WhatsApp for Guidance
-                </a>
+  href={`https://wa.me/919428186817?text=${encodeURIComponent(
+    "Hi, I want IELTS coaching in Ahmedabad. Please share details about fees, demo class, and batch timings."
+  )}`}
+  target="_blank"
+  className="group bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-all inline-flex items-center justify-center gap-2"
+>
+  💬 WhatsApp for Guidance
+</a>
               </div>
               <div className="animate-up stagger-4 flex flex-wrap justify-center gap-6 mt-8 text-sm">
                 <span className="flex items-center gap-2">✅ 2000+ Students Trained</span>
