@@ -3,6 +3,10 @@
 import Script from "next/script";
 import Link from "next/link";
 import { useState } from "react";
+import {
+  websiteWhatsAppMessages,
+  getWhatsAppLink,
+} from "@/lib/whatsappTemplates";
 
 export default function PTEGandhinagarClient() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -223,11 +227,13 @@ export default function PTEGandhinagarClient() {
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </a>
                 <a
-                  href="https://wa.me/919428186817"
+                  href={getWhatsAppLink(
+  websiteWhatsAppMessages.pteGandhinagar
+)}
                   target="_blank"
                   className="group bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-all inline-flex items-center justify-center gap-2"
                 >
-                  💬 WhatsApp for Guidance
+                  💬 Get PTE Guidance
                 </a>
               </div>
               <div className="animate-up stagger-4 flex flex-wrap justify-center gap-6 mt-8 text-sm">

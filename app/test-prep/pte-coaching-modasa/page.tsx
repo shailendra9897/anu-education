@@ -1,5 +1,9 @@
 import Script from "next/script";
 import Link from "next/link";
+import {
+  websiteWhatsAppMessages,
+  getWhatsAppLink,
+} from "@/lib/whatsappTemplates";
 
 export const metadata = {
   title: "PTE Coaching in Modasa | Best PTE Classes Near You – ANU Education",
@@ -201,7 +205,7 @@ export default function PTEModasaPage() {
               🎓 Book Free Demo Class
             </a>
             <a
-              href="https://wa.me/919428186817"
+              href={getWhatsAppLink(websiteWhatsAppMessages.pte)}
               target="_blank"
               rel="noopener noreferrer"
               className="border border-blue-600 text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-blue-50 transition"

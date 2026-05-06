@@ -3,7 +3,10 @@
 import Script from "next/script";
 import Link from "next/link";
 import { useState } from "react";
-
+import {
+  websiteWhatsAppMessages,
+  getWhatsAppLink,
+} from "@/lib/whatsappTemplates";
 export default function PTEAhmedabadClient() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -188,12 +191,15 @@ export default function PTEAhmedabadClient() {
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </a>
                 <a
-                  href="https://wa.me/919428186817"
-                  target="_blank"
-                  className="group bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-all inline-flex items-center justify-center gap-2"
-                >
-                  💬 WhatsApp for Guidance
-                </a>
+  href={getWhatsAppLink(
+    websiteWhatsAppMessages.pteAhmedabad
+  )}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="bg-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-600 hover:scale-105 transition-all inline-flex items-center justify-center gap-2 shadow-lg"
+>
+  💬 Get PTE Guidance
+</a>
               </div>
               <div className="animate-up stagger-4 flex flex-wrap justify-center gap-6 mt-8 text-sm">
                 <span className="flex items-center gap-2">✅ 1500+ Students Trained</span>
@@ -317,7 +323,16 @@ export default function PTEAhmedabadClient() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="https://www.anuedu.in/free-demo" target="_blank" className="bg-white text-blue-700 px-8 py-4 rounded-xl font-bold hover:shadow-xl transition">👉 Enroll Now</a>
                 <a href="tel:+917016497087" className="border-2 border-white px-8 py-4 rounded-xl font-bold hover:bg-white/10 transition">📞 Call: 7016497087</a>
-                <a href="https://wa.me/919428186817" target="_blank" className="border-2 border-white px-8 py-4 rounded-xl font-bold hover:bg-white/10 transition">💬 WhatsApp</a>
+                <a
+  href={getWhatsAppLink(
+    websiteWhatsAppMessages.pte
+  )}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="bg-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-600 hover:scale-105 transition-all inline-flex items-center justify-center gap-2 shadow-lg"
+>
+  💬 Get PTE Guidance
+</a>
               </div>
               <p className="mt-6 text-sm text-white/80">Limited seats per batch – secure your spot now.</p>
             </div>

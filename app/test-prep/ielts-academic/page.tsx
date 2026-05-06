@@ -1,5 +1,9 @@
 import Script from "next/script";
 import Link from "next/link";
+import {
+  websiteWhatsAppMessages,
+  getWhatsAppLink,
+} from "@/lib/whatsappTemplates";
 
 export const metadata = {
   title: "IELTS Academic Exam: Complete Guide for 2026 (Syllabus, Format, Time & Cost)",
@@ -138,13 +142,15 @@ export default function IELTSAcademicPage() {
               🎓 Book Free Demo Class
             </a>
             <a
-              href="https://wa.me/919428186817"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border border-blue-600 text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-blue-50 transition"
-            >
-              💬 WhatsApp for Quick Support
-            </a>
+  href={getWhatsAppLink(
+    websiteWhatsAppMessages.ieltsAcademic
+  )}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="bg-green-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-600 transition shadow-lg inline-flex items-center gap-2"
+>
+  💬 WhatsApp for Quick Support
+</a>
           </div>
         </section>
 
@@ -377,13 +383,15 @@ export default function IELTSAcademicPage() {
               🎓 Book Free Demo Class
             </a>
             <a
-              href="https://wa.me/919428186817"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border-2 border-white text-white px-6 py-3 rounded-xl font-bold hover:bg-white/10 transition"
-            >
-              💬 WhatsApp for Quick Support
-            </a>
+  href={getWhatsAppLink(
+    websiteWhatsAppMessages.ieltsAcademic
+  )}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="bg-green-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-600 transition shadow-lg inline-flex items-center gap-2"
+>
+  💬 WhatsApp for Quick Support
+</a>
           </div>
           <div className="mt-6 text-sm">
             📞 Call: +91 7016497087 | 🌐 www.anuedu.in

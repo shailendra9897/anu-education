@@ -5,6 +5,10 @@ import { CountryCard } from '@/components/CountryCard';
 import { TestCard } from '@/components/TestCard';
 import { ServiceCard } from '@/components/ServiceCard';
 import StudyAbroadSteps from '@/components/StudyAbroadSteps';
+import {
+  websiteWhatsAppMessages,
+  getWhatsAppLink,
+} from "@/lib/whatsappTemplates";
 
 export default function HomeClient() {
   return (
@@ -212,9 +216,11 @@ export default function HomeClient() {
               </a>
 
               <a
-  href={`https://wa.me/919428186817?text=${encodeURIComponent(
-    "Hi, I want guidance for study abroad and courses. Please help me."
-  )}`}
+  href={getWhatsAppLink(
+    websiteWhatsAppMessages.home
+  )}
+  target="_blank"
+  rel="noopener noreferrer"
   className="group bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-all inline-flex items-center justify-center gap-2"
 >
   <span>💬</span> WhatsApp Guidance

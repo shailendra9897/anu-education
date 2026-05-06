@@ -1,6 +1,9 @@
 import Script from "next/script";
 import ContactForm from "@/components/ContactForm";
-
+import {
+  websiteWhatsAppMessages,
+  getWhatsAppLink,
+} from "@/lib/whatsappTemplates";
 export const metadata = {
   title: "Contact ANU Education – Study Abroad & Language Coaching",
   description:
@@ -79,15 +82,18 @@ export default function ContactPage() {
         </p>
 
         <p>
-          📱 <strong>WhatsApp:</strong>{" "}
-          <a
-            href="https://wa.me/919428186817"
-            target="_blank"
-            className="text-green-600 hover:underline"
-          >
-            Chat on WhatsApp
-          </a>
-        </p>
+  📱 <strong>WhatsApp:</strong>{" "}
+  <a
+    href={getWhatsAppLink(
+      websiteWhatsAppMessages.home
+    )}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-green-600 hover:underline"
+  >
+    Chat on WhatsApp
+  </a>
+</p>
 
         <p>
           ✉️ <strong>Email:</strong>{" "}
