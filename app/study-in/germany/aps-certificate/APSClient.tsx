@@ -150,12 +150,14 @@ export default function APSClient() {
               documents. The process takes <strong>3–6 weeks</strong> on average and costs <strong>₹18,000</strong>.
             </p>
             <div className="mt-6">
-              <Link
-                href="/free-demo"
-                className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition"
-              >
-                🎓 Get Expert Guidance on APS & Visa
-              </Link>
+              <a
+  href="https://wa.me/919428186817?text=Hi%2C%20I%20need%20guidance%20for%20APS%20Certificate%20and%20Germany%20student%20visa."
+  target="_blank"
+  rel="noopener noreferrer"
+  className="bg-green-500 text-white px-8 py-3 rounded-xl font-bold hover:bg-green-600 transition inline-flex items-center gap-2"
+>
+  💬 Get APS & Visa Guidance
+</a>
             </div>
           </div>
 
@@ -329,12 +331,14 @@ export default function APSClient() {
 
           {/* Final CTA */}
           <div className="mt-12 text-center">
-            <Link
-              href="/free-demo"
-              className="inline-block bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-bold hover:shadow-xl transition"
-            >
-              🚀 Get Personalized APS & Visa Assistance
-            </Link>
+            <a
+  href="https://wa.me/919428186817?text=Hi%2C%20I%20need%20guidance%20for%20APS%20Certificate%20and%20Germany%20student%20visa."
+  target="_blank"
+  rel="noopener noreferrer"
+  className="bg-green-500 text-white px-8 py-3 rounded-xl font-bold hover:bg-green-600 transition inline-flex items-center gap-2"
+>
+  💬 Get APS & Visa Guidance
+</a>
           </div>
         </div>
       </main>
