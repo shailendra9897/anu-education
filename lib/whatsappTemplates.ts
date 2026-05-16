@@ -50,6 +50,9 @@ export const websiteWhatsAppMessages = {
   ieltsAhmedabad:
     "Hi, I want IELTS coaching in Ahmedabad. Please share fees, demo class and batch timings.",
 
+    ieltsGandhinagar:
+    "Hi, I want IELTS coaching in Gandhinagar. Please share fees, demo class and batch timings.",
+
   ieltsAcademic:
     "Hi, I am interested in IELTS Academic coaching. Please guide me about classes and fees.",
 
