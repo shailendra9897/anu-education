@@ -1,20 +1,36 @@
+// FILE: app/test-prep/gre/page.tsx
+// This is a SERVER component for metadata + it renders the CLIENT component below.
+// ─────────────────────────────────────────────────────────────────────────────
+// HOW TO USE:
+//   1. Save this file at:  app/test-prep/gre/page.tsx
+//   2. Save GREClient.tsx at: app/test-prep/gre/GREClient.tsx
+//   3. Import and render <GREClient /> from this file (shown below).
+// ─────────────────────────────────────────────────────────────────────────────
+
+import GREClient from "./GREClient";
+
 export const metadata = {
-  title: "GRE Coaching - ANU Education",
-  description: "Score high in GRE with ANU Education’s focused coaching. Verbal, Quant, and AWA strategies covered.",
+  title: "GRE Coaching Online India 2026 – Score 320+ | ANU Education",
+  description:
+    "Best online GRE coaching in India 2026. Expert-led live classes for Verbal, Quant & AWA. Free demo class, mock tests, AI scoring, and study abroad counselling. Join ANU Education — Skill India certified institute.",
+  keywords: [
+    "GRE coaching online India",
+    "best GRE coaching 2026",
+    "GRE preparation Gujarat",
+    "GRE coaching Ahmedabad",
+    "GRE online classes India",
+    "score 320 GRE",
+    "GRE verbal quant AWA coaching",
+  ],
+  openGraph: {
+    title: "GRE Coaching Online India 2026 – Score 320+ | ANU Education",
+    description:
+      "Live online GRE coaching with expert trainers. Free demo · Mock tests · AWA feedback · Study abroad counselling. Enrol at ANU Education.",
+    url: "https://www.anuedu.in/test-prep/gre",
+    type: "website",
+  },
 };
 
 export default function GREPage() {
-  return (
-    <div className="max-w-4xl mx-auto px-4 py-10 space-y-6">
-      <h1 className="text-3xl font-bold text-blue-700">GRE Coaching</h1>
-      <p>
-        Get comprehensive GRE coaching at ANU Education. Learn strategies to improve both verbal reasoning and quantitative aptitude.
-      </p>
-      <ul className="list-disc pl-6">
-        <li>Quant & Verbal Deep Dives</li>
-        <li>Weekly Progress Tracking</li>
-        <li>AWA Essay Training</li>
-      </ul>
-    </div>
-  );
+  return <GREClient />;
 }
