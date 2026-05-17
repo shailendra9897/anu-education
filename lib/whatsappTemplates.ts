@@ -69,6 +69,9 @@ export const websiteWhatsAppMessages = {
     pte:
   "Hi, I am interested in PTE coaching. Please share details about fees, demo class and batch timings.",
 
+  french:
+  "Hi, I am interested in French language learning. Please share details about fees, demo class and batch timings.",
+
   pteGandhinagar:
   "Hi, I am interested in your online PTE coaching for Gandhinagar students. Please guide me about fees, demo class and batch timings.",
 };

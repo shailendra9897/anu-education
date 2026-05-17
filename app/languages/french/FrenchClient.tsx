@@ -172,7 +172,7 @@ export default function FrenchClient() {
                   🎓 Start Free 5-Day Trial
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </a>
-                <a href={getWhatsAppLink(websiteWhatsAppMessages.home)} target="_blank" rel="noopener noreferrer"
+                <a href={getWhatsAppLink(websiteWhatsAppMessages.french)} target="_blank" rel="noopener noreferrer"
                   aria-label="Chat with ANU Education on WhatsApp for French course"
                   className="bg-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-600 hover:scale-105 transition-all inline-flex items-center justify-center gap-2 shadow-lg">
                   💬 WhatsApp for French Guidance
@@ -241,7 +241,7 @@ export default function FrenchClient() {
                   <div className="text-sm font-semibold">Max CRS points</div>
                   <div className="text-xs text-red-200 mt-1">from French proficiency</div>
                 </div>
-                <a href={getWhatsAppLink(websiteWhatsAppMessages.home)} target="_blank" rel="noopener noreferrer"
+                <a href={getWhatsAppLink(websiteWhatsAppMessages.french)} target="_blank" rel="noopener noreferrer"
                   className="bg-green-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors text-sm">
                   Ask about Canada PR →
                 </a>
@@ -284,7 +284,7 @@ export default function FrenchClient() {
                     className="bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-800 transition-colors text-center">
                     Start Free at {levels[activeLevel].level} →
                   </a>
-                  <a href={getWhatsAppLink(websiteWhatsAppMessages.home)} target="_blank" rel="noopener noreferrer"
+                  <a href={getWhatsAppLink(websiteWhatsAppMessages.french)} target="_blank" rel="noopener noreferrer"
                     className="border border-blue-300 text-blue-700 px-6 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-center">
                     💬 Ask a Trainer
                   </a>
@@ -319,7 +319,7 @@ export default function FrenchClient() {
                     <li>✅ Weekly Tests</li>
                     <li>✅ 5-Day Free Trial</li>
                   </ul>
-                  <a href={getWhatsAppLink(websiteWhatsAppMessages.home)} target="_blank" rel="noopener noreferrer"
+                  <a href={getWhatsAppLink(websiteWhatsAppMessages.french)} target="_blank" rel="noopener noreferrer"
                     className={`block text-center py-3 rounded-xl font-semibold text-sm transition-colors ${pack.highlight ? "bg-yellow-500 text-white hover:bg-yellow-600" : "bg-blue-700 text-white hover:bg-blue-800"}`}>
                     Get Fee Details →
                   </a>
@@ -490,7 +490,7 @@ export default function FrenchClient() {
                 className="inline-block bg-blue-700 text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-blue-800 transition-colors pulse">
                 👉 Book Free French Demo Class
               </a>
-              <a href={getWhatsAppLink(websiteWhatsAppMessages.home)} target="_blank" rel="noopener noreferrer"
+              <a href={getWhatsAppLink(websiteWhatsAppMessages.french)} target="_blank" rel="noopener noreferrer"
                 className="inline-block bg-green-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-green-700 transition-colors">
                 💬 WhatsApp: +91 70164 97087
               </a>
@@ -532,7 +532,7 @@ export default function FrenchClient() {
                 className="border-2 border-white/70 px-8 py-4 rounded-xl font-bold hover:bg-white/10 transition-colors">
                 📞 +91 70164 97087
               </a>
-              <a href={getWhatsAppLink(websiteWhatsAppMessages.home)} target="_blank" rel="noopener noreferrer"
+              <a href={getWhatsAppLink(websiteWhatsAppMessages.french)} target="_blank" rel="noopener noreferrer"
                 className="bg-green-500 text-white px-8 py-4 rounded-xl font-bold hover:bg-green-600 transition-colors">
                 💬 WhatsApp Us
               </a>
