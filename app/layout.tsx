@@ -2,7 +2,7 @@ import './globals.css';
 import { Footer } from '@/components/Footer';
 import ClientWrapper from '@/components/ClientWrapper';
 import Script from 'next/script';
-import CookieConsent from '@/components/CookieConsent';
+
 
 export const metadata = {
   title: "Study Abroad & IELTS Coaching | Germany, UK, Canada – ANU Education",
@@ -75,7 +75,7 @@ export default function RootLayout({
         <Footer />
 
         {/* ✅ Cookie Consent (CORRECT PLACE) */}
-        <CookieConsent />
+
       </body>
     </html>
   );
