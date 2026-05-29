@@ -224,17 +224,17 @@ export default function IELTSOnlineClient() {
             <nav aria-label="Breadcrumb" className="text-xs text-blue-200 mb-5">
               <Link href="/" className="hover:text-white">Home</Link><span className="mx-1">/</span>
               <Link href="/test-prep" className="hover:text-white">Test Prep</Link><span className="mx-1">/</span>
-              <span className="text-white">IELTS Academic Online Coaching</span>
+              <span className="text-white">IELTS Online Coaching in India</span>
             </nav>
             <div className="text-center">
               <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold mb-5 float">
                 🎯 Academic & General · Live Classes · 5-Day Free Trial · Skill India Certified
               </div>
               <h1 className="anim d1 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5">
-                IELTS Academic Online Coaching
+                IELTS Online Coaching in India | Live Classes + Mock Tests
                 <br />
                 <span className="bg-gradient-to-r from-yellow-300 to-green-300 bg-clip-text text-transparent">
-                  Score Band 7+ in 2026
+                  Achieve Your Target Band Score in 2026
                 </span>
               </h1>
               <p className="anim d2 text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed mb-8">

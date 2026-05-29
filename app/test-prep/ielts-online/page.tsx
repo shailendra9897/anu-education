@@ -3,11 +3,11 @@
 import IELTSOnlineClient from "./IELTSOnlineClient";
 
 export const metadata = {
-  title: "IELTS Academic Online Coaching India 2026 – Band 7+ Live Classes | ANU Education",
+  title: "IELTS Online Coaching in India 2026 – Live Classes + Mock Tests | ANU Education",
   description:
-    "Best IELTS Academic online coaching in India 2026. Live classes, 15 full-length mock tests, speaking practice, Saturday test analysis, Sunday doubt-solving. Beginner & Advanced batches. Free 5-day trial. Skill India certified. Gujarat's top rated IELTS coaching.",
+    "Best IELTS Online coaching in India 2026. Live classes, 15 full-length mock tests, speaking practice, Saturday test analysis, Sunday doubt-solving. Beginner & Advanced batches. Free 5-day trial. Skill India certified. Gujarat's top rated IELTS coaching.",
   keywords: [
-    "IELTS Academic online coaching India",
+    "IELTS Online coaching in India",
     "IELTS online coaching 2026",
     "best IELTS coaching online India",
     "IELTS Academic coaching Gujarat",
