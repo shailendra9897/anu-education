@@ -1,40 +1,35 @@
-import PTEGandhinagarClient from './PTEGandhinagarClient';
+// FILE: app/test-prep/pte-coaching-gandhinagar/page.tsx
+
+import PTEGandhinagarClient from "./PTEGandhinagarClient";
 
 export const metadata = {
-  metadataBase: new URL('https://www.anuedu.in'),
-  title: "Best PTE Coaching in Gandhinagar – Online Classes for Fast Score | ANU Education",
+  title: "PTE Classes in Gandhinagar 2026 – Online PTE Coaching | ANU Education",
   description:
-    "Join online PTE coaching in Gandhinagar with AI‑based scoring, daily speaking sessions, full mock tests, and flexible timing. Free 4‑day demo. Score 79+.",
-  keywords:
-    "PTE coaching Gandhinagar, best PTE classes Gandhinagar, online PTE preparation Gandhinagar, PTE mock tests Gandhinagar",
+    "Best online PTE classes in Gandhinagar. ANU Education offers live PTE Academic coaching with 4 course packs, 14 mock tests, 180+ practice exercises, AI-based scoring, Saturday doubt sessions, and free demo. Score 65+ or 79+. Skill India certified.",
+  keywords: [
+    "PTE classes Gandhinagar",
+    "PTE online classes Gandhinagar",
+    "PTE coaching Gandhinagar",
+    "best PTE coaching Gandhinagar",
+    "online PTE preparation Gandhinagar",
+    "PTE Academic online coaching India",
+    "PTE coaching near me Gandhinagar",
+    "PTE classes online India",
+    "PTE mock tests online",
+    "PTE score 79 coaching Gujarat",
+  ],
   openGraph: {
-    title: "Best PTE Coaching in Gandhinagar – Online Classes for Fast Score | ANU Education",
+    title: "PTE Classes in Gandhinagar 2026 – Online Coaching, 14 Mock Tests | ANU Education",
     description:
-      "Expert online PTE training for Gandhinagar students. Live classes, AI scoring, mock tests, free demo. Achieve 65+ or 79+ fast.",
+      "Live online PTE classes for Gandhinagar students. 4 course packs from ₹2,000. 14 mock tests, 180+ exercises, AI scoring, Saturday doubt sessions. Free 3-day demo.",
     url: "https://www.anuedu.in/test-prep/pte-coaching-gandhinagar",
-    siteName: "ANU Education",
-    images: [
-      {
-        url: "/images/pte-gandhinagar.jpg",
-        width: 1200,
-        height: 630,
-        alt: "PTE Coaching in Gandhinagar",
-      },
-    ],
-    locale: "en_IN",
     type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "PTE Coaching in Gandhinagar – Online Classes for Fast Score",
-    description: "Live online classes, AI mock tests, daily speaking practice. Free 4‑day demo. Enroll now.",
-    images: ["/images/pte-gandhinagar.jpg"],
   },
   alternates: {
     canonical: "https://www.anuedu.in/test-prep/pte-coaching-gandhinagar",
   },
 };
 
-export default function Page() {
+export default function PTEGandhinagarPage() {
   return <PTEGandhinagarClient />;
 }
