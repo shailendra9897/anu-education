@@ -316,7 +316,7 @@ export default function HomeClient() {
             <TestCard name="IELTS" link="/test-prep/ielts-online" />
             <TestCard name="PTE" link="/test-prep/pte" />
             <TestCard name="German" link="/test-prep/german" />
-            <TestCard name="French" link="/test-prep/french" />
+            <TestCard name="French" link="/languages/french" />
             <TestCard name="TOEFL" link="/test-prep/toefl" />
             <TestCard name="Duolingo" link="/test-prep/duolingo" />
           </div>
