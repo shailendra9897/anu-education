@@ -2,7 +2,17 @@ import './globals.css';
 import { Footer } from '@/components/Footer';
 import ClientWrapper from '@/components/ClientWrapper';
 import Script from 'next/script';
+import { Sora, Inter } from "next/font/google";
 
+const sora = Sora({
+  subsets: ["latin"],
+  variable: "--font-sora",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 export const metadata = {
   title: "Study Abroad & IELTS Coaching | Germany, UK, Canada – ANU Education",
