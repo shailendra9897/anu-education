@@ -39,11 +39,11 @@ export default function RootLayout({
               window.gtag = gtag;
 
               gtag('consent', 'default', {
-                ad_storage: 'denied',
-                analytics_storage: 'denied',
-                ad_user_data: 'denied',
-                ad_personalization: 'denied'
-              });
+  ad_storage: 'granted',
+  analytics_storage: 'granted',
+  ad_user_data: 'granted',
+  ad_personalization: 'granted'
+});
             `,
           }}
         />
