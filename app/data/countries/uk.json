@@ -1,0 +1,16 @@
+{
+  "id": "uk",
+  "name": "United Kingdom",
+  "study_positioning": "Strong destination for undergraduate, postgraduate, foundation, and English-language routes.",
+  "recommended_tests": ["IELTS Academic or UKVI where required", "PTE Academic UKVI where accepted", "TOEFL where accepted by university"],
+  "visa": {
+    "route": "Student visa",
+    "fee": [{"name": "Student visa application", "amount": 558, "currency": "GBP"}],
+    "additional_costs": ["Immigration Health Surcharge depends on visa length", "Priority services are optional where available"],
+    "process": ["Receive CAS from licensed student sponsor", "Prepare funds, academic documents, passport and English evidence", "Apply online", "Pay visa fee and healthcare surcharge", "Book biometrics/upload documents", "Wait for decision"],
+    "deadlines": "Apply before course start date and after CAS issue. Arrival is allowed up to 1 month before courses longer than 6 months, or up to 1 week before courses of 6 months or less.",
+    "notes": ["Do not travel before the visa start date."]
+  },
+  "official_sources": ["https://www.gov.uk/student-visa", "https://www.gov.uk/government/publications/visa-regulations-revised-table/home-office-immigration-and-nationality-fees-8-april-2026"],
+  "last_verified": "2026-08-02"
+}

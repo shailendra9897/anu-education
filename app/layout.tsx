@@ -3,6 +3,7 @@ import { Footer } from '@/components/Footer';
 import ClientWrapper from '@/components/ClientWrapper';
 import Script from 'next/script';
 import { Sora, Inter } from "next/font/google";
+import ChatWidget from "@/components/ai/ChatWidget";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -83,7 +84,7 @@ export default function RootLayout({
         <main className="min-h-screen">{children}</main>
 
         <Footer />
-
+          <ChatWidget />
         {/* ✅ Cookie Consent (CORRECT PLACE) */}
 
       </body>

@@ -1,0 +1,40 @@
+{
+  "id": "duolingo",
+  "name": "Duolingo English Test",
+  "category": "At-home English proficiency test preparation",
+  "status": "active",
+  "best_for": ["University admissions", "Fast English test results", "At-home testing"],
+  "exam_snapshot": {
+    "purpose": "University admissions; not for immigration/visa in many cases",
+    "duration": "About 1 hour",
+    "mode": "100% online at home",
+    "score_range": "10-160 in 5-point increments",
+    "score_validity": "2 years",
+    "results": "Within 48 hours",
+    "exam_fee_estimate": "About USD 70 / INR 6000",
+    "retakes": "Up to 3 times in any 30-day window",
+    "conducting_body": "Duolingo, Inc."
+  },
+  "anu_course": {
+    "packs_ref": "pricing.json#/prices/duolingo",
+    "target_score": "115+",
+    "access": "60 days",
+    "live_hours": "20 hours",
+    "mock_tests": 12,
+    "features": ["300+ grammar and vocabulary videos", "4-week live curriculum", "Saturday grammar batch", "Free study abroad counselling", "Recordings for missed lectures"],
+    "schedule_ist": [
+      {"course": "Duolingo Main", "days": "Monday-Friday", "time": "7:00 PM - 8:00 PM"},
+      {"course": "Grammar Batch", "days": "Saturday", "time": "11:00 AM - 12:00 PM"}
+    ]
+  },
+  "country_score_guidance": [
+    {"country": "USA", "minimum": 100, "recommended": "120+", "note": "Top-50 may require 120-135"},
+    {"country": "Canada", "minimum": 110, "recommended": "120", "note": "Not for SDS visa"},
+    {"country": "UK", "minimum": 110, "recommended": "120", "note": "Check per university"},
+    {"country": "Australia", "minimum": 90, "recommended": "110+", "note": "IELTS/PTE preferred for visa"},
+    {"country": "Germany", "minimum": 90, "recommended": "105", "note": "Varies by university"},
+    {"country": "Ireland", "minimum": 100, "recommended": "115", "note": "Most universities accept DET"}
+  ],
+  "sources": ["TEST_PREP/ANU_DUOLINGO.pdf", "FEES/DUOLINGO_FEE.pdf"],
+  "last_reviewed": "2026-08-02"
+}

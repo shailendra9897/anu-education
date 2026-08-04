@@ -1,0 +1,26 @@
+{
+  "id": "mbbs-abroad",
+  "name": "MBBS Abroad",
+  "scope": "Distinct medical-study pathway separate from ANU's nine-country general study-abroad list.",
+  "common_destinations": ["Russia", "Philippines", "Georgia", "Kazakhstan", "Kyrgyzstan", "Uzbekistan", "Armenia", "Nepal", "Bangladesh"],
+  "student_profile": ["NEET-qualified Indian medical aspirants", "Students seeking lower-cost MBBS options", "Students comparing NMC-compliant foreign medical programs"],
+  "core_counselling_points": [
+    "Verify university recognition, medium of instruction, clinical exposure, internship rules and licensing pathway.",
+    "For Indian students, check current NMC/FMGL regulations before finalizing admission.",
+    "Confirm total cost including tuition, hostel, food, insurance, visa, travel, local registration and exam costs.",
+    "Do not promise medical licensure outcomes; licensing depends on current regulations and student performance."
+  ],
+  "visa_model": {
+    "note": "Visa fees and processes vary by MBBS destination country and university. Build country-specific MBBS visa subfiles when ANU source material is available.",
+    "needs_review": true
+  },
+  "recommended_knowledge_to_add_next": [
+    "Country-wise MBBS eligibility and NEET requirement",
+    "NMC/FMGL compliance checklist",
+    "University comparison table",
+    "Total cost by destination",
+    "Visa fee and process per MBBS country"
+  ],
+  "sources": [],
+  "last_reviewed": "2026-08-02"
+}

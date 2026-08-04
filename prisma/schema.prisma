@@ -1,0 +1,205 @@
+// FILE: prisma/schema.prisma
+//
+// ─────────────────────────────────────────────────────────────────
+// ANU Education AI Assistant — database schema
+//
+// Design principles:
+//   1. Conversation is channel-agnostic (web widget OR WhatsApp) —
+//      one model handles both via `source`, so a student who starts
+//      on the website and continues on WhatsApp has ONE conversation
+//      record, not two.
+//   2. Lead scoring reuses the SAME 0–100 scale as the Study Abroad
+//      Readiness Assessment (lib/assessment/scoreEngine.ts) so a
+//      counsellor's CRM view can compare assessment leads and chat
+//      leads on one consistent scale.
+//   3. Every escalation is logged as its own row (HandoffEvent) —
+//      not just a boolean flag — so you can measure which trigger
+//      fires most often and improve the prompt/knowledge base
+//      accordingly over time.
+//   4. Soft-delete via `deletedAt` on Conversation for GDPR-style
+//      data requests, not hard deletes — preserves lead history
+//      for CRM/analytics while allowing "forget me" compliance.
+// ─────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ═════════════════════════════════════════════════════════════════
+// CONVERSATION
+// ═════════════════════════════════════════════════════════════════
+
+enum ConversationSource {
+  WEB          // chat widget on anuedu.in
+  WHATSAPP     // WhatsApp Business API
+}
+
+enum ConversationStatus {
+  ACTIVE          // AI is actively responding
+  HANDED_OFF      // escalated to a human counsellor
+  CLOSED          // conversation ended (by user or timeout)
+  ARCHIVED        // soft-closed after long inactivity
+}
+
+model Conversation {
+  id        String              @id @default(cuid())
+  source    ConversationSource
+  status    ConversationStatus  @default(ACTIVE)
+
+  // Identity — at least one of these should be populated.
+  // phone is the WhatsApp-canonical identifier; sessionId covers
+  // anonymous web visitors before they share contact details.
+  phone     String?             // E.164 format, e.g. "+919428186817"
+  sessionId String?             @unique // web widget session token
+  name      String?             // captured mid-conversation once known
+  email     String?
+
+  // Page context — which anuedu.in page the chat opened from.
+  // Useful for understanding intent (e.g. opened from /test-prep/gmat
+  // strongly suggests a GMAT question) and for attribution reporting.
+  sourcePage String?
+
+  // Lead scoring — same 0–100 scale as scoreEngine.ts in the
+  // assessment tool, so counsellors see one consistent number
+  // across both lead sources in the CRM.
+  leadScore  Int?
+  leadTier   String?            // "READY" | "ALMOST" | "EARLY" — mirrors ResultTier
+
+  // Relations
+  messages       Message[]
+  handoffEvents  HandoffEvent[]
+  leadContext    LeadContext?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // soft delete for data-request compliance
+
+  @@index([phone])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ═════════════════════════════════════════════════════════════════
+// MESSAGE
+// ═════════════════════════════════════════════════════════════════
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM       // logged for audit/debug — not shown to the user
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  role    MessageRole
+  content String
+
+  // Tool-call trace — records which knowledge lookup(s) the
+  // assistant used to answer this message, if any. Stored as JSON
+  // for flexibility (tool name + args + result summary), primarily
+  // for debugging hallucination reports and improving the knowledge
+  // layer over time.
+  toolCalls Json?
+
+  // Token usage for cost tracking / rate-limit accounting.
+  promptTokens     Int?
+  completionTokens Int?
+
+  createdAt DateTime @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+// ═════════════════════════════════════════════════════════════════
+// HANDOFF EVENT
+// One row per escalation — NOT a boolean flag on Conversation —
+// so trigger frequency can be analysed and the prompt/knowledge
+// base improved based on real data.
+// ═════════════════════════════════════════════════════════════════
+
+enum HandoffTrigger {
+  EXPLICIT_HUMAN_REQUEST
+  PRICING_NEGOTIATION
+  VISA_REJECTION_DISTRESS
+  URGENT_TIMELINE
+  COMPLAINT
+  LEGAL_MEDICAL_QUESTION
+  LOW_CONFIDENCE_ANSWER
+  REPEATED_UNSATISFIED_QUESTION
+  MANUAL_OVERRIDE          // counsellor manually pulled the conversation
+}
+
+model HandoffEvent {
+  id             String        @id @default(cuid())
+  conversationId String
+  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  trigger        HandoffTrigger
+  triggerDetail  String?
+
+  // Whether a counsellor actually picked up the handoff, and when.
+  acknowledgedAt DateTime?
+  acknowledgedBy String?        // counsellor identifier/email
+
+  createdAt DateTime @default(now())
+
+  @@index([conversationId])
+  @@index([trigger])
+}
+
+// ═════════════════════════════════════════════════════════════════
+// LEAD CONTEXT
+// One-to-one with Conversation. Mirrors the LeadContext type in
+// lib/assessment/types.ts so the chat assistant and the readiness
+// assessment produce comparable, mergeable lead records.
+// ═════════════════════════════════════════════════════════════════
+
+model LeadContext {
+  id             String       @id @default(cuid())
+  conversationId String       @unique
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // Populated progressively as the assistant learns about the student —
+  // never required upfront, filled in opportunistically during chat.
+  goal            String?     // e.g. "study" | "pr" | "work" | "research"
+  targetCountry   String?
+  targetCourse    String?     // e.g. "IELTS Academic", "GMAT"
+  englishLevel    String?
+  budgetRange     String?
+  timeline        String?     // e.g. "within 1 month", "just exploring"
+  biggestChallenge String?
+
+  // Links this chat lead to a completed Study Abroad Readiness
+  // Assessment result, if the same student did both — avoids
+  // treating one person as two separate leads in the CRM.
+  linkedAssessmentId String?
+
+  updatedAt DateTime @updatedAt
+
+  @@index([targetCountry])
+  @@index([targetCourse])
+}
+
+// ═════════════════════════════════════════════════════════════════
+// RATE LIMIT LOG
+// Lightweight table backing lib/ai/rateLimiter.ts when Redis is
+// unavailable (dev/fallback) — production should use Redis directly
+// for speed, but this keeps a durable audit trail either way.
+// ═════════════════════════════════════════════════════════════════
+
+model RateLimitLog {
+  id        String   @id @default(cuid())
+  identifier String  // IP address or phone number
+  endpoint   String  // e.g. "/api/chat"
+  createdAt  DateTime @default(now())
+
+  @@index([identifier, endpoint, createdAt])
+}

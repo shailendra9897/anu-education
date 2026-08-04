@@ -1,0 +1,16 @@
+{
+  "id": "australia",
+  "name": "Australia",
+  "study_positioning": "Destination for higher education, vocational education, ELICOS, and packaged courses.",
+  "recommended_tests": ["IELTS Academic", "PTE Academic", "TOEFL where accepted", "Duolingo for selected admissions only"],
+  "visa": {
+    "route": "Student visa subclass 500",
+    "fee": [{"name": "Student visa application", "amount": 2500, "currency": "AUD", "note": "From 1 July 2026; concessions apply in limited circumstances"}],
+    "process": ["Receive Confirmation of Enrolment from approved provider", "Prepare Genuine Student evidence, finances, OSHC, English and academic documents", "Apply online", "Pay visa application charge", "Complete biometrics/health checks if requested", "Wait for decision"],
+    "deadlines": "Apply after CoE issue and before course start. Processing times vary; use official processing time tools.",
+    "work_rights": "Generally up to 48 hours a fortnight while course is in session; exceptions apply.",
+    "notes": ["Visa charge increased from 1 July 2026.", "Use the official pricing estimator for exact cost."]
+  },
+  "official_sources": ["https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/student-500", "https://www.studyaustralia.gov.au/en/plan-your-move/your-guide-to-visas/student-visa-subclass-500"],
+  "last_verified": "2026-08-02"
+}

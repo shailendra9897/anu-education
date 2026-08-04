@@ -1,0 +1,16 @@
+{
+  "id": "ireland",
+  "name": "Ireland",
+  "study_positioning": "English-speaking EU destination for undergraduate, postgraduate, IT, business, healthcare and post-study work pathways.",
+  "recommended_tests": ["IELTS Academic", "PTE Academic where accepted", "TOEFL", "Duolingo where accepted"],
+  "visa": {
+    "route": "Long Stay D Study visa where visa-required",
+    "fee": [{"name": "Single entry", "amount": 60, "currency": "EUR", "local_amount_india": "INR 5300"}, {"name": "Multiple entry", "amount": 100, "currency": "EUR", "local_amount_india": "INR 9000"}, {"name": "Transit", "amount": 25, "currency": "EUR", "local_amount_india": "INR 2225"}],
+    "additional_costs": ["VFS/service charges may apply", "Irish Residence Permit registration after arrival is commonly EUR 300"],
+    "process": ["Secure full-time admission", "Apply online through the Irish visa system", "Pay visa fee", "Submit documents through the instructed office/VFS route", "Provide biometrics if resident in India", "Await decision"],
+    "deadlines": "Apply well before the course start date. Processing times vary by office and season.",
+    "notes": ["Course should generally be full-time with at least 15 hours per week for eligible study routes.", "Evidence of funds and private medical insurance is required."]
+  },
+  "official_sources": ["https://www.irishimmigration.ie/preclearance-and-entry-visas-fees/", "https://www.ireland.ie/en/dfa/visas-for-ireland/", "https://www.dfa.ie/irish-embassy/india/visas/applying-for-irish-visa/"],
+  "last_verified": "2026-08-02"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "german",
+  "name": "German Language Coaching",
+  "category": "Language training and Goethe exam preparation",
+  "status": "active",
+  "best_for": ["Study in Germany", "Work and migration", "Goethe exam preparation", "European academic/career mobility"],
+  "levels": ["Basic", "A1", "A2", "B1", "B2"],
+  "anu_course": {
+    "packs_ref": "pricing.json#/prices/german",
+    "features": ["Live 60-90 minute sessions", "C1-certified trainers", "Vocabulary quizzes", "PDF reference material", "Speaking practice with real-time feedback", "Grammar practice", "Goethe reading and listening tests", "Session recordings"],
+    "learning_hours": "Up to 200+ live hours in Basic-to-B1 pathway",
+    "exam_focus": "Goethe-aligned curriculum covering A1, A2, B1 and B2 exam patterns."
+  },
+  "timings_ist": [
+    {"batch": "German Demo", "morning": "11:30 AM - 12:30 PM", "evening": null},
+    {"batch": "Basic", "morning": "8:00 AM - 9:00 AM", "evening": "7:30 PM - 8:30 PM"},
+    {"batch": "A1", "morning": "9:00 AM - 10:30 AM", "evening": "9:00 PM - 10:30 PM"},
+    {"batch": "A2", "morning": "9:00 AM - 10:30 AM", "evening": "9:00 PM - 10:30 PM"},
+    {"batch": "B1", "morning": null, "evening": "6:00 PM - 7:30 PM"}
+  ],
+  "goethe_passing_note": "ANU source material notes 60% overall for A1/A2 and module-wise passing for B1/B2.",
+  "sources": ["TEST_PREP/ANU_GERMAN.pdf", "FEES/GERMAN_FEE.pdf"],
+  "last_reviewed": "2026-08-02"
+}
