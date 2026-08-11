@@ -1,7 +1,10 @@
 // app/lib/chat/message.service.ts
-import prisma from "../prisma";
+import prisma from "../prisma"; // Fixes path navigation up to the root lib folder
 import { Message, MessageRole } from "@prisma/client";
 import { touchConversation } from "./conversation.service";
+
+// ✅ Export ChatRole as an alias to satisfy prompt.service.ts imports
+export type ChatRole = MessageRole; 
 
 export type MessageInput = {
   conversationId: string;
