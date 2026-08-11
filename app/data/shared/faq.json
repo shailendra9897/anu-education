@@ -1,0 +1,37 @@
+{
+  "id": "shared-faq",
+  "scope": "Cross-cutting FAQs for ANU Education counselling and AI assistants.",
+  "faqs": [
+    {
+      "question": "How can a student book a free demo?",
+      "answer": "Ask the student to contact ANU Education through WhatsApp or email. Use +91 94281 86817 for the main desk or +91 7016497087 for course details.",
+      "source": "ANU course fee PDFs"
+    },
+    {
+      "question": "Are classes online?",
+      "answer": "Yes. ANU Education course materials describe live online classes, portal access, video lessons, mock tests, recordings, and expert feedback.",
+      "source": "ANU course fee PDFs"
+    },
+    {
+      "question": "Are prices retail prices or partner wallet prices?",
+      "answer": "The fee PDFs and B2B brochure describe wallet or limited-offer pricing. Confirm final payable retail price, GST, batch availability, and discounts with ANU Education before enrolment.",
+      "source": "B2B partner brochure and fee PDFs"
+    },
+    {
+      "question": "Does ANU Education provide study abroad counselling?",
+      "answer": "Yes. Duolingo materials mention free study abroad counselling, and ANU positions itself as a study-abroad gateway. For country-specific admissions or visa counselling, collect the student profile first.",
+      "source": "DUOLINGO_FEE.pdf and B2B brochure"
+    },
+    {
+      "question": "Are recordings available if a student misses class?",
+      "answer": "Several course PDFs mention recordings for missed lectures. Confirm recording access duration for the selected course pack.",
+      "source": "PTE_FEE.pdf, GRE_FEE.pdf, FRENCH_FEE.pdf, GERMAN_FEE.pdf, DUOLINGO_FEE.pdf"
+    },
+    {
+      "question": "What should the AI do when a student asks about visa success guarantees?",
+      "answer": "Do not promise approval. Explain that visa decisions are made by the relevant government authority and depend on eligibility, documentation, finances, genuineness, and current policy.",
+      "source": "AI operating policy"
+    }
+  ],
+  "last_reviewed": "2026-08-02"
+}

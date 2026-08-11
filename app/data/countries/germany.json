@@ -1,0 +1,15 @@
+{
+  "id": "germany",
+  "name": "Germany",
+  "study_positioning": "Strong destination for engineering, technology, research, business and low-tuition public university pathways.",
+  "recommended_tests": ["IELTS Academic", "TOEFL", "German A1-B2/Goethe depending on program", "GRE for selected master's programs"],
+  "visa": {
+    "route": "German national visa / long-stay D visa for study",
+    "fee": [{"name": "Applicants over 18", "amount": 75, "currency": "EUR", "local_amount": "INR 8100"}, {"name": "Applicants under 18", "amount": 37.5, "currency": "EUR", "local_amount": "INR 4100"}],
+    "process": ["Secure admission or preparatory pathway", "Prepare blocked account/proof of funds, academic records, language evidence and passport", "Complete application through the relevant German mission/Consular Portal where applicable", "Book/attend appointment", "Submit biometrics and documents", "Wait for decision"],
+    "deadlines": "Appointment availability and university intake deadlines vary. Start early because national visa appointments can take time.",
+    "notes": ["Fee is payable in INR at the exchange rate on appointment day.", "Do not use agents; official forms and information are free."]
+  },
+  "official_sources": ["https://india.diplo.de/in-en/service/2755482-2755482"],
+  "last_verified": "2026-08-02"
+}

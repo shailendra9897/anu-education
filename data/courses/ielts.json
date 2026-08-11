@@ -1,0 +1,27 @@
+{
+  "id": "ielts",
+  "name": "IELTS Academic",
+  "category": "English proficiency test preparation",
+  "status": "active",
+  "best_for": ["Study abroad", "University admission", "English skill evaluation"],
+  "accepted_in": "140+ countries and 9000+ colleges/universities worldwide",
+  "anu_course": {
+    "packs_ref": "pricing.json#/prices/ielts",
+    "access": "180 days for paid self-prep/champion packs",
+    "live_cycle": "8 weeks",
+    "live_hours": "40-60 hours",
+    "practice": ["300+ grammar, vocabulary and spelling videos", "60 practice tests", "15 full-length timed mock tests", "50+ exercises", "20 hours IELTS foundation video lectures"],
+    "feedback": ["Expert mentor feedback", "Mock and practice test analysis", "Live doubt solving"],
+    "bonus": "Champion course includes a free 4-week French live course."
+  },
+  "batch_timings_ist": [
+    {"batch": "Morning Beginners", "time": "7:30 AM - 9:30 AM", "duration": "2 hours"},
+    {"batch": "Afternoon Beginners", "time": "2:00 PM - 4:00 PM", "duration": "2 hours"},
+    {"batch": "Evening Beginners", "time": "8:30 PM - 10:30 PM", "duration": "2 hours"},
+    {"batch": "Morning Advance", "time": "7:30 AM - 10:30 AM", "duration": "3 hours"},
+    {"batch": "Afternoon Advance", "time": "2:00 PM - 5:00 PM", "duration": "3 hours"},
+    {"batch": "Evening Advance", "time": "8:00 PM - 11:00 PM", "duration": "3 hours"}
+  ],
+  "sources": ["TEST_PREP/ANU_IELTS_ACADEMIC.pdf", "FEES/IELTS_ACADEMIC_FEE.pdf"],
+  "last_reviewed": "2026-08-02"
+}

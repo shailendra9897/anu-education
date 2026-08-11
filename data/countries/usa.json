@@ -1,0 +1,16 @@
+{
+  "id": "usa",
+  "name": "United States of America",
+  "study_positioning": "Major destination for undergraduate, master's, MBA, STEM, research and doctoral programs.",
+  "recommended_tests": ["TOEFL", "IELTS Academic", "Duolingo for selected institutions", "GRE", "GMAT", "SAT"],
+  "visa": {
+    "route": "F-1 academic student visa or M-1 vocational student visa",
+    "fee": [{"name": "Nonimmigrant visa application fee for F/M", "amount": 185, "currency": "USD"}],
+    "additional_costs": ["SEVIS I-901 fee is separate and must be checked before payment", "Issuance fee may vary by nationality"],
+    "process": ["Get accepted by a SEVP-approved school", "Receive Form I-20", "Pay SEVIS fee", "Complete DS-160", "Pay visa fee", "Schedule visa interview", "Attend interview with required documents"],
+    "deadlines": "New F/M visas can be issued up to 365 days before the course start date. Students may not enter the USA more than 30 days before the start date.",
+    "notes": ["Interview wait times vary by location, season and category."]
+  },
+  "official_sources": ["https://travel.state.gov/content/travel/en/us-visas/study/student-visa.html", "https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/fees/fees-visa-services.html"],
+  "last_verified": "2026-08-02"
+}

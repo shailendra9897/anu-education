@@ -1,0 +1,14 @@
+{
+  "id": "toefl",
+  "name": "TOEFL",
+  "category": "English proficiency test preparation",
+  "status": "coming_soon",
+  "best_for": ["US and Canada university admissions", "English proficiency evidence"],
+  "anu_course": {
+    "packs_ref": "pricing.json#/prices/toefl",
+    "note": "B2B brochure lists TOEFL as coming soon for US and Canada."
+  },
+  "needs_review": true,
+  "sources": ["TEST_PREP/B2B Partner ANU Education Program | Wallet Pricing for Resellers & Institutes.pdf"],
+  "last_reviewed": "2026-08-02"
+}

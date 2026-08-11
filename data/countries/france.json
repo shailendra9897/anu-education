@@ -1,0 +1,15 @@
+{
+  "id": "france",
+  "name": "France",
+  "study_positioning": "Destination for bachelor's, master's, business, hospitality, arts, language and Francophone pathways.",
+  "recommended_tests": ["IELTS Academic", "TOEFL", "French DELF/TCF/TEF depending on program", "Duolingo where accepted"],
+  "visa": {
+    "route": "Long-stay student visa / VLS-TS student",
+    "fee": [{"name": "Student visa - EEF procedure countries", "amount": 50, "currency": "EUR"}, {"name": "Student visa - other countries", "amount": 99, "currency": "EUR"}],
+    "process": ["Confirm whether Etudes en France procedure applies", "Secure admission", "Complete Campus France/EEF steps where required", "Complete France-Visas application", "Prepare documents and proof of resources", "Attend appointment", "Validate residence formalities after arrival if required"],
+    "deadlines": "Apply after admission and ahead of intake. For applications submitted from 1 August 2026, minimum resources are EUR 877.50 per month.",
+    "notes": ["Fees are indicative and may vary by special case or service provider charge."]
+  },
+  "official_sources": ["https://france-visas.gouv.fr/en/etudiant", "https://www.service-public.gouv.fr/particuliers/vosdroits/F2231?lang=en"],
+  "last_verified": "2026-08-02"
+}

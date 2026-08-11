@@ -1,0 +1,38 @@
+{
+  "id": "pte",
+  "name": "PTE Academic & PTE Core",
+  "category": "Computer-based English proficiency test preparation",
+  "status": "active",
+  "best_for": ["Study abroad", "Canada SDS where accepted", "Australia, New Zealand, UK, USA and Canada pathways"],
+  "exam_snapshot": {
+    "mode": "Computer-based only",
+    "duration": "About 2 hours",
+    "score_range": "10-90",
+    "score_validity": "2 years",
+    "retake_gap": "5 days after previous exam",
+    "sections": [
+      {"name": "Speaking & Writing", "duration": "54-67 minutes", "question_types": 10, "approx_questions": 36},
+      {"name": "Reading", "duration": "29-30 minutes", "question_types": 5, "approx_questions": 18},
+      {"name": "Listening", "duration": "30-43 minutes", "question_types": 8, "approx_questions": 20}
+    ]
+  },
+  "anu_course": {
+    "packs_ref": "pricing.json#/prices/pte",
+    "features": ["300+ videos", "14 mock tests in Champion", "180+ practice exercises", "800+ questions", "Expert feedback"],
+    "live_class_schedule": [
+      {"course": "PTE Academic Morning", "days": "Monday-Friday", "time": "9:00 AM - 10:30 AM"},
+      {"course": "PTE Academic Evening", "days": "Monday-Friday", "time": "8:00 PM - 9:30 PM"},
+      {"course": "PTE Demo Batch Evening", "days": "Monday-Friday", "time": "6:00 PM - 7:00 PM"}
+    ],
+    "saturday_sessions": [
+      {"session": "Doubt Solving", "time": "10:00 AM - 11:00 AM"},
+      {"session": "Grammar Batch", "time": "11:00 AM - 12:00 PM"}
+    ]
+  },
+  "faqs": [
+    {"question": "Is PTE paper based?", "answer": "No. PTE is available only in computer-based format."},
+    {"question": "Is PTE Academic accepted for Canada SDS?", "answer": "ANU source material says test-centre PTE Academic with overall 60 is valid for SDS from 10 August 2023; verify current IRCC rules before counselling."}
+  ],
+  "sources": ["TEST_PREP/ANU_PTE.pdf", "FEES/PTE_FEE.pdf"],
+  "last_reviewed": "2026-08-02"
+}

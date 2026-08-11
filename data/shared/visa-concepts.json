@@ -1,0 +1,42 @@
+{
+  "id": "visa-concepts",
+  "purpose": "Reusable visa and study-abroad concepts for AI counselling responses.",
+  "concepts": [
+    {
+      "id": "selt",
+      "term": "SELT",
+      "definition": "Secure English Language Test. Some governments require approved English tests for specific visa routes. Acceptance depends on country, visa category, provider, and test delivery mode."
+    },
+    {
+      "id": "sop",
+      "term": "Statement of Purpose",
+      "definition": "A written explanation of the applicant's study goal, course choice, career plan, funding, and intention to comply with visa rules."
+    },
+    {
+      "id": "genuine-student",
+      "term": "Genuine student or genuine temporary entrant assessment",
+      "definition": "A visa officer's assessment of whether the applicant genuinely intends to study and has credible academic, financial, and career reasons."
+    },
+    {
+      "id": "proof-of-funds",
+      "term": "Proof of funds",
+      "definition": "Evidence that the applicant can pay tuition, living expenses, travel, insurance, and other required costs. Accepted evidence and minimum amounts vary by country."
+    },
+    {
+      "id": "coe-cas-i20-offer",
+      "term": "Admission confirmation documents",
+      "definition": "Country-specific enrolment evidence such as Australia's CoE, UK's CAS, USA Form I-20, or a university offer/admission letter."
+    },
+    {
+      "id": "biometrics",
+      "term": "Biometrics",
+      "definition": "Fingerprint and photo collection required by many visa systems. It is usually completed after online application submission or during an appointment."
+    },
+    {
+      "id": "visa-fee-warning",
+      "term": "Visa fee volatility",
+      "definition": "Visa fees, health surcharges, biometrics, service charges, and exchange-rate conversions change. Always verify against official government or visa-application-centre pages before payment."
+    }
+  ],
+  "last_reviewed": "2026-08-02"
+}

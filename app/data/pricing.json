@@ -1,0 +1,78 @@
+{
+  "id": "anu-pricing-2026",
+  "currency_default": "INR",
+  "tax_note": "GST may apply where stated. Confirm final invoice amount with ANU Education.",
+  "prices": {
+    "ielts": [
+      {"pack_id": "ielts-trial-self-prep", "name": "IELTS Academic Self Prep - Trial", "price": 0, "duration": "5 days"},
+      {"pack_id": "ielts-trial-champion", "name": "IELTS Academic Champion - Trial", "price": 0, "duration": "5 days"},
+      {"pack_id": "ielts-self-prep", "name": "IELTS Academic - Self Prep", "price": 1875, "original_price": 3750, "discount": "50%", "access": "180 days"},
+      {"pack_id": "ielts-champion-morning", "name": "IELTS Academic - Champion Morning", "price": 5250, "original_price": 10500, "discount": "50%", "access": "180 days"},
+      {"pack_id": "ielts-champion-afternoon", "name": "IELTS Academic - Champion Afternoon", "price": 5250, "original_price": 10500, "discount": "50%", "access": "180 days"},
+      {"pack_id": "ielts-champion-evening", "name": "IELTS Academic - Champion Evening", "price": 5250, "original_price": 10500, "discount": "50%", "access": "180 days"},
+      {"pack_id": "ielts-champion-all-timings", "name": "IELTS Academic - Champion All Timings", "price": 6375, "original_price": 12750, "discount": "50%", "access": "180 days"}
+    ],
+    "pte": [
+      {"pack_id": "pte-academic-trial", "name": "PTE Academic - Trial", "price": 0, "duration": "5 days"},
+      {"pack_id": "pte-academic-self-prep", "name": "PTE Academic - Self Prep", "price": 2250, "original_price": 3000, "discount": "25%", "access": "180 days"},
+      {"pack_id": "pte-academic-live-class", "name": "PTE Academic - Live Class", "price": 1575, "original_price": 2100, "discount": "25%", "access": "90 days"},
+      {"pack_id": "pte-academic-champion", "name": "PTE Academic - Champion", "price": 3600, "original_price": 4800, "discount": "25%", "access": "180 days"},
+      {"pack_id": "pte-core-trial", "name": "PTE Core - Trial", "price": 0, "duration": "5 days"},
+      {"pack_id": "pte-core-champion-self-evaluated", "name": "PTE Core - Champion Self Evaluated", "price": 2250, "original_price": 3000, "discount": "25%", "access": "180 days"},
+      {"pack_id": "pte-core-champion", "name": "PTE Core - Champion", "price": 3600, "original_price": 4800, "discount": "25%", "access": "180 days"}
+    ],
+    "duolingo": [
+      {"pack_id": "duolingo-champion", "name": "Duolingo English Test Champion", "price": 1999, "original_price": 5000, "discount": "60%", "access": "60 days", "tax": "+ GST"}
+    ],
+    "gre": [
+      {"pack_id": "gre-trial", "name": "Shorter GRE - Trial", "price": 0, "duration": "5 days"},
+      {"pack_id": "gre-self-prep", "name": "Shorter GRE - Self Prep", "price": 9000, "original_price": 12000, "discount": "25%", "access": "180 days"},
+      {"pack_id": "gre-live-class", "name": "Shorter GRE - Live Class", "price": 9000, "original_price": 12000, "discount": "25%", "access": "90 days"},
+      {"pack_id": "gre-champion", "name": "Shorter GRE - Champion", "price": 15750, "original_price": 21000, "discount": "25%", "access": "180 days"}
+    ],
+    "spoken-english": [
+      {"pack_id": "spoken-trial", "name": "Spoken English Champion - Trial", "price": 0, "duration": "5 days"},
+      {"pack_id": "spoken-study-plan", "name": "Spoken English Study Plan", "price": 750, "original_price": 1000, "discount": "25%"},
+      {"pack_id": "spoken-champion-self-evaluated", "name": "Champion Self Evaluated", "price": 1575, "original_price": 2100, "discount": "25%", "access": "180 days"},
+      {"pack_id": "spoken-champion", "name": "Spoken English - Champion", "price": 3600, "original_price": 4800, "discount": "25%", "access": "180 days"}
+    ],
+    "french": [
+      {"pack_id": "french-basic-to-tef-usd", "name": "French Basic to TEF USD", "price": 400, "currency": "USD", "duration": "64 weeks"},
+      {"pack_id": "french-basic-a1-evening", "name": "French Basic & A1 - Evening", "price": 7500, "duration": "150 days / 10 weeks"},
+      {"pack_id": "french-basic-a1-morning", "name": "French Basic & A1 - Morning", "price": 7500, "duration": "150 days / 10 weeks"},
+      {"pack_id": "french-a2", "name": "French A2", "price": 9750, "duration": "90 days / 7 weeks"},
+      {"pack_id": "french-b1", "name": "French B1", "price": 9750, "duration": "90 days / 7 weeks"},
+      {"pack_id": "french-b2", "name": "French B2", "price": 9750, "duration": "90 days / 7 weeks"},
+      {"pack_id": "french-basic-a1-all-timings", "name": "French Basic & A1 - All Timings", "price": 9750, "duration": "150 days / 10 weeks"},
+      {"pack_id": "french-basic-a1-night", "name": "French Basic & A1 - Night", "price": 10000, "duration": "150 days / 10 weeks"},
+      {"pack_id": "french-basic-a1-a2-evening", "name": "French Basic, A1 & A2 - Evening", "price": 12000, "duration": "224 days / 16 weeks"},
+      {"pack_id": "french-basic-a1-a2-morning", "name": "French Basic, A1 & A2 - Morning", "price": 12000, "duration": "224 days / 16 weeks"},
+      {"pack_id": "french-basic-a1-weekend", "name": "French Basic & A1 - Weekend", "price": 12000, "duration": "150 days"},
+      {"pack_id": "french-basic-a1-a2-all-timings", "name": "French Basic, A1 & A2 - All Timings", "price": 14250, "duration": "224 days / 16 weeks"},
+      {"pack_id": "french-basic-a1-a2-night", "name": "French Basic, A1 & A2 - Night", "price": 14500, "duration": "224 days / 16 weeks"},
+      {"pack_id": "french-b1-b2-tef", "name": "French B1, B2 & TEF", "price": 22125, "duration": "224 days / 16 weeks"},
+      {"pack_id": "french-basic-to-tef", "name": "French Basic to TEF", "price": 34375, "duration": "64 weeks"}
+    ],
+    "german": [
+      {"pack_id": "german-demo", "name": "Free 3-Day Demo", "price": 0, "duration": "5 days access"},
+      {"pack_id": "german-basic-a1", "name": "German Basic & A1", "price": 7500, "duration": "150 days / 11 weeks"},
+      {"pack_id": "german-a2", "name": "German A2", "price": 9750, "duration": "90 days / 7 weeks"},
+      {"pack_id": "german-b1", "name": "German B1", "price": 9750, "duration": "90 days / 7 weeks"},
+      {"pack_id": "german-basic-a1-a2", "name": "German Basic, A1 & A2", "price": 12000, "duration": "210 days / 18 weeks"},
+      {"pack_id": "german-basic-to-b1", "name": "German Basic to B1", "price": 18750, "duration": "308 days / 28 weeks"}
+    ],
+    "toefl": [],
+    "gmat": [],
+    "sat": []
+  },
+  "sources": [
+    "FEES/IELTS_ACADEMIC_FEE.pdf",
+    "FEES/PTE_FEE.pdf",
+    "FEES/DUOLINGO_FEE.pdf",
+    "FEES/GRE_FEE.pdf",
+    "FEES/SPOKEN_ENGLISH_FEE.pdf",
+    "FEES/FRENCH_FEE.pdf",
+    "FEES/GERMAN_FEE.pdf"
+  ],
+  "last_reviewed": "2026-08-02"
+}
