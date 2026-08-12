@@ -9,21 +9,29 @@ export function extractStudentDetails(
 ): ExtractedStudentDetails {
   const text = message.trim();
 
-  // Email
+  // ── Email ──────────────────────────────────────────────────────
   const emailMatch = text.match(
     /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i,
   );
 
-  // Indian mobile number
+  // ── Indian mobile number ───────────────────────────────────────
   const phoneMatch = text.match(
     /(?:\+91[\s-]?)?[6-9]\d{9}\b/,
   );
 
-  // Try to identify a name from common natural-language patterns.
+  // ── Name ────────────────────────────────────────────────────────
   const namePatterns = [
-    /\bmy name is\s+([A-Za-z][A-Za-z .'-]{1,50})/i,
-    /\bi am\s+([A-Za-z][A-Za-z .'-]{1,50})/i,
-    /\bthis is\s+([A-Za-z][A-Za-z .'-]{1,50})/i,
+    // Name: Rahul Patel
+    /\bname\s*[:=-]\s*([A-Za-z][A-Za-z .'-]{1,50}?)(?=\s+(?:phone|mobile|whatsapp|email)\s*[:=-]|\s*$)/i,
+
+    // My name is Rahul Patel
+    /\bmy name is\s+([A-Za-z][A-Za-z .'-]{1,50}?)(?=\s+(?:phone|mobile|whatsapp|email)\s*[:=-]|\s*$)/i,
+
+    // I am Rahul Patel
+    /\bi am\s+([A-Za-z][A-Za-z .'-]{1,50}?)(?=\s+(?:phone|mobile|whatsapp|email)\s*[:=-]|\s*$)/i,
+
+    // This is Rahul Patel
+    /\bthis is\s+([A-Za-z][A-Za-z .'-]{1,50}?)(?=\s+(?:phone|mobile|whatsapp|email)\s*[:=-]|\s*$)/i,
   ];
 
   let name: string | undefined;

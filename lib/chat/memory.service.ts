@@ -61,77 +61,65 @@ export async function getRecentUserIntent(
 export async function isAwaitingDemoConfirmation(
   conversationId: string,
 ): Promise<boolean> {
-  const recent = await getRecentMessages(conversationId, 10);
+  const recent = await getRecentMessages(conversationId, 6);
+
+  console.log(
+    "[DEMO MEMORY DEBUG]",
+    recent.map((message) => ({
+      role: message.role,
+      content: message.content,
+      createdAt: message.createdAt,
+    })),
+  );
 
   if (recent.length === 0) {
     return false;
   }
 
-  const lastAssistantMessage = [...recent]
-    .reverse()
-    .find((message) => message.role === "ASSISTANT");
+  const lastAssistantMessage = recent.find(
+    (message) => message.role === "ASSISTANT",
+  );
 
   if (!lastAssistantMessage) {
     return false;
   }
 
-  const text = lastAssistantMessage.content
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .trim();
+  const text = lastAssistantMessage.content.toLowerCase();
 
-  const confirmationPatterns = [
-    "would you like me to book",
-    "would you like me to book this free demo",
-    "would you like me to book the demo",
-    "would you like me to book the free demo",
-    "shall i book your demo",
-    "shall i book the demo",
-    "shall i book the free demo",
-    "would you like me to reserve",
-    "would you like me to reserve your demo",
-  ];
-
-  return confirmationPatterns.some((pattern) =>
-    text.includes(pattern),
+  return (
+    text.includes("would you like me to book") ||
+    text.includes("would you like me to book this free demo") ||
+    text.includes("would you like me to book the demo") ||
+    text.includes("shall i book your demo") ||
+    text.includes("shall i book the free demo")
   );
 }
 
 export async function getPendingDemoMessage(
   conversationId: string,
 ): Promise<string | null> {
-  const recent = await getRecentMessages(conversationId, 10);
+  const recent = await getRecentMessages(conversationId, 6);
 
-  const lastAssistantMessage = [...recent]
-    .reverse()
-    .find((message) => message.role === "ASSISTANT");
+  const lastAssistantMessage = recent.find(
+    (message) => message.role === "ASSISTANT",
+  );
 
   if (!lastAssistantMessage) {
     return null;
   }
 
-  const text = lastAssistantMessage.content
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .trim();
+  const text = lastAssistantMessage.content.toLowerCase();
 
-  const confirmationPatterns = [
-    "would you like me to book",
-    "shall i book your demo",
-    "shall i book the demo",
-    "shall i book the free demo",
-    "would you like me to reserve",
-  ];
+  if (
+    text.includes("would you like me to book") ||
+    text.includes("shall i book your demo") ||
+    text.includes("shall i book the free demo")
+  ) {
+    return lastAssistantMessage.content;
+  }
 
-  const isConfirmationMessage = confirmationPatterns.some((pattern) =>
-    text.includes(pattern),
-  );
-
-  return isConfirmationMessage
-    ? lastAssistantMessage.content
-    : null;
+  return null;
 }
-
 export async function getPendingDemoCourse(
   conversationId: string,
 ): Promise<string | null> {

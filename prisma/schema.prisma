@@ -46,28 +46,28 @@ datasource db {
 // ═════════════════════════════════════════════════════════════════
 
 enum ConversationSource {
-  WEB          // chat widget on anuedu.in
-  WHATSAPP     // WhatsApp Business API
+  WEB // chat widget on anuedu.in
+  WHATSAPP // WhatsApp Business API
 }
 
 enum ConversationStatus {
-  ACTIVE          // AI is actively responding
-  HANDED_OFF      // escalated to a human counsellor
-  CLOSED          // conversation ended (by user or timeout)
-  ARCHIVED        // soft-closed after long inactivity
+  ACTIVE // AI is actively responding
+  HANDED_OFF // escalated to a human counsellor
+  CLOSED // conversation ended (by user or timeout)
+  ARCHIVED // soft-closed after long inactivity
 }
 
 model Conversation {
-  id        String              @id @default(cuid())
-  source    ConversationSource
-  status    ConversationStatus  @default(ACTIVE)
+  id     String             @id @default(cuid())
+  source ConversationSource
+  status ConversationStatus @default(ACTIVE)
 
   // Identity — at least one of these should be populated.
   // phone is the WhatsApp-canonical identifier; sessionId covers
   // anonymous web visitors before they share contact details.
-  phone     String?             // E.164 format, e.g. "+919428186817"
-  sessionId String?             @unique // web widget session token
-  name      String?             // captured mid-conversation once known
+  phone     String? // E.164 format, e.g. "+919428186817"
+  sessionId String? @unique // web widget session token
+  name      String? // captured mid-conversation once known
   email     String?
 
   // Page context — which anuedu.in page the chat opened from.
@@ -78,14 +78,15 @@ model Conversation {
   // Lead scoring — same 0–100 scale as scoreEngine.ts in the
   // assessment tool, so counsellors see one consistent number
   // across both lead sources in the CRM.
-  leadScore  Int?
-  leadTier   String?            // "READY" | "ALMOST" | "EARLY" — mirrors ResultTier
+  leadScore Int?
+  leadTier  String? // "READY" | "ALMOST" | "EARLY" — mirrors ResultTier
 
   // Relations
-  messages       Message[]
-  handoffEvents  HandoffEvent[]
-  leadContext    LeadContext?
-  demoBookings   DemoBooking[]
+  messages             Message[]
+  handoffEvents        HandoffEvent[]
+  leadContext          LeadContext?
+  demoBookings         DemoBooking[]
+  portalAccessRequests PortalAccessRequest[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -103,7 +104,7 @@ model Conversation {
 enum MessageRole {
   USER
   ASSISTANT
-  SYSTEM       // logged for audit/debug — not shown to the user
+  SYSTEM // logged for audit/debug — not shown to the user
 }
 
 model Message {
@@ -146,20 +147,20 @@ enum HandoffTrigger {
   LEGAL_MEDICAL_QUESTION
   LOW_CONFIDENCE_ANSWER
   REPEATED_UNSATISFIED_QUESTION
-  MANUAL_OVERRIDE          // counsellor manually pulled the conversation
+  MANUAL_OVERRIDE // counsellor manually pulled the conversation
 }
 
 model HandoffEvent {
-  id             String        @id @default(cuid())
+  id             String       @id @default(cuid())
   conversationId String
-  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
-  trigger        HandoffTrigger
-  triggerDetail  String?
+  trigger       HandoffTrigger
+  triggerDetail String?
 
   // Whether a counsellor actually picked up the handoff, and when.
   acknowledgedAt DateTime?
-  acknowledgedBy String?        // counsellor identifier/email
+  acknowledgedBy String? // counsellor identifier/email
 
   createdAt DateTime @default(now())
 
@@ -181,18 +182,18 @@ model LeadContext {
 
   // Populated progressively as the assistant learns about the student —
   // never required upfront, filled in opportunistically during chat.
-  goal            String?     // e.g. "study" | "pr" | "work" | "research"
-  targetCountry   String?
-  targetCourse    String?     // e.g. "IELTS Academic", "GMAT"
-  englishLevel    String?
-  budgetRange     String?
-  timeline        String?     // e.g. "within 1 month", "just exploring"
+  goal          String? // e.g. "study" | "pr" | "work" | "research"
+  targetCountry String?
+  targetCourse  String? // e.g. "IELTS Academic", "GMAT"
+  englishLevel  String?
+  budgetRange   String?
+  timeline      String? // e.g. "within 1 month", "just exploring"
 
   // "Fall 2026", "September intake" — distinct from `timeline` above,
   // which captures readiness/urgency ("ASAP", "just exploring")
   // rather than a specific academic term. Populated by
   // lib/lead/leadExtractor.ts's extractIntake().
-  intake          String?
+  intake String?
 
   biggestChallenge String?
 
@@ -223,17 +224,17 @@ enum DemoBookingStatus {
 }
 
 model DemoBooking {
-  id             String            @id @default(cuid())
+  id             String       @id @default(cuid())
   conversationId String
-  conversation   Conversation      @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   // Snapshotted at booking time, intentionally duplicating
   // Conversation.name/phone/email rather than reading them live —
   // a booking record should reflect what was true when it was made,
   // even if the conversation's contact details are corrected later.
-  name           String?
-  phone          String?
-  email          String?
+  name  String?
+  phone String?
+  email String?
 
   course         String?
   preferredBatch String?
@@ -246,13 +247,54 @@ model DemoBooking {
   // scheduled job runs more than once before preferredDate.
   reminderSentAt DateTime?
 
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([conversationId])
   @@index([phone])
   @@index([status])
   @@index([preferredDate])
+}
+
+// ═════════════════════════════════════════════════════════════════
+// PORTAL ACCESS REQUEST
+// Tracks students who need access to the external white-label
+// student portal. The portal itself remains the source of truth.
+// ═════════════════════════════════════════════════════════════════
+
+enum PortalAccessStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model PortalAccessRequest {
+  id String @id @default(cuid())
+
+  conversationId String?
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+
+  demoBookingId String?
+  studentName   String
+  email         String
+  phone         String
+  course        String?
+
+  status PortalAccessStatus @default(PENDING)
+
+  portalStudentId String?
+  portalLogin     String?
+
+  notes String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([phone])
+  @@index([status])
+  @@index([demoBookingId])
 }
 
 // ═════════════════════════════════════════════════════════════════
@@ -263,9 +305,9 @@ model DemoBooking {
 // ═════════════════════════════════════════════════════════════════
 
 model RateLimitLog {
-  id        String   @id @default(cuid())
-  identifier String  // IP address or phone number
-  endpoint   String  // e.g. "/api/chat"
+  id         String   @id @default(cuid())
+  identifier String // IP address or phone number
+  endpoint   String // e.g. "/api/chat"
   createdAt  DateTime @default(now())
 
   @@index([identifier, endpoint, createdAt])

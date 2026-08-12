@@ -55,7 +55,7 @@ export async function registerStudentOnPortal(
 
     return {
       success: true,
-      message: "Portal registration page opened successfully.",
+      message: "Portal access test completed.",
     };
   } finally {
     await browser.close();

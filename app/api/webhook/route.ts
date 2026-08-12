@@ -205,34 +205,69 @@ Message anytime if needed 👍`
         return NextResponse.json({ status: "opt-out" });
       }
 
-      // HOT LEAD
-      if (
-        userMessage.includes("yes") ||
+      // ==========================
+      // ANU AI / DEMO CHAT
+      // ==========================
+      const shouldUseChat =
         userMessage.includes("demo") ||
-        userMessage.includes("join")
-      ) {
+        userMessage.includes("german") ||
+        userMessage.includes("ielts") ||
+        userMessage.includes("pte") ||
+        userMessage.includes("french") ||
+        userMessage.includes("spoken english") ||
+        userMessage.includes("duolingo") ||
+        userMessage.includes("toefl") ||
+        userMessage.includes("gre") ||
+        userMessage.includes("gmat") ||
+        userMessage.includes("sat") ||
+        userMessage === "yes" ||
+        userMessage === "yes please" ||
+        userMessage === "book it" ||
+        userMessage === "book" ||
+        userMessage === "confirm" ||
+        userMessage === "confirm it" ||
+        userMessage === "please book" ||
+        userMessage === "sure" ||
+        userMessage === "ok";
 
-        await safeSaveLead(from, lastTemplate || "unknown", userMessage, source, "Hot");
+      if (shouldUseChat) {
+        try {
+          await safeSaveLead(
+            from,
+            lastTemplate || "unknown",
+            userMessage,
+            source,
+            "Hot",
+          );
 
-        if (lastTemplate === "student_class_19rs_1") {
+          const chatResult = await sendToChat(
+            req,
+            from,
+            message.text.body.trim(),
+          );
 
           await safeSendReply(
             from,
-`🔥 Great!
-
-Your ₹19 demo seat is almost confirmed.
-
-👉 Book now:
-https://study.anuedu.in/register
-
-⏳ Only few seats left today`
+            chatResult.reply,
           );
 
-        } else {
-          await safeSendReply(from, replyConfig.interestedReply);
-        }
+          return NextResponse.json({
+            status: "chat handled",
+            conversationId: chatResult.conversationId,
+          });
+        } catch (error) {
+          console.error("[WHATSAPP → CHAT] Error:", error);
 
-        return NextResponse.json({ status: "hot lead" });
+          await safeSendReply(
+            from,
+            "Sorry, I'm having a temporary issue. Please try again in a moment.",
+          );
+
+          return NextResponse.json(
+            { status: "chat error" },
+            { status: 500 },
+          );
+        }
       }
 
       // GREETING
@@ -275,6 +310,43 @@ Want to improve your English & go abroad? 🌍
 
 👉 Type DEMO to book your seat`
   );
+}
+
+// ==========================
+// SEND TO CHAT API
+// ==========================
+async function sendToChat(
+  req: NextRequest,
+  phone: string,
+  message: string,
+) {
+  const chatUrl = new URL("/api/chat", req.url);
+
+  const response = await fetch(chatUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      message,
+      phone,
+      sourcePage: "whatsapp",
+      sessionId: `whatsapp:${phone}`,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+
+    console.error("[WHATSAPP → CHAT] Chat API error:", {
+      status: response.status,
+      error: errorText,
+    });
+
+    throw new Error(`Chat API failed: ${response.status}`);
+  }
+
+  return response.json();
 }
 
 // ==========================

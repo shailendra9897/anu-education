@@ -20,6 +20,7 @@ import { captureDemoStudentDetails } from "@/lib/demo/demo.details.service";
 import { getMissingDemoDetails } from "@/lib/demo/demo.details";
 import { getDemoBookingByConversation } from "@/lib/demo/demo.service";
 import { extractStudentDetails } from "@/lib/demo/student-details.extractor";
+import { createPortalAccessRequest } from "@/lib/portal/portal.access.service";
 
 // ── REQUEST / RESPONSE CONTRACT ────────────────────────────────────
 
@@ -136,15 +137,17 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
     const pendingDemoCourse = awaitingDemoConfirmation
       ? await getPendingDemoCourse(conversation.id)
       : null;
-console.log("[DEMO DEBUG]", {
-  conversationId: conversation.id,
-  awaitingDemoConfirmation,
-  pendingDemoCourse,
-  conversationName: conversation.name,
-  conversationPhone: conversation.phone,
-  conversationEmail: conversation.email,
-  userMessage,
-});
+
+    console.log("[DEMO DEBUG]", {
+      conversationId: conversation.id,
+      awaitingDemoConfirmation,
+      pendingDemoCourse,
+      conversationName: conversation.name,
+      conversationPhone: conversation.phone,
+      conversationEmail: conversation.email,
+      userMessage,
+    });
+
     await saveMessage(
       conversation.id,
       MessageRole.USER,
@@ -206,17 +209,51 @@ console.log("[DEMO DEBUG]", {
           conversationId: conversation.id,
         });
       }
+
+      // ── EXISTING DEMO + DETAILS NOW COMPLETE ─────────────────────
+      if (
+        updatedDemoBooking.name &&
+        updatedDemoBooking.phone &&
+        updatedDemoBooking.email
+      ) {
+        // Create portal access request if it does not already exist.
+        await createPortalAccessRequest({
+          conversationId: conversation.id,
+          demoBookingId: updatedDemoBooking.id,
+          studentName: updatedDemoBooking.name,
+          phone: updatedDemoBooking.phone,
+          email: updatedDemoBooking.email,
+          course: updatedDemoBooking.course ?? undefined,
+        });
+
+        const completionMessage =
+          `Perfect, ${updatedDemoBooking.name}! Your free ` +
+          `${updatedDemoBooking.course ?? ""} demo booking is confirmed. ` +
+          `Your portal access request has also been created. ` +
+          `You will receive your portal activation details by email.`;
+
+        await saveMessage(
+          conversation.id,
+          MessageRole.ASSISTANT,
+          completionMessage,
+        );
+
+        return NextResponse.json({
+          reply: completionMessage,
+          conversationId: conversation.id,
+        });
+      }
     }
 
     const demoResult = await processDemoRequest({
-  conversationId: conversation.id,
-  message: userMessage,
-  name: conversation.name ?? undefined,
-  phone: conversation.phone ?? body.phone,
-  email: conversation.email ?? undefined,
-  awaitingConfirmation: awaitingDemoConfirmation,
-  pendingCourse: pendingDemoCourse,
-});
+      conversationId: conversation.id,
+      message: userMessage,
+      name: conversation.name ?? undefined,
+      phone: conversation.phone ?? body.phone,
+      email: conversation.email ?? undefined,
+      awaitingConfirmation: awaitingDemoConfirmation,
+      pendingCourse: pendingDemoCourse,
+    });
 
     if (demoResult.needsConfirmation) {
       await saveMessage(

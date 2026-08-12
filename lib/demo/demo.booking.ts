@@ -20,24 +20,21 @@
 //      details-request message, so the student never receives a
 //      false "you're done" message.
 //
+//   ✅ Portal Access Integration: Creates a PortalAccessRequest 
+//      record immediately after a successful DemoBooking row is 
+//      created, guarded by complete contact details check.
+//
 //   ✅ Removed dead code: the old bottom fallback block
 //      ("Student has explicitly confirmed") could never execute —
 //      its guard condition is always true by the time execution
 //      reaches it (the top confirmation block already returns
 //      whenever that same condition would be false). Deleted.
-//
-// ⚠️ STILL NEEDS VERIFICATION against files not yet shared:
-//   - lib/demo/demo.service.ts       (createDemoBooking, getDemoBookingByConversation)
-//   - lib/demo/demo.details.service.ts (captureDemoStudentDetails)
-//   - lib/demo/demo.details.ts       (getMissingDemoDetails)
-//   This file assumes createDemoBooking accepts partial/undefined
-//   name/phone/email (creating an incomplete row is intentional now,
-//   not a bug) — please confirm that's safe on the DB/service side.
 // ─────────────────────────────────────────────────────────────────
 
 import { createDemoBooking } from "./demo.service";
 import { extractDemoIntent } from "./demo.extractor";
 import { getAvailableDemoSlots } from "./demo.availability";
+import { createPortalAccessRequest } from "@/lib/portal/portal.access.service";
 
 export type BookDemoInput = {
   conversationId: string;
@@ -106,8 +103,6 @@ export async function processDemoRequest(
     // incomplete. This gives route.ts's existing missing-details
     // loop (existingDemoBooking / getMissingDemoDetails) a row to
     // attach captured details to on the student's next message(s).
-    // What we DON'T do anymore is tell the student it's "created"
-    // (success: true) until it's actually complete — see below.
     const booking = await createDemoBooking({
       conversationId: input.conversationId,
       name: input.name,
@@ -117,6 +112,18 @@ export async function processDemoRequest(
       preferredBatch: selectedSlot.batch,
       notes: `Faculty-approved demo timing: ${selectedSlot.time}`,
     });
+
+    // 🚀 Automatically create a Portal Access Request if complete student details exist
+    if (input.name && input.email && input.phone) {
+      await createPortalAccessRequest({
+        conversationId: input.conversationId,
+        demoBookingId: booking.id,
+        studentName: input.name,
+        email: input.email,
+        phone: input.phone,
+        course: selectedSlot.course,
+      });
+    }
 
     // ✅ FIX: only claim success once contact details are complete.
     if (hasAllContactDetails(input)) {
@@ -218,16 +225,6 @@ export async function processDemoRequest(
 
   // We have a demo request, but the student has not explicitly
   // selected/confirmed a slot yet.
-  //
-  // IMPORTANT: we do NOT create a booking merely because someone
-  // asks "What is the demo timing?" — only ask for confirmation.
-  //
-  // (The old code had an unreachable "fallback confirmed" branch
-  // after this block — removed. By the time we reach this point,
-  // we are guaranteed NOT in the awaitingConfirmation+confirmed
-  // case, since that's handled entirely by the top block above.
-  // So this function always ends by asking for confirmation here;
-  // it never falls through to a second booking-creation path.)
   const slotText = slots
     .map((slot) => `${slot.batch}: ${slot.time}`)
     .join(", ");
