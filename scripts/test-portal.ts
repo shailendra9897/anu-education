@@ -3,11 +3,13 @@ import { registerStudentOnPortal } from "../lib/demo/portal/portal.registration"
 async function main() {
   const result = await registerStudentOnPortal({
     name: "ANU Test Student",
-    email: "YOUR_TEST_EMAIL@example.com",
+    email: "skr989798@gmail.com",
     phone: "9999999999",
+    password: "TestPassword@123",
+    course: "german", // 👈 Valid mapped course ("ielts" | "pte" | "german" | "french")
   });
 
-  console.log(result);
+  console.log("[TEST PORTAL RESULT]", result);
 }
 
 main().catch((error) => {

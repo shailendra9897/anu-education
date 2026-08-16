@@ -59,9 +59,10 @@ export default function ChatWindow({
   quickActions,
   inputPlaceholder,
 }: ChatWindowProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput]       = useState("");
-  const [isTyping, setIsTyping] = useState(false);
+ const [messages, setMessages] = useState<ChatMessage[]>([]);
+const [input, setInput] = useState("");
+const [isTyping, setIsTyping] = useState(false);
+const [conversationId, setConversationId] = useState<string | null>(null);
   const [hasStarted, setHasStarted] = useState(false); // hides welcome once chat begins
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -93,13 +94,20 @@ export default function ChatWindow({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: trimmed,
-          history: messages.map((m) => ({ role: m.role, content: m.content })),
-        }),
+  message: trimmed,
+  conversationId,
+  history: messages.map((m) => ({
+    role: m.role,
+    content: m.content,
+  })),
+}),
       });
 
       if (!res.ok) throw new Error(`Chat API error: ${res.status}`);
       const data = await res.json();
+      if (data.conversationId) {
+  setConversationId(data.conversationId);
+}
 
       const assistantMsg: ChatMessage = {
         id:   crypto.randomUUID(),

@@ -2,35 +2,83 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  const isAdminRoute = pathname.startsWith("/admin");
+  const isAdminApiRoute = pathname.startsWith("/api/admin");
+
+  // Protect both:
+  // /admin/*
+  // /api/admin/*
+  if (!isAdminRoute && !isAdminApiRoute) {
+    return NextResponse.next();
+  }
+
   const auth = request.headers.get("authorization");
 
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    if (!auth) {
-      return new NextResponse("Authentication required", {
+  if (!auth || !auth.startsWith("Basic ")) {
+    return new NextResponse("Authentication required", {
+      status: 401,
+      headers: {
+        "WWW-Authenticate": 'Basic realm="ANU Education Admin"',
+      },
+    });
+  }
+
+  try {
+    const encoded = auth.slice(6).trim();
+
+    if (!encoded) {
+      return new NextResponse("Unauthorized", {
         status: 401,
-        headers: {
-          "WWW-Authenticate": 'Basic realm="Secure Area"',
-        },
       });
     }
 
-    const encoded = auth.split(" ")[1];
-    const decoded = Buffer.from(encoded, "base64").toString();
-    const [user, pass] = decoded.split(":");
+    const decoded = Buffer.from(encoded, "base64").toString("utf-8");
 
-    if (
-      user === process.env.ADMIN_USER &&
-      pass === process.env.ADMIN_PASS
-    ) {
-      return NextResponse.next();
+    const separatorIndex = decoded.indexOf(":");
+
+    if (separatorIndex === -1) {
+      return new NextResponse("Unauthorized", {
+        status: 401,
+      });
     }
 
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
+    const user = decoded.slice(0, separatorIndex);
+    const pass = decoded.slice(separatorIndex + 1);
 
-  return NextResponse.next();
+    const expectedUser = process.env.ADMIN_USER;
+    const expectedPass = process.env.ADMIN_PASS;
+
+    if (!expectedUser || !expectedPass) {
+      console.error(
+        "[ADMIN AUTH] ADMIN_USER or ADMIN_PASS is not configured.",
+      );
+
+      return new NextResponse("Admin authentication is not configured.", {
+        status: 500,
+      });
+    }
+
+    if (user !== expectedUser || pass !== expectedPass) {
+      return new NextResponse("Unauthorized", {
+        status: 401,
+      });
+    }
+
+    return NextResponse.next();
+  } catch (error) {
+    console.error("[ADMIN AUTH] Authentication error:", error);
+
+    return new NextResponse("Unauthorized", {
+      status: 401,
+    });
+  }
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/api/admin/:path*",
+  ],
 };
