@@ -31,8 +31,14 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // ⚠️ SQLite is fine for local development/prototyping — zero setup,
+  // no separate DB server needed. Before real production traffic
+  // (website chat + WhatsApp webhook + CRM + Admin writing
+  // concurrently), switch back to `provider = "postgresql"` — SQLite
+  // locks the entire database file per write transaction, which
+  // becomes a bottleneck once more than one service writes at once.
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 // ═════════════════════════════════════════════════════════════════
