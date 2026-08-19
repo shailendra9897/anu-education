@@ -396,6 +396,15 @@ export async function persistLeadContext(
   extraction: LeadExtractionResult
 ): Promise<void> {
   const { name, phone, email, ...leadFields } = extraction;
+  const mappedLeadFields = {
+    goal: leadFields.goal,
+    targetCountry: leadFields.country,
+    targetCourse: leadFields.course,
+    englishLevel: leadFields.englishLevel,
+    budgetRange: leadFields.budget,
+    timeline: leadFields.timeline,
+    intake: leadFields.intake,
+  };
 
   // Update Conversation identity fields — only if we detected
   // something, and only overwrite existing values with new ones
@@ -412,12 +421,12 @@ export async function persistLeadContext(
   }
 
   // Upsert LeadContext with everything else.
-  const hasLeadFields = Object.values(leadFields).some((v) => v !== undefined);
+  const hasLeadFields = Object.values(mappedLeadFields).some((v) => v !== undefined);
   if (hasLeadFields) {
     await prisma.leadContext.upsert({
       where:  { conversationId },
-      create: { conversationId, ...leadFields },
-      update: { ...leadFields },
+      create: { conversationId, ...mappedLeadFields },
+      update: { ...mappedLeadFields },
     });
   }
 }
@@ -438,4 +447,315 @@ export async function persistLeadContext(
 // either way, so callers (route.ts, the WhatsApp webhook) never need
 // to know which extraction method was used.
 
+// ═════════════════════════════════════════════════════════════════
+// COACHING LEAD EXTRACTION
+// ═════════════════════════════════════════════════════════════════
+
+function escapeRegexCoaching(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export interface CoachingLeadContext {
+  course?:          string;
+  targetScore?:     string;
+  currentLevel?:    string;
+  preferredBatch?:  string;
+  preferredTiming?: string;
+  onlinePreference?: string;
+  city?:            string;
+  targetExamDate?:  string;
+  destination?:     string;
+  intake?:          string;
+  budget?:          string;
+  goal?:            string;
+  name?:            string;
+  phone?:           string;
+  email?:           string;
+}
+
+const COACHING_COURSES: Record<string, string> = {
+  "ielts academic":  "IELTS Academic",
+  "ielts general":   "IELTS General",
+  "ielts":           "IELTS",
+  "pte academic":    "PTE Academic",
+  "pte":             "PTE",
+  "german":          "German",
+  "goethe":          "German",
+  "french":          "French",
+  "tef":             "French",
+  "tcf":             "French",
+  "spoken english":  "Spoken English",
+  "gre":             "GRE",
+  "gmat":            "GMAT",
+  "sat":             "SAT",
+  "toefl":           "TOEFL",
+  "duolingo":        "Duolingo",
+  "det":             "Duolingo",
+  "dmat":            "dMAT",
+  "d-mat":           "dMAT",
+};
+
+function extractCoachingCourse(message: string): string | null {
+  const lower = message.toLowerCase();
+  const sorted = Object.keys(COACHING_COURSES).sort((a, b) => b.length - a.length);
+  for (const keyword of sorted) {
+    if (new RegExp(`\\b${escapeRegexCoaching(keyword)}\\b`, "i").test(lower)) {
+      return COACHING_COURSES[keyword];
+    }
+  }
+  return null;
+}
+
+function extractCoachingTargetScore(message: string): string | null {
+  const pteScore = message.match(/\bpte\s*(?:score\s*)?(?:of\s*)?(\d{2,3})\b/i);
+  if (pteScore) return `PTE ${pteScore[1]}`;
+
+  const ieltsScore = message.match(/\bielts\s*(?:score\s*)?(?:of\s*)?(\d(?:\.\d)?)\b/i);
+  if (ieltsScore) return `IELTS ${ieltsScore[1]}`;
+
+  const toeflScore = message.match(/\btoefl\s*(?:score\s*)?(?:of\s*)?(\d{2,3})\b/i);
+  if (toeflScore) return `TOEFL ${toeflScore[1]}`;
+
+  const greScore = message.match(/\bgre\s*(?:score\s*)?(?:of\s*)?(\d{2,3})\b/i);
+  if (greScore) return `GRE ${greScore[1]}`;
+
+  const gmatScore = message.match(/\bgmat\s*(?:score\s*)?(?:of\s*)?(\d{2,3})\b/i);
+  if (gmatScore) return `GMAT ${gmatScore[1]}`;
+
+  const bandScore = message.match(/\bband\s*(\d(?:\.\d)?)\b/i);
+  if (bandScore) return `IELTS Band ${bandScore[1]}`;
+
+  const genericScore = message.match(/\b(?:score|target|need|want|get)\s*(?:of\s*)?(\d{2,3})\b/i);
+  if (genericScore) return genericScore[1];
+
+  return null;
+}
+
+function extractCoachingCurrentLevel(message: string): string | null {
+  if (/\bnot taken\b|\bhaven'?t taken\b|\bno (?:english )?test yet\b|\bnever taken\b/i.test(message)) {
+    return "Not taken yet";
+  }
+  if (/\bbeginner\b|\bbasic\b/i.test(message)) return "Beginner";
+  if (/\bintermediate\b|\bband\s*5\b|\bpte\s*4\d\b/i.test(message)) return "Intermediate";
+  if (/\badvanced\b|\bfluent\b|\bband\s*[7-9]\b|\bpte\s*[6-9]\d\b|\bpte\s*\d{3}\b/i.test(message)) return "Advanced";
+
+  const ieltsLevel = message.match(/\bielts\s*(?:band\s*)?(\d(?:\.\d)?)\b/i);
+  if (ieltsLevel) return `IELTS ${ieltsLevel[1]}`;
+
+  const pteLevel = message.match(/\bpte\s*(\d{2,3})\b/i);
+  if (pteLevel) return `PTE ${pteLevel[1]}`;
+
+  return null;
+}
+
+function extractPreferredTiming(message: string): string | null {
+  const lower = message.toLowerCase();
+  if (/\bmorning\b|\bearly morning\b|\b6\s*(?:am|a\.m\.)\b|\b7\s*(?:am|a\.m\.)\b|\b8\s*(?:am|a\.m\.)\b/i.test(lower)) return "Morning";
+  if (/\b(?:afternoon|post lunch)\b|\b12\s*(?:pm|noon)\b|\b1\s*(?:pm|p\.m\.)\b|\b2\s*(?:pm|p\.m\.)\b|\b3\s*(?:pm|p\.m\.)\b|\b4\s*(?:pm|p\.m\.)\b/i.test(lower)) return "Afternoon";
+  if (/\bevening\b|\bnight\b|\b5\s*(?:pm|p\.m\.)\b|\b6\s*(?:pm|p\.m\.)\b|\b7\s*(?:pm|p\.m\.)\b|\b8\s*(?:pm|p\.m\.)\b/i.test(lower)) return "Evening";
+  if (/\bweekend\b|\bsaturday\b|\bsunday\b/i.test(lower)) return "Weekend";
+  if (/\bany time\b|\bflexible\b|\bno preference\b/i.test(lower)) return "Flexible";
+  return null;
+}
+
+function extractOnlinePreference(message: string): string | null {
+  if (/\bonline\b|\bfrom home\b|\bvirtual\b|\bvia zoom\b|\bvia teams\b/i.test(message)) return "Online";
+  if (/\boffline\b|\bin[- ]?person\b|\bat (?:the )?center\b|\bat (?:the )?centre\b|\bface[- ]to[- ]face\b/i.test(message)) return "Offline";
+  if (/\bboth\b|\beither\b|\bno preference\b/i.test(message)) return "Flexible";
+  return null;
+}
+
+function extractCity(message: string): string | null {
+  const cityPatterns = [
+    /\b(?:in|from|based in|located in|living in|stay in|residing in)\s+([A-Z][a-zA-Z\s]{1,30})\b/,
+    /\b(?:city\s*(?:is|:|=)\s*)([A-Z][a-zA-Z\s]{1,30})\b/i,
+  ];
+
+  const STOPWORDS = new Set([
+    "india", "the", "and", "for", "with", "from", "want", "need",
+    "looking", "interested", "planning", "studying", "studied",
+    "online", "offline", "classes", "coaching", "course", "batch",
+  ]);
+
+  for (const pattern of cityPatterns) {
+    const match = message.match(pattern);
+    if (match?.[1]) {
+      const city = match[1].trim();
+      if (!STOPWORDS.has(city.toLowerCase()) && city.length >= 2) {
+        return city.charAt(0).toUpperCase() + city.slice(1);
+      }
+    }
+  }
+  return null;
+}
+
+function extractTargetExamDate(message: string): string | null {
+  const monthYear = message.match(
+    /\b(?:in|by|before|around|targeting?)\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s*(20\d{2})?\b/i,
+  );
+  if (monthYear) {
+    const month = monthYear[1][0].toUpperCase() + monthYear[1].slice(1).toLowerCase();
+    const year = monthYear[2] ? ` ${monthYear[2]}` : "";
+    return `${month}${year}`;
+  }
+
+  const examMonth = message.match(
+    /\bexam\s+(?:is\s+)?(?:in\s+)?(january|february|march|april|may|june|july|august|september|october|november|december)\s*(20\d{2})?\b/i,
+  );
+  if (examMonth) {
+    const month = examMonth[1][0].toUpperCase() + examMonth[1].slice(1).toLowerCase();
+    const year = examMonth[2] ? ` ${examMonth[2]}` : "";
+    return `${month}${year}`;
+  }
+
+  const withinMonths = message.match(/\bwithin\s+(\d{1,2})\s+months?\b/i);
+  if (withinMonths) return `Within ${withinMonths[1]} months`;
+
+  if (/\basap\b|\bimmediately\b|\bas soon as possible\b/i.test(message)) return "ASAP";
+
+  return null;
+}
+
+/**
+ * extractCoachingLead
+ * ────────────────────
+ * Extracts coaching-specific information from a user message.
+ * Returns a CoachingLeadContext with all detected fields.
+ * Call this when the intent router detects COACHING_LEAD.
+ */
+export function extractCoachingLead(
+  message: string,
+  previous?: CoachingLeadContext,
+): CoachingLeadContext {
+  const detected: CoachingLeadContext = {
+    course:           extractCoachingCourse(message)     ?? undefined,
+    targetScore:      extractCoachingTargetScore(message) ?? undefined,
+    currentLevel:     extractCoachingCurrentLevel(message) ?? undefined,
+    preferredTiming:  extractPreferredTiming(message)    ?? undefined,
+    onlinePreference: extractOnlinePreference(message)   ?? undefined,
+    city:             extractCity(message)               ?? undefined,
+    targetExamDate:   extractTargetExamDate(message)     ?? undefined,
+    destination:      extractCountry(message)            ?? undefined,
+    intake:           extractIntake(message)             ?? undefined,
+    budget:           extractBudget(message)             ?? undefined,
+    goal:             extractGoal(message)               ?? undefined,
+    name:             extractName(message)               ?? undefined,
+    phone:            extractPhone(message)              ?? undefined,
+    email:            extractEmail(message)              ?? undefined,
+  };
+
+  if (!previous) return detected;
+
+  return {
+    course:           detected.course           ?? previous.course,
+    targetScore:      detected.targetScore      ?? previous.targetScore,
+    currentLevel:     detected.currentLevel     ?? previous.currentLevel,
+    preferredTiming:  detected.preferredTiming  ?? previous.preferredTiming,
+    onlinePreference: detected.onlinePreference ?? previous.onlinePreference,
+    city:             detected.city             ?? previous.city,
+    targetExamDate:   detected.targetExamDate   ?? previous.targetExamDate,
+    destination:      detected.destination      ?? previous.destination,
+    intake:           detected.intake           ?? previous.intake,
+    budget:           detected.budget           ?? previous.budget,
+    goal:             detected.goal             ?? previous.goal,
+    name:             detected.name             ?? previous.name,
+    phone:            detected.phone            ?? previous.phone,
+    email:            detected.email            ?? previous.email,
+  };
+}
+
+/**
+ * CoachingInfoField
+ * ──────────────────
+ * Describes one piece of coaching information and whether it
+ * has been collected.
+ */
+export interface CoachingInfoField {
+  key:       string;
+  label:     string;
+  collected: boolean;
+  value?:    string;
+}
+
+/**
+ * COACHING_INFO_PRIORITY
+ * ──────────────────────
+ * Ordered list of coaching fields and their human-readable labels.
+ * The first missing field is the "next most useful" piece of
+ * information to ask for.
+ */
+const COACHING_INFO_PRIORITY: { key: string; label: string }[] = [
+  { key: "course",           label: "course" },
+  { key: "targetScore",      label: "target score" },
+  { key: "currentLevel",     label: "current level" },
+  { key: "preferredTiming",  label: "preferred timing" },
+  { key: "onlinePreference", label: "online/offline preference" },
+  { key: "city",             label: "city/location" },
+  { key: "destination",      label: "study-abroad destination" },
+  { key: "targetExamDate",   label: "target exam date" },
+  { key: "intake",           label: "intake" },
+  { key: "budget",           label: "budget" },
+];
+
+/**
+ * getMissingCoachingInfo
+ * ──────────────────────
+ * Returns the ordered list of coaching fields with their
+ * collection status, plus the first missing field label.
+ */
+export function getMissingCoachingInfo(
+  context: CoachingLeadContext,
+): { fields: CoachingInfoField[]; nextMissing: string | null } {
+  const fields: CoachingInfoField[] = COACHING_INFO_PRIORITY.map((item) => ({
+    key:       item.key,
+    label:     item.label,
+    collected: Boolean(context[item.key as keyof CoachingLeadContext]),
+    value:     context[item.key as keyof CoachingLeadContext] ?? undefined,
+  }));
+
+  const nextMissing = fields.find((f) => !f.collected)?.label ?? null;
+
+  return { fields, nextMissing };
+}
+
+/**
+ * buildCoachingContextString
+ * ──────────────────────────
+ * Builds a plain-text coaching context block for the AI system
+ * prompt. This tells the AI what has been collected and what to
+ * ask next, enabling natural follow-up questions.
+ */
+export function buildCoachingContextString(
+  context: CoachingLeadContext,
+): string {
+  const { fields, nextMissing } = getMissingCoachingInfo(context);
+
+  const collected = fields
+    .filter((f) => f.collected)
+    .map((f) => `- ${f.label}: ${f.value}`)
+    .join("\n");
+
+  const lines: string[] = [
+    "COACHING LEAD CONTEXT:",
+    collected || "(No information collected yet.)",
+    "",
+  ];
+
+  if (nextMissing) {
+    lines.push(
+      `NEXT ACTION: Ask for the student's ${nextMissing} in a natural, conversational way.`,
+      "Do NOT ask for multiple pieces of information at once.",
+      "Do NOT repeat information already collected above.",
+      "Be warm and helpful. If the student asks an informational question, answer it first, then gently ask for the next missing detail.",
+    );
+  } else {
+    lines.push(
+      "All key coaching details collected. Summarize what you know and offer:",
+      "1. A free demo class booking, or",
+      "2. Connecting with a counsellor for enrollment details.",
+    );
+  }
+
+  return lines.join("\n");
+}
 

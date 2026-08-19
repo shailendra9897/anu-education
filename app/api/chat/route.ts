@@ -5,7 +5,12 @@
 // ─────────────────────────────────────────────────────────────────
 
 import { NextResponse } from "next/server";
-import { ConversationSource, MessageRole } from "@prisma/client";
+import {
+  ConversationSource,
+  ConversationStatus,
+  HandoffTrigger,
+  MessageRole,
+} from "@prisma/client";
 import type { Conversation, Message } from "@prisma/client";
 import { buildPrompt } from "@/lib/chat/prompt.service";
 import prisma from "@/lib/prisma";
@@ -21,6 +26,18 @@ import { getMissingDemoDetails } from "@/lib/demo/demo.details";
 import { getDemoBookingByConversation } from "@/lib/demo/demo.service";
 import { extractStudentDetails } from "@/lib/demo/student-details.extractor";
 import { createPortalAccessRequest } from "@/lib/portal/portal.access.service";
+import { ANU_FACTS } from "@/lib/ai/systemPrompt";
+import { routeIntent } from "@/lib/chat/intent-router";
+import {
+  extractLead,
+  persistLeadContext,
+  type LeadExtractionResult,
+} from "@/lib/lead/leadExtractor";
+import {
+  extractCoachingLead,
+  buildCoachingContextString,
+  type CoachingLeadContext,
+} from "@/lib/lead/leadExtractor";
 
 // ── REQUEST / RESPONSE CONTRACT ────────────────────────────────────
 
@@ -66,6 +83,55 @@ async function getRecentMessages(
     role: m.role === MessageRole.ASSISTANT ? ("assistant" as const) : ("user" as const),
     content: m.content,
   }));
+}
+
+async function createHumanHandoff(
+  conversationId: string,
+  reason: string,
+): Promise<string> {
+  await prisma.conversation.update({
+    where: { id: conversationId },
+    data: { status: ConversationStatus.HANDED_OFF },
+  });
+
+  await prisma.handoffEvent.create({
+    data: {
+      conversationId,
+      trigger: HandoffTrigger.EXPLICIT_HUMAN_REQUEST,
+      triggerDetail: reason,
+    },
+  });
+
+  return (
+    `I’ll connect you with a human counsellor. ` +
+    `The fastest way is WhatsApp: ${ANU_FACTS.whatsappLink}`
+  );
+}
+
+function toLeadExtractionResult(
+  conversation: Conversation,
+  leadContext: {
+    goal?: string | null;
+    targetCountry?: string | null;
+    targetCourse?: string | null;
+    englishLevel?: string | null;
+    budgetRange?: string | null;
+    timeline?: string | null;
+    intake?: string | null;
+  } | null,
+): LeadExtractionResult {
+  return {
+    name: conversation.name ?? undefined,
+    phone: conversation.phone ?? undefined,
+    email: conversation.email ?? undefined,
+    country: leadContext?.targetCountry ?? undefined,
+    course: leadContext?.targetCourse ?? undefined,
+    englishLevel: leadContext?.englishLevel ?? undefined,
+    budget: leadContext?.budgetRange ?? undefined,
+    timeline: leadContext?.timeline ?? undefined,
+    intake: leadContext?.intake ?? undefined,
+    goal: leadContext?.goal as LeadExtractionResult["goal"] | undefined,
+  };
 }
 
 // ── POST HANDLER — orchestrates the full pipeline in order ────────
@@ -137,6 +203,10 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
     const pendingDemoCourse = awaitingDemoConfirmation
       ? await getPendingDemoCourse(conversation.id)
       : null;
+    const intentRoute = routeIntent({
+      message: userMessage,
+      awaitingDemoConfirmation,
+    });
 
     console.log("[DEMO DEBUG]", {
       conversationId: conversation.id,
@@ -147,6 +217,7 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
       conversationEmail: conversation.email,
       userMessage,
     });
+    console.log("[INTENT ROUTER]", intentRoute);
 
     await saveMessage(
       conversation.id,
@@ -164,6 +235,24 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
 
       updatedDemoBooking =
         await getDemoBookingByConversation(conversation.id);
+    }
+
+    if (intentRoute.intent === "HUMAN_HANDOFF") {
+      const handoffMessage = await createHumanHandoff(
+        conversation.id,
+        intentRoute.reason,
+      );
+
+      await saveMessage(
+        conversation.id,
+        MessageRole.ASSISTANT,
+        handoffMessage,
+      );
+
+      return NextResponse.json({
+        reply: handoffMessage,
+        conversationId: conversation.id,
+      });
     }
 
     if (
@@ -245,40 +334,127 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
       }
     }
 
-    const demoResult = await processDemoRequest({
-      conversationId: conversation.id,
-      message: userMessage,
-      name: conversation.name ?? undefined,
-      phone: conversation.phone ?? body.phone,
-      email: conversation.email ?? undefined,
-      awaitingConfirmation: awaitingDemoConfirmation,
-      pendingCourse: pendingDemoCourse,
-    });
-
-    if (demoResult.needsConfirmation) {
-      await saveMessage(
-        conversation.id,
-        MessageRole.ASSISTANT,
-        demoResult.message,
-      );
-
-      return NextResponse.json({
-        reply: demoResult.message,
+    if (intentRoute.intent === "DEMO") {
+      const demoResult = await processDemoRequest({
         conversationId: conversation.id,
+        message: userMessage,
+        name: conversation.name ?? undefined,
+        phone: conversation.phone ?? body.phone,
+        email: conversation.email ?? undefined,
+        awaitingConfirmation: awaitingDemoConfirmation,
+        pendingCourse: pendingDemoCourse,
       });
+
+      if (demoResult.needsConfirmation) {
+        await saveMessage(
+          conversation.id,
+          MessageRole.ASSISTANT,
+          demoResult.message,
+        );
+
+        return NextResponse.json({
+          reply: demoResult.message,
+          conversationId: conversation.id,
+        });
+      }
+
+      if (demoResult.success) {
+        await saveMessage(
+          conversation.id,
+          MessageRole.ASSISTANT,
+          demoResult.message,
+        );
+
+        return NextResponse.json({
+          reply: demoResult.message,
+          conversationId: conversation.id,
+        });
+      }
     }
 
-    if (demoResult.success) {
-      await saveMessage(
-        conversation.id,
-        MessageRole.ASSISTANT,
-        demoResult.message,
+    if (intentRoute.intent === "LEAD_QUALIFICATION") {
+      const existingLeadContext = await prisma.leadContext.findUnique({
+        where: { conversationId: conversation.id },
+        select: {
+          goal: true,
+          targetCountry: true,
+          targetCourse: true,
+          englishLevel: true,
+          budgetRange: true,
+          timeline: true,
+          intake: true,
+        },
+      });
+
+      const leadExtraction = extractLead(
+        userMessage,
+        toLeadExtractionResult(conversation, existingLeadContext),
       );
 
-      return NextResponse.json({
-        reply: demoResult.message,
-        conversationId: conversation.id,
+      await persistLeadContext(conversation.id, leadExtraction);
+    }
+
+    // ── COACHING LEAD Handling ────────────────────────────────────
+    let coachingContextStr: string | null = null;
+
+    if (intentRoute.intent === "COACHING_LEAD") {
+      const existingLeadContext = await prisma.leadContext.findUnique({
+        where: { conversationId: conversation.id },
+        select: {
+          goal: true,
+          targetCountry: true,
+          targetCourse: true,
+          englishLevel: true,
+          budgetRange: true,
+          timeline: true,
+          intake: true,
+        },
       });
+
+      const previousCoaching: CoachingLeadContext = {
+        course:           existingLeadContext?.targetCourse ?? undefined,
+        destination:      existingLeadContext?.targetCountry ?? undefined,
+        currentLevel:     existingLeadContext?.englishLevel ?? undefined,
+        budget:           existingLeadContext?.budgetRange ?? undefined,
+        intake:           existingLeadContext?.intake ?? undefined,
+        goal:             existingLeadContext?.goal ?? undefined,
+        name:             conversation.name ?? undefined,
+        phone:            conversation.phone ?? undefined,
+        email:            conversation.email ?? undefined,
+      };
+
+      const coachingExtraction = extractCoachingLead(userMessage, previousCoaching);
+
+      // Persist to existing LeadContext fields
+      const leadForPersist: LeadExtractionResult = {
+        name:         coachingExtraction.name,
+        phone:        coachingExtraction.phone,
+        email:        coachingExtraction.email,
+        country:      coachingExtraction.destination,
+        course:       coachingExtraction.course,
+        intake:       coachingExtraction.intake,
+        budget:       coachingExtraction.budget,
+        englishLevel: coachingExtraction.currentLevel ?? coachingExtraction.targetScore,
+        timeline:     coachingExtraction.targetExamDate,
+        goal:         coachingExtraction.goal as LeadExtractionResult["goal"],
+      };
+
+      await persistLeadContext(conversation.id, leadForPersist);
+
+      // Update conversation identity fields if detected
+      if (coachingExtraction.name || coachingExtraction.phone || coachingExtraction.email) {
+        conversation = await prisma.conversation.update({
+          where: { id: conversation.id },
+          data: {
+            ...(coachingExtraction.name  ? { name: coachingExtraction.name }  : {}),
+            ...(coachingExtraction.phone ? { phone: coachingExtraction.phone } : {}),
+            ...(coachingExtraction.email ? { email: coachingExtraction.email } : {}),
+          },
+        });
+      }
+
+      // Build coaching context for AI prompt
+      coachingContextStr = buildCoachingContextString(coachingExtraction);
     }
 
     // ── getRecentMessages() ───────────────────────────────────────
@@ -296,6 +472,7 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
       prompt.system,
       prompt.memory ? `\nContext / Memory:\n${prompt.memory}` : "",
       prompt.knowledge ? `\nKnowledge Context:\n${prompt.knowledge}` : "",
+      coachingContextStr ? `\n${coachingContextStr}` : "",
     ]
       .filter(Boolean)
       .join("\n\n");
