@@ -89,30 +89,45 @@ const whatsappWebhookDeps: WebhookDeps = {
 
 // ── GET — Meta webhook verification ───────────────────────────────
 
-export function GET(req: NextRequest): NextResponse {
-  const params = req.nextUrl.searchParams;
-  const result = verifyWebhookSubscription(
-    {
-      mode: params.get("hub.mode"),
-      verifyToken: params.get("hub.verify_token"),
-      challenge: params.get("hub.challenge"),
-    },
-    getWhatsAppVerifyToken()
-  );
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
 
-  if (result.ok) {
-    // Body MUST be exactly the challenge, plain text.
-    return new NextResponse(result.challenge, {
+  const mode = searchParams.get("hub.mode");
+  const token = searchParams.get("hub.verify_token");
+  const challenge = searchParams.get("hub.challenge");
+
+  console.log("[WhatsApp Webhook] verification request", {
+    hasMode: !!mode,
+    hasToken: !!token,
+    hasChallenge: !!challenge,
+    tokenMatched:
+      token === process.env.WHATSAPP_VERIFY_TOKEN,
+  });
+
+  if (
+    mode === "subscribe" &&
+    token === process.env.WHATSAPP_VERIFY_TOKEN &&
+    challenge
+  ) {
+    console.log(
+      "[WhatsApp Webhook] verification successful"
+    );
+
+    return new Response(challenge, {
       status: 200,
-      headers: { "Content-Type": "text/plain" },
+      headers: {
+        "Content-Type": "text/plain",
+      },
     });
   }
 
-  console.warn("[WhatsApp Webhook] verification failed", {
-    hasMode: Boolean(params.get("hub.mode")),
-    tokenMatched: false,
+  console.error(
+    "[WhatsApp Webhook] verification failed"
+  );
+
+  return new Response("Forbidden", {
+    status: 403,
   });
-  return new NextResponse("Forbidden", { status: 403 });
 }
 
 // ── POST — Meta WhatsApp events ───────────────────────────────────
