@@ -144,10 +144,22 @@ export function classifyChatwootMessageEvent(
   // 4. Sender must be the external contact — rejects counsellors
   //    ("user"), automation bots and system actors.
   const sender = asRecord(root.sender);
-  if (!sender || sender.type !== "contact") {
+
+  const senderType = asTrimmedString(sender?.type);
+  const senderPhone = asTrimmedString(sender?.phone_number);
+  const senderIdentifier = asTrimmedString(sender?.identifier);
+
+  const isAgentOrBot =
+    senderType === "user" || senderType === "agent_bot";
+
+  const isExternalContact =
+    !!sender &&
+    !isAgentOrBot &&
+    (!!senderPhone || !!senderIdentifier);
+
+  if (!isExternalContact) {
     return { ok: false, reason: "sender_not_contact" };
   }
-
   // 5. Text-only acceptance.
   const content = asTrimmedString(root.content);
   if (!content) return { ok: false, reason: "empty_content" };

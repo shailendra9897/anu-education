@@ -53,13 +53,24 @@ const BASE_PAYLOAD = {
   message_type: "incoming",
   private: false,
   created_at: 1755936000,
-  sender: { id: 42, type: "contact", name: "Ravi Kumar" },
-  contact: { id: 42, name: "Ravi Kumar", phone_number: "+917016497087" },
+  sender: {
+    id: 42,
+    name: "Ravi Kumar",
+    phone_number: "+917016497087",
+  },
+  contact: {
+    id: 42,
+    name: "Ravi Kumar",
+    phone_number: "+917016497087",
+  },
   conversation: {
     id: 33,
     inbox_id: 1,
     status: "open",
-    contact: { id: 42, phone_number: "+917016497087" },
+    contact: {
+      id: 42,
+      phone_number: "+917016497087",
+    },
   },
 };
 
@@ -145,13 +156,41 @@ test("rejects outgoing messages (counsellor/AI replies)", () => {
     ...BASE_PAYLOAD,
     message_type: "outgoing",
   });
-  expectIgnored("non_incoming_message")({ ...BASE_PAYLOAD, message_type: 1 });
-  expectIgnored("non_incoming_message")({ ...BASE_PAYLOAD, message_type: undefined });
+  expectIgnored("non_incoming_message")({
+    ...BASE_PAYLOAD,
+    message_type: 1,
+  });
+  expectIgnored("non_incoming_message")({
+    ...BASE_PAYLOAD,
+    message_type: undefined,
+  });
+});
+
+test("accepts Chatwoot contact webhook_data without type=contact", () => {
+  const result = classifyChatwootMessageEvent(
+    {
+      ...BASE_PAYLOAD,
+      sender: {
+        id: 42,
+        name: "Ravi Kumar",
+        phone_number: "+917016497087",
+      },
+    },
+    1
+  );
+
+  assert.equal(result.ok, true);
 });
 
 test("rejects private notes", () => {
-  expectIgnored("private_note")({ ...BASE_PAYLOAD, private: true });
-  expectIgnored("private_note")({ ...BASE_PAYLOAD, private: undefined });
+  expectIgnored("private_note")({
+    ...BASE_PAYLOAD,
+    private: true,
+  });
+  expectIgnored("private_note")({
+    ...BASE_PAYLOAD,
+    private: undefined,
+  });
 });
 
 test("rejects bot/system/counsellor senders", () => {
