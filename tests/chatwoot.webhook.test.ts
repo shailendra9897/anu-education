@@ -137,6 +137,38 @@ test("phone falls back through meta.sender then top-level contact", () => {
   assert.ok(r2.ok && r2.observed.phone === "+917016497087");
 });
 
+test("phone falls back to root.sender.phone_number", () => {
+  const payload = {
+    ...BASE_PAYLOAD,
+    contact: undefined,
+    sender: {
+      id: 42,
+      name: "Ravi Kumar",
+      type: "contact",
+      phone_number: "+919876543210",
+    },
+    conversation: { id: 33, inbox_id: 1 },
+  };
+  const result = classifyChatwootMessageEvent(payload, 1);
+  assert.ok(result.ok && result.observed.phone === "+919876543210");
+});
+
+test("phone falls back to root.sender.identifier", () => {
+  const payload = {
+    ...BASE_PAYLOAD,
+    contact: undefined,
+    sender: {
+      id: 42,
+      name: "Ravi Kumar",
+      type: "contact",
+      identifier: "919876543210",
+    },
+    conversation: { id: 33, inbox_id: 1 },
+  };
+  const result = classifyChatwootMessageEvent(payload, 1);
+  assert.ok(result.ok && result.observed.phone === "919876543210");
+});
+
 // ── classifier: explicit rejection matrix ─────────────────────────
 
 test("rejects non-message_created events incl. message_updated", () => {

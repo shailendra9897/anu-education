@@ -89,6 +89,8 @@ function asTrimmedString(value: unknown): string | null {
  *   1. conversation.contact.phone_number   (standard webhook shape)
  *   2. conversation.meta.sender.phone_number
  *   3. top-level contact.phone_number      (older payload shapes)
+ *   4. root.sender.phone_number            (sender-level fallback)
+ *   5. root.sender.identifier              (identity fallback)
  */
 function extractChatwootPhone(
   root: Record<string, unknown>,
@@ -108,9 +110,21 @@ function extractChatwootPhone(
   }
 
   const topLevelContact = asRecord(root.contact);
-  return topLevelContact
+  const topLevelPhone = topLevelContact
     ? asTrimmedString(topLevelContact.phone_number)
     : null;
+  if (topLevelPhone) return topLevelPhone;
+
+  const sender = asRecord(root.sender);
+  if (sender) {
+    const phone = asTrimmedString(sender.phone_number);
+    if (phone) return phone;
+
+    const identifier = asTrimmedString(sender.identifier);
+    if (identifier) return identifier;
+  }
+
+  return null;
 }
 
 // ── classifier ────────────────────────────────────────────────────
