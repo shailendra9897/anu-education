@@ -1,11 +1,23 @@
+---
+title: IELTS Academic
+category: English proficiency test preparation
+source: data/courses/ielts.json, data/pricing.json
+status: verified
+last_reviewed: 2026-08-25
+---
+
 # IELTS Academic
 
-**Category:** English proficiency test preparation
-**Status:** Active
-**Best for:** Study abroad, university admission, English skill evaluation
-**Accepted in:** 140+ countries and 9000+ colleges/universities worldwide
+## Overview
 
-## ANU Course Details
+- **Best for:** Study abroad, university admission, English skill evaluation
+- **Accepted in:** 140+ countries and 9000+ colleges/universities worldwide
+
+## Eligibility
+
+Open to all students preparing for IELTS Academic. No prerequisite qualifications required for enrolment.
+
+## Course Details
 
 - **Access:** 180 days for paid self-prep/champion packs
 - **Live cycle:** 8 weeks
@@ -14,10 +26,14 @@
 - **Feedback:** Expert mentor feedback, mock and practice test analysis, live doubt solving
 - **Bonus:** Champion course includes a free 4-week French live course
 
-## Batch Timings (IST)
+## Fees
 
-| Batch | Time | Duration |
-|-------|------|----------|
+See `data/pricing.json` under `prices.ielts` for current pack prices and discounts.
+
+## Timings
+
+| Batch | Time (IST) | Duration |
+|-------|------------|----------|
 | Morning Beginners | 7:30 AM - 9:30 AM | 2 hours |
 | Afternoon Beginners | 2:00 PM - 4:00 PM | 2 hours |
 | Evening Beginners | 8:30 PM - 10:30 PM | 2 hours |
@@ -25,8 +41,14 @@
 | Afternoon Advance | 2:00 PM - 5:00 PM | 3 hours |
 | Evening Advance | 8:00 PM - 11:00 PM | 3 hours |
 
-## Pricing
+## FAQs
 
-See `data/pricing.json` under `prices.ielts` for current pack prices and discounts.
+No IELTS-specific FAQs documented in source material.
 
-Source: `data/courses/ielts.json`, `data/pricing.json`
+## Important Notes
+
+- Verify current IELTS format, scoring, and test-centre availability before counselling.
+
+## Status
+
+Active course with full pricing and schedule available.

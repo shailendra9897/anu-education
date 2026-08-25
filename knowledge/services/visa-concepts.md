@@ -1,6 +1,14 @@
-# ANU Education — Visa Concepts Glossary
+---
+title: Visa Concepts Glossary
+category: Reference glossary
+source: data/shared/visa-concepts.json
+status: verified
+last_reviewed: 2026-08-25
+---
 
-Reusable visa and study-abroad概念 definitions for counselling context.
+# Visa Concepts Glossary
+
+Reusable visa and study-abroad definitions for counselling context.
 
 ## SELT
 
@@ -30,4 +38,6 @@ Fingerprint and photo collection required by many visa systems. It is usually co
 
 Visa fees, health surcharges, biometrics, service charges, and exchange-rate conversions change. Always verify against official government or visa-application-centre pages before payment.
 
-Source: `data/shared/visa-concepts.json`
+## Status
+
+Verified from ANU source material.

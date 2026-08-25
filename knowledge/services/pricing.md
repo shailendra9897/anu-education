@@ -1,7 +1,17 @@
+---
+title: ANU Education Pricing Overview
+category: Course pricing
+source: data/pricing.json
+status: verified
+last_reviewed: 2026-08-25
+---
+
 # ANU Education — Pricing Overview
 
-**Currency default:** INR
-**Tax note:** GST may apply where stated. Confirm final invoice amount with ANU Education.
+## Overview
+
+- **Currency default:** INR
+- **Tax note:** GST may apply where stated. Confirm final invoice amount with ANU Education.
 
 ## IELTS Academic Packs
 
@@ -56,19 +66,19 @@
 | Pack | Price (INR) | Duration |
 |------|-------------|----------|
 | Basic to TEF USD | 400 USD | 64 weeks |
-| Basic & A1 (Evening) | 7,500 | 150 days / 10 weeks |
-| Basic & A1 (Morning) | 7,500 | 150 days / 10 weeks |
+| Basic and A1 (Evening) | 7,500 | 150 days / 10 weeks |
+| Basic and A1 (Morning) | 7,500 | 150 days / 10 weeks |
 | A2 | 9,750 | 90 days / 7 weeks |
 | B1 | 9,750 | 90 days / 7 weeks |
 | B2 | 9,750 | 90 days / 7 weeks |
-| Basic & A1 (All Timings) | 9,750 | 150 days / 10 weeks |
-| Basic & A1 (Night) | 10,000 | 150 days / 10 weeks |
-| Basic, A1 & A2 (Evening) | 12,000 | 224 days / 16 weeks |
-| Basic, A1 & A2 (Morning) | 12,000 | 224 days / 16 weeks |
-| Basic & A1 (Weekend) | 12,000 | 150 days |
-| Basic, A1 & A2 (All Timings) | 14,250 | 224 days / 16 weeks |
-| Basic, A1 & A2 (Night) | 14,500 | 224 days / 16 weeks |
-| B1, B2 & TEF | 22,125 | 224 days / 16 weeks |
+| Basic and A1 (All Timings) | 9,750 | 150 days / 10 weeks |
+| Basic and A1 (Night) | 10,000 | 150 days / 10 weeks |
+| Basic, A1 and A2 (Evening) | 12,000 | 224 days / 16 weeks |
+| Basic, A1 and A2 (Morning) | 12,000 | 224 days / 16 weeks |
+| Basic and A1 (Weekend) | 12,000 | 150 days |
+| Basic, A1 and A2 (All Timings) | 14,250 | 224 days / 16 weeks |
+| Basic, A1 and A2 (Night) | 14,500 | 224 days / 16 weeks |
+| B1, B2 and TEF | 22,125 | 224 days / 16 weeks |
 | Basic to TEF | 34,375 | 64 weeks |
 
 ## German
@@ -76,14 +86,20 @@
 | Pack | Price (INR) | Duration |
 |------|-------------|----------|
 | Free 3-Day Demo | Free | 5 days access |
-| Basic & A1 | 7,500 | 150 days / 11 weeks |
+| Basic and A1 | 7,500 | 150 days / 11 weeks |
 | A2 | 9,750 | 90 days / 7 weeks |
 | B1 | 9,750 | 90 days / 7 weeks |
-| Basic, A1 & A2 | 12,000 | 210 days / 18 weeks |
+| Basic, A1 and A2 | 12,000 | 210 days / 18 weeks |
 | Basic to B1 | 18,750 | 308 days / 28 weeks |
 
 ## Coming Soon
 
 TOEFL, GMAT, SAT — no pricing available yet.
 
-Source: `data/pricing.json`
+## Important Notes
+
+- All prices are wallet/limited-offer pricing from source material. Confirm final retail price, GST, batch availability, and discounts with ANU Education before quoting to students.
+
+## Status
+
+Verified from ANU source material.

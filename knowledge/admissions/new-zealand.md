@@ -1,6 +1,20 @@
+---
+title: New Zealand
+category: Study abroad admissions
+source: data/countries/new-zealand.json
+status: verified
+last_reviewed: 2026-08-25
+---
+
 # New Zealand
 
-**Positioning:** Destination for tertiary, vocational, school, and English-language study with work rights depending on visa conditions.
+## Overview
+
+- **Positioning:** Destination for tertiary, vocational, school, and English-language study with work rights depending on visa conditions.
+
+## Eligibility
+
+Requires an offer of place from an approved education provider.
 
 ## Recommended Tests
 
@@ -9,13 +23,9 @@
 - TOEFL
 - Duolingo where accepted by provider
 
-## Visa Information
+## Visa Process
 
-- **Route:** Fee Paying Student Visa
-- **Fee:** NZD 850 (from amount shown by Immigration New Zealand)
-- **Processing time:** 80% within 8 weeks
-
-### Process
+**Route:** Fee Paying Student Visa
 
 1. Get an offer of place from approved education provider
 2. Prepare tuition payment evidence or ability to pay
@@ -24,21 +34,28 @@
 5. Pay fee
 6. Wait for decision/eVisa
 
-### Deadlines
+## Fees
 
-International students are strongly encouraged to apply 3 months before intended travel.
+- Fee Paying Student Visa: NZD 850
+- Processing time: 80% within 8 weeks
 
-### Funds Required
+## Funds Required
 
 - NZD 20,000 per year for tertiary/English/non-compulsory study of 1 year or more
 - NZD 1,667 per month for shorter tertiary/English/non-compulsory study
 
-### Work Rights
+## Work Rights
 
 May work up to 25 hours per week while studying and full-time in holidays, depending on visa conditions.
+
+## Important Notes
+
+- International students are strongly encouraged to apply 3 months before intended travel.
 
 ## Official Sources
 
 - https://www.immigration.govt.nz/visas/fee-paying-student-visa/
 
-Source: `data/countries/new-zealand.json`
+## Status
+
+Verified from ANU source material.

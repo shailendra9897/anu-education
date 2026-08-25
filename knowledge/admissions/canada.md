@@ -1,6 +1,20 @@
+---
+title: Canada
+category: Study abroad admissions
+source: data/countries/canada.json
+status: verified
+last_reviewed: 2026-08-25
+---
+
 # Canada
 
-**Positioning:** Popular destination for diplomas, undergraduate, postgraduate, and PR-linked pathways.
+## Overview
+
+- **Positioning:** Popular destination for diplomas, undergraduate, postgraduate, and PR-linked pathways.
+
+## Eligibility
+
+Requires admission to a designated learning institution. Provincial/territorial attestation may be required.
 
 ## Recommended Tests
 
@@ -10,14 +24,9 @@
 - Duolingo (for selected university admissions)
 - French TEF/TCF (for PR profile building)
 
-## Visa Information
+## Visa Process
 
-- **Route:** Study permit
-- **Fees:**
-  - Study permit: CAD 150
-  - Biometrics individual: CAD 85
-
-### Process
+**Route:** Study permit
 
 1. Get admission and required provincial/territorial attestation if applicable
 2. Prepare proof of funds, academic documents, SOP, passport and forms
@@ -26,12 +35,14 @@
 5. Give biometrics if required
 6. Wait for decision and passport/letter instructions
 
-### Deadlines
+## Fees
 
-Apply as early as possible after admission. Intake deadlines and attestation processes vary by province and institution.
+- Study permit: CAD 150
+- Biometrics individual: CAD 85
 
-### Notes
+## Important Notes
 
+- Apply as early as possible after admission. Intake deadlines and attestation processes vary by province and institution.
 - Visa officers assess financial sufficiency and source of funds.
 - Rules can change quickly; verify with IRCC before filing.
 
@@ -39,4 +50,6 @@ Apply as early as possible after admission. Intake deadlines and attestation pro
 
 - https://www.ircc.canada.ca/english/information/fees/fees.asp
 
-Source: `data/countries/canada.json`
+## Status
+
+Verified from ANU source material.

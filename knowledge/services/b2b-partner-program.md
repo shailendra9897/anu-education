@@ -1,6 +1,14 @@
+---
+title: ANU Education B2B Partner Program
+category: Partner program
+source: data/shared/company.json
+status: verified
+last_reviewed: 2026-08-25
+---
+
 # ANU Education — B2B Partner Program
 
-## Summary
+## Overview
 
 Partners sell ANU Education courses under their own pricing while ANU Education delivers classes, mock tests, mentor feedback, and course infrastructure.
 
@@ -16,4 +24,10 @@ Partner pays wallet price, sets retail price, and keeps the difference as profit
 - Full course infrastructure
 - No minimum volume pressure
 
-Source: `data/shared/company.json`
+## Important Notes
+
+- Confirm current wallet pricing with ANU Education before quoting to partners.
+
+## Status
+
+Verified from ANU source material.

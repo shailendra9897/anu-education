@@ -1,10 +1,22 @@
-# PTE Academic & PTE Core
+---
+title: PTE Academic and PTE Core
+category: Computer-based English proficiency test preparation
+source: data/courses/pte.json, data/pricing.json
+status: verified
+last_reviewed: 2026-08-25
+---
 
-**Category:** Computer-based English proficiency test preparation
-**Status:** Active
-**Best for:** Study abroad, Canada SDS where accepted, Australia/New Zealand/UK/USA/Canada pathways
+# PTE Academic and PTE Core
 
-## Exam Snapshot
+## Overview
+
+- **Best for:** Study abroad, Canada SDS where accepted, Australia/New Zealand/UK/USA/Canada pathways
+
+## Eligibility
+
+Open to all students preparing for PTE Academic or PTE Core. No prerequisite qualifications required for enrolment.
+
+## Exam Details
 
 - **Mode:** Computer-based only
 - **Duration:** About 2 hours
@@ -16,7 +28,7 @@
   - Reading: 29-30 minutes, 5 question types, ~18 questions
   - Listening: 30-43 minutes, 8 question types, ~20 questions
 
-## ANU Course Details
+## Course Details
 
 - **Features:** 300+ videos, 14 mock tests in Champion, 180+ practice exercises, 800+ questions, expert feedback
 - **Live class schedule:**
@@ -25,9 +37,19 @@
   - PTE Demo Batch Evening: Monday-Friday, 6:00 PM - 7:00 PM
 - **Saturday sessions:** Doubt Solving 10:00 AM - 11:00 AM; Grammar Batch 11:00 AM - 12:00 PM
 
-## Key FAQs
+## Fees
+
+See `data/pricing.json` under `prices.pte` for current pack prices and discounts.
+
+## FAQs
 
 - **Is PTE paper based?** No. PTE is available only in computer-based format.
 - **Is PTE Academic accepted for Canada SDS?** Test-centre PTE Academic with overall 60 is valid for SDS from 10 August 2023; verify current IRCC rules before counselling.
 
-Source: `data/courses/pte.json`, `data/pricing.json`
+## Important Notes
+
+- PTE Core is a separate test from PTE Academic; confirm which test the student needs before advising.
+
+## Status
+
+Active course with full pricing and schedule available.

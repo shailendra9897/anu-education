@@ -1,6 +1,20 @@
+---
+title: United States of America
+category: Study abroad admissions
+source: data/countries/usa.json
+status: verified
+last_reviewed: 2026-08-25
+---
+
 # United States of America
 
-**Positioning:** Major destination for undergraduate, master's, MBA, STEM, research and doctoral programs.
+## Overview
+
+- **Positioning:** Major destination for undergraduate, master's, MBA, STEM, research and doctoral programs.
+
+## Eligibility
+
+Requires admission to a SEVP-approved school. Student must obtain Form I-20 before applying for visa.
 
 ## Recommended Tests
 
@@ -11,13 +25,9 @@
 - GMAT
 - SAT
 
-## Visa Information
+## Visa Process
 
-- **Route:** F-1 academic student visa or M-1 vocational student visa
-- **Fee:** Nonimmigrant visa application fee for F/M — USD 185
-- **Additional costs:** SEVIS I-901 fee is separate and must be checked before payment; issuance fee may vary by nationality
-
-### Process
+**Route:** F-1 academic student visa or M-1 vocational student visa
 
 1. Get accepted by a SEVP-approved school
 2. Receive Form I-20
@@ -27,12 +37,16 @@
 6. Schedule visa interview
 7. Attend interview with required documents
 
-### Deadlines
+## Fees
 
-New F/M visas can be issued up to 365 days before the course start date. Students may not enter the USA more than 30 days before the start date.
+- Nonimmigrant visa application fee for F/M: USD 185
+- SEVIS I-901 fee is separate and must be checked before payment
+- Issuance fee may vary by nationality
 
-### Notes
+## Important Notes
 
+- New F/M visas can be issued up to 365 days before the course start date.
+- Students may not enter the USA more than 30 days before the start date.
 - Interview wait times vary by location, season and category.
 
 ## Official Sources
@@ -40,4 +54,6 @@ New F/M visas can be issued up to 365 days before the course start date. Student
 - https://travel.state.gov/content/travel/en/us-visas/study/student-visa.html
 - https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/fees/fees-visa-services.html
 
-Source: `data/countries/usa.json`
+## Status
+
+Verified from ANU source material.

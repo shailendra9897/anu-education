@@ -1,10 +1,22 @@
+---
+title: Duolingo English Test
+category: At-home English proficiency test preparation
+source: data/courses/duolingo.json, data/pricing.json
+status: verified
+last_reviewed: 2026-08-25
+---
+
 # Duolingo English Test
 
-**Category:** At-home English proficiency test preparation
-**Status:** Active
-**Best for:** University admissions, fast English test results, at-home testing
+## Overview
 
-## Exam Snapshot
+- **Best for:** University admissions, fast English test results, at-home testing
+
+## Eligibility
+
+Open to all students preparing for Duolingo English Test. No prerequisite qualifications required for enrolment.
+
+## Exam Details
 
 - **Purpose:** University admissions; not for immigration/visa in many cases
 - **Duration:** About 1 hour
@@ -12,20 +24,28 @@
 - **Score range:** 10-160 in 5-point increments
 - **Score validity:** 2 years
 - **Results:** Within 48 hours
-- **Exam fee estimate:** About USD 70 / INR 6000
+- **Exam fee estimate:** About USD 70 / INR 6,000
 - **Retakes:** Up to 3 times in any 30-day window
 - **Conducting body:** Duolingo, Inc.
 
-## ANU Course Details
+## Course Details
 
 - **Target score:** 115+
 - **Access:** 60 days
 - **Live hours:** 20 hours
 - **Mock tests:** 12
 - **Features:** 300+ grammar and vocabulary videos, 4-week live curriculum, Saturday grammar batch, free study abroad counselling, recordings for missed lectures
-- **Schedule (IST):**
-  - Duolingo Main: Monday-Friday, 7:00 PM - 8:00 PM
-  - Grammar Batch: Saturday, 11:00 AM - 12:00 PM
+
+## Fees
+
+See `data/pricing.json` under `prices.duolingo` for current pack prices and discounts.
+
+## Timings
+
+| Session | Days | Time (IST) |
+|---------|------|------------|
+| Duolingo Main | Monday-Friday | 7:00 PM - 8:00 PM |
+| Grammar Batch | Saturday | 11:00 AM - 12:00 PM |
 
 ## Country Score Guidance
 
@@ -38,4 +58,15 @@
 | Germany | 90 | 105 | Varies by university |
 | Ireland | 100 | 115 | Most universities accept DET |
 
-Source: `data/courses/duolingo.json`, `data/pricing.json`
+## FAQs
+
+No Duolingo-specific FAQs documented in source material.
+
+## Important Notes
+
+- Duolingo is not accepted for Canada SDS visa route.
+- Exam fee is an estimate; verify current Duolingo fee before counselling.
+
+## Status
+
+Active course with full pricing and schedule available.

@@ -1,3 +1,11 @@
+---
+title: AI Operating Policies
+category: AI behaviour rules
+source: data/shared/faq.json, data/shared/company.json, data/mbbs-abroad.json
+status: verified
+last_reviewed: 2026-08-25
+---
+
 # AI Operating Policies
 
 These rules govern ANU Education's AI assistant behaviour. They are derived from existing source material and operating guidelines.
@@ -26,4 +34,6 @@ For country-specific admissions or visa counselling, collect the student profile
 
 The AI should only state information present in ANU Education's source material. Where source material is incomplete or missing (e.g., MBBS country-specific details, TOEFL/GMAT/SAT course details), the AI should acknowledge the gap rather than invent information.
 
-Source: `data/shared/faq.json`, `data/shared/company.json`, `data/mbbs-abroad.json`
+## Status
+
+Verified from ANU source material.

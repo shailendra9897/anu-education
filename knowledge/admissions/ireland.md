@@ -1,6 +1,20 @@
+---
+title: Ireland
+category: Study abroad admissions
+source: data/countries/ireland.json
+status: verified
+last_reviewed: 2026-08-25
+---
+
 # Ireland
 
-**Positioning:** English-speaking EU destination for undergraduate, postgraduate, IT, business, healthcare and post-study work pathways.
+## Overview
+
+- **Positioning:** English-speaking EU destination for undergraduate, postgraduate, IT, business, healthcare and post-study work pathways.
+
+## Eligibility
+
+Requires full-time admission. Course should generally be full-time with at least 15 hours per week for eligible study routes.
 
 ## Recommended Tests
 
@@ -9,16 +23,9 @@
 - TOEFL
 - Duolingo where accepted
 
-## Visa Information
+## Visa Process
 
-- **Route:** Long Stay D Study visa (where visa-required)
-- **Fees:**
-  - Single entry: EUR 60 (INR 5,300)
-  - Multiple entry: EUR 100 (INR 9,000)
-  - Transit: EUR 25 (INR 2,225)
-- **Additional costs:** VFS/service charges may apply; Irish Residence Permit registration after arrival is commonly EUR 300
-
-### Process
+**Route:** Long Stay D Study visa (where visa-required)
 
 1. Secure full-time admission
 2. Apply online through the Irish visa system
@@ -27,13 +34,17 @@
 5. Provide biometrics if resident in India
 6. Await decision
 
-### Deadlines
+## Fees
 
-Apply well before the course start date. Processing times vary by office and season.
+- Single entry: EUR 60 (INR 5,300)
+- Multiple entry: EUR 100 (INR 9,000)
+- Transit: EUR 25 (INR 2,225)
+- VFS/service charges may apply
+- Irish Residence Permit registration after arrival is commonly EUR 300
 
-### Notes
+## Important Notes
 
-- Course should generally be full-time with at least 15 hours per week for eligible study routes.
+- Apply well before the course start date. Processing times vary by office and season.
 - Evidence of funds and private medical insurance is required.
 
 ## Official Sources
@@ -42,4 +53,6 @@ Apply well before the course start date. Processing times vary by office and sea
 - https://www.ireland.ie/en/dfa/visas-for-ireland/
 - https://www.dfa.ie/irish-embassy/india/visas/applying-for-irish-visa/
 
-Source: `data/countries/ireland.json`
+## Status
+
+Verified from ANU source material.
