@@ -4,6 +4,16 @@ category: MBA admissions test preparation
 source: data/courses/gmat.json
 status: coming_soon
 last_reviewed: 2026-08-25
+availability: coming_soon
+pricing_status: coming_soon
+demo_available: false
+pricing: null
+demo_schedule: null
+batch_schedule: null
+demo_timings: null
+batch_timings: null
+aliases: []
+tags: []
 ---
 
 # GMAT

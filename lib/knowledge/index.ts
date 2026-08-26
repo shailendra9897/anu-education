@@ -16,4 +16,6 @@ export type {
   KnowledgeRetrievalResult,
   KnowledgeSection,
   KnowledgeStatus,
+  PricingPackage,
+  ScheduleSlot,
 } from "./types";

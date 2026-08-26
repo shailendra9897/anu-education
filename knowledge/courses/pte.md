@@ -4,6 +4,80 @@ category: Computer-based English proficiency test preparation
 source: data/courses/pte.json, data/pricing.json
 status: verified
 last_reviewed: 2026-08-25
+availability: active
+pricing_status: published
+demo_available: true
+pricing:
+  - pack_id: pte-academic-trial
+    name: PTE Academic - Trial
+    price: 0
+    original_price: null
+    discount: null
+    currency: INR
+    duration: "5 days"
+  - pack_id: pte-academic-self-prep
+    name: PTE Academic - Self Prep
+    price: 2250
+    original_price: 3000
+    discount: "25%"
+    currency: INR
+    duration: "180 days"
+  - pack_id: pte-academic-live-class
+    name: PTE Academic - Live Class
+    price: 1575
+    original_price: 2100
+    discount: "25%"
+    currency: INR
+    duration: "90 days"
+  - pack_id: pte-academic-champion
+    name: PTE Academic - Champion
+    price: 3600
+    original_price: 4800
+    discount: "25%"
+    currency: INR
+    duration: "180 days"
+  - pack_id: pte-core-trial
+    name: PTE Core - Trial
+    price: 0
+    original_price: null
+    discount: null
+    currency: INR
+    duration: "5 days"
+  - pack_id: pte-core-champion-self-evaluated
+    name: PTE Core - Champion Self Evaluated
+    price: 2250
+    original_price: 3000
+    discount: "25%"
+    currency: INR
+    duration: "180 days"
+  - pack_id: pte-core-champion
+    name: PTE Core - Champion
+    price: 3600
+    original_price: 4800
+    discount: "25%"
+    currency: INR
+    duration: "180 days"
+demo_schedule:
+  - day: Monday-Friday
+    start: "6:00 PM"
+    end: "7:00 PM"
+    timezone: IST
+    label: PTE Demo Batch Evening
+batch_schedule:
+  - day: Monday-Friday
+    start: "9:00 AM"
+    end: "10:30 AM"
+    timezone: IST
+    label: PTE Academic Morning
+  - day: Monday-Friday
+    start: "8:00 PM"
+    end: "9:30 PM"
+    timezone: IST
+    label: PTE Academic Evening
+demo_timings: "Mon-Fri 6:00 PM - 7:00 PM"
+batch_timings: "Academic Morning Mon-Fri 9:00-10:30, Academic Evening Mon-Fri 8:00-9:30"
+aliases: []
+tags: []
 ---
 
 # PTE Academic and PTE Core

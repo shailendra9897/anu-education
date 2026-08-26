@@ -4,6 +4,95 @@ category: English proficiency test preparation
 source: data/courses/ielts.json, data/pricing.json
 status: verified
 last_reviewed: 2026-08-25
+availability: active
+pricing_status: published
+demo_available: true
+pricing:
+  - pack_id: ielts-trial-self-prep
+    name: IELTS Academic Self Prep - Trial
+    price: 0
+    original_price: null
+    discount: null
+    currency: INR
+    duration: "5 days"
+  - pack_id: ielts-trial-champion
+    name: IELTS Academic Champion - Trial
+    price: 0
+    original_price: null
+    discount: null
+    currency: INR
+    duration: "5 days"
+  - pack_id: ielts-self-prep
+    name: IELTS Academic - Self Prep
+    price: 1875
+    original_price: 3750
+    discount: "50%"
+    currency: INR
+    duration: "180 days"
+  - pack_id: ielts-champion-morning
+    name: IELTS Academic - Champion Morning
+    price: 5250
+    original_price: 10500
+    discount: "50%"
+    currency: INR
+    duration: "180 days"
+  - pack_id: ielts-champion-afternoon
+    name: IELTS Academic - Champion Afternoon
+    price: 5250
+    original_price: 10500
+    discount: "50%"
+    currency: INR
+    duration: "180 days"
+  - pack_id: ielts-champion-evening
+    name: IELTS Academic - Champion Evening
+    price: 5250
+    original_price: 10500
+    discount: "50%"
+    currency: INR
+    duration: "180 days"
+  - pack_id: ielts-champion-all-timings
+    name: IELTS Academic - Champion All Timings
+    price: 6375
+    original_price: 12750
+    discount: "50%"
+    currency: INR
+    duration: "180 days"
+demo_schedule: null
+batch_schedule:
+  - day: Monday-Friday
+    start: "7:30 AM"
+    end: "9:30 AM"
+    timezone: IST
+    label: Morning Beginners
+  - day: Monday-Friday
+    start: "2:00 PM"
+    end: "4:00 PM"
+    timezone: IST
+    label: Afternoon Beginners
+  - day: Monday-Friday
+    start: "8:30 PM"
+    end: "10:30 PM"
+    timezone: IST
+    label: Evening Beginners
+  - day: Monday-Friday
+    start: "7:30 AM"
+    end: "10:30 AM"
+    timezone: IST
+    label: Morning Advance
+  - day: Monday-Friday
+    start: "2:00 PM"
+    end: "5:00 PM"
+    timezone: IST
+    label: Afternoon Advance
+  - day: Monday-Friday
+    start: "8:00 PM"
+    end: "11:00 PM"
+    timezone: IST
+    label: Evening Advance
+demo_timings: null
+batch_timings: "Morning Beginners 7:30-9:30, Afternoon Beginners 2:00-4:00, Evening Beginners 8:30-10:30, Morning Advance 7:30-10:30, Afternoon Advance 2:00-5:00, Evening Advance 8:00-11:00"
+aliases: []
+tags: []
 ---
 
 # IELTS Academic

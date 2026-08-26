@@ -4,6 +4,33 @@ category: At-home English proficiency test preparation
 source: data/courses/duolingo.json, data/pricing.json
 status: verified
 last_reviewed: 2026-08-25
+availability: active
+pricing_status: published
+demo_available: null
+pricing:
+  - pack_id: duolingo-champion
+    name: Duolingo English Test Champion
+    price: 1999
+    original_price: 5000
+    discount: "60%"
+    currency: INR
+    duration: "60 days"
+demo_schedule: null
+batch_schedule:
+  - day: Monday-Friday
+    start: "7:00 PM"
+    end: "8:00 PM"
+    timezone: IST
+    label: Duolingo Main
+  - day: Saturday
+    start: "11:00 AM"
+    end: "12:00 PM"
+    timezone: IST
+    label: Grammar Batch
+demo_timings: null
+batch_timings: "Duolingo Main Mon-Fri 7:00-8:00 PM, Grammar Batch Sat 11:00-12:00"
+aliases: []
+tags: []
 ---
 
 # Duolingo English Test

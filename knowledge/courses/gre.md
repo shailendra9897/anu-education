@@ -4,6 +4,64 @@ category: Graduate admissions test preparation
 source: data/courses/gre.json, data/pricing.json
 status: verified
 last_reviewed: 2026-08-25
+availability: active
+pricing_status: published
+demo_available: true
+pricing:
+  - pack_id: gre-trial
+    name: Shorter GRE - Trial
+    price: 0
+    original_price: null
+    discount: null
+    currency: INR
+    duration: "5 days"
+  - pack_id: gre-self-prep
+    name: Shorter GRE - Self Prep
+    price: 9000
+    original_price: 12000
+    discount: "25%"
+    currency: INR
+    duration: "180 days"
+  - pack_id: gre-live-class
+    name: Shorter GRE - Live Class
+    price: 9000
+    original_price: 12000
+    discount: "25%"
+    currency: INR
+    duration: "90 days"
+  - pack_id: gre-champion
+    name: Shorter GRE - Champion
+    price: 15750
+    original_price: 21000
+    discount: "25%"
+    currency: INR
+    duration: "180 days"
+demo_schedule:
+  - day: Mon-Wed-Fri
+    start: "5:00 PM"
+    end: "6:00 PM"
+    timezone: IST
+    label: Demo
+batch_schedule:
+  - day: Monday-Friday
+    start: "7:30 PM"
+    end: "8:30 PM"
+    timezone: IST
+    label: Verbal Evening
+  - day: Monday-Friday
+    start: "8:30 PM"
+    end: "9:30 PM"
+    timezone: IST
+    label: Quants Evening
+  - day: Saturday
+    start: "11:00 AM"
+    end: "12:00 PM"
+    timezone: IST
+    label: Grammar Batch
+demo_timings: "Mon-Wed-Fri 5:00 PM - 6:00 PM"
+batch_timings: "Verbal Evening Mon-Fri 7:30-8:30, Quants Evening Mon-Fri 8:30-9:30, Grammar Batch Sat 11:00-12:00"
+aliases: []
+tags: []
 ---
 
 # Shorter GRE
