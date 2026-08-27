@@ -3,6 +3,7 @@ import {
   type KnowledgeCollection,
   type KnowledgeDocument,
 } from "./knowledge.loader";
+import { searchKnowledgeFromMarkdown } from "./md-to-legacy.adapter";
 
 export type KnowledgeSearchResult = {
   id: string;
@@ -20,6 +21,17 @@ export type KnowledgeSearchOptions = {
 const DEFAULT_SEARCH_LIMIT = 6;
 
 export async function searchKnowledge(
+  query: string,
+  options: KnowledgeSearchOptions = {},
+): Promise<KnowledgeSearchResult[]> {
+  if (process.env.ANU_KNOWLEDGE_SOURCE === "json") {
+    return searchKnowledgeJson(query, options);
+  }
+
+  return searchKnowledgeFromMarkdown(query, options);
+}
+
+async function searchKnowledgeJson(
   query: string,
   options: KnowledgeSearchOptions = {},
 ): Promise<KnowledgeSearchResult[]> {
