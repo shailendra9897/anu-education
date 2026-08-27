@@ -60,8 +60,8 @@ batch_schedule:
     label: Grammar Batch
 demo_timings: "Mon-Wed-Fri 5:00 PM - 6:00 PM"
 batch_timings: "Verbal Evening Mon-Fri 7:30-8:30, Quants Evening Mon-Fri 8:30-9:30, Grammar Batch Sat 11:00-12:00"
-aliases: []
-tags: []
+aliases: [GRE, graduate record, gre exam]
+tags: [graduate, mba, phd, masters, stem]
 ---
 
 # Shorter GRE

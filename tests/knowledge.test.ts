@@ -17,7 +17,7 @@ import { writeFile, mkdir, rm } from "node:fs/promises";
 
 import { loadMarkdownKnowledge } from "../lib/knowledge/md-loader";
 import { retrieveKnowledge, retrieveVerified } from "../lib/knowledge/md-retriever";
-import type { KnowledgeDoc, KnowledgeFrontMatter, KnowledgeStatus } from "../lib/knowledge/types";
+import type { KnowledgeDoc, KnowledgeFrontMatter, KnowledgeStatus, PricingPackage, ScheduleSlot } from "../lib/knowledge/types";
 
 const KNOWLEDGE_DIR = path.join(process.cwd(), "knowledge");
 const FIXTURE_DIR = path.join(process.cwd(), "tests", "_knowledge_fixtures");
@@ -566,9 +566,9 @@ test("aliases and tags are parsed as arrays (empty arrays for course files)", as
         doc.meta.category.toLowerCase().includes("training")) {
       assert.ok(Array.isArray(doc.meta.aliases), `${doc.relPath}: aliases should be array`);
       assert.ok(Array.isArray(doc.meta.tags), `${doc.relPath}: tags should be array`);
-      // Currently all course files have empty arrays
-      assert.equal(doc.meta.aliases!.length, 0, `${doc.relPath}: aliases should be empty`);
-      assert.equal(doc.meta.tags!.length, 0, `${doc.relPath}: tags should be empty`);
+      // Course files should have aliases and tags for retrieval
+      assert.ok(doc.meta.aliases!.length > 0, `${doc.relPath}: aliases should be populated`);
+      assert.ok(doc.meta.tags!.length > 0, `${doc.relPath}: tags should be populated`);
     }
   }
 });
@@ -1102,7 +1102,7 @@ test("IELTS pricing migrated correctly from pricing.json", async () => {
 
   for (let i = 0; i < jsonPacks.length; i++) {
     const json = jsonPacks[i];
-    const md = ielts.meta.pricing![i];
+    const md: PricingPackage = ielts.meta.pricing![i];
     assert.equal(md.pack_id, json.pack_id, `pack ${i} pack_id`);
     assert.equal(md.name, json.name, `pack ${i} name`);
     assert.equal(md.price, json.price, `pack ${i} price`);
@@ -1226,7 +1226,7 @@ test("IELTS batch_schedule migrated from ielts.json batch_timings_ist", async ()
 
   for (let i = 0; i < courseData.batch_timings_ist.length; i++) {
     const json = courseData.batch_timings_ist[i];
-    const md = ielts.meta.batch_schedule![i];
+    const md: ScheduleSlot = ielts.meta.batch_schedule![i];
     assert.equal(md.label, json.batch, `batch ${i} label`);
     assert.equal(md.timezone, "IST", `batch ${i} timezone`);
     // time is "7:30 AM - 9:30 AM" format
@@ -1450,5 +1450,459 @@ test("pricing currency defaults to INR except French USD pack", async () => {
         assert.equal(pack.currency, "INR", `${doc.relPath}: ${pack.pack_id} currency should be INR`);
       }
     }
+  }
+});
+
+// ── A2.6: Retrieval Quality Tests ─────────────────────────────────
+
+test('"IELTS fees" → IELTS ranks above generic pricing/FAQ', async () => {
+  const results = await retrieveKnowledge("IELTS fees", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const topTitles = results.slice(0, 3).map((r) => r.doc.meta.title);
+  assert.ok(
+    topTitles[0].includes("IELTS"),
+    `top result should be IELTS, got: ${topTitles[0]}`,
+  );
+  // Ensure IELTS ranks above generic pricing
+  const ieltsIdx = topTitles.findIndex((t) => t.includes("IELTS"));
+  const pricingIdx = topTitles.findIndex((t) => t.toLowerCase().includes("pricing"));
+  assert.ok(
+    ieltsIdx < pricingIdx || pricingIdx === -1,
+    "IELTS should rank above pricing",
+  );
+});
+
+test('"PTE demo class" → PTE ranks above general FAQ', async () => {
+  const results = await retrieveKnowledge("PTE demo class", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const topTitles = results.slice(0, 3).map((r) => r.doc.meta.title);
+  assert.ok(
+    topTitles[0].includes("PTE"),
+    `top result should be PTE, got: ${topTitles[0]}`,
+  );
+  // Ensure PTE ranks above FAQ
+  const pteIdx = topTitles.findIndex((t) => t.includes("PTE"));
+  const faqIdx = topTitles.findIndex((t) => t.toLowerCase().includes("frequently"));
+  assert.ok(
+    pteIdx < faqIdx || faqIdx === -1,
+    "PTE should rank above FAQ",
+  );
+});
+
+test('"USA study visa" → USA ranks above visa-concepts', async () => {
+  const results = await retrieveKnowledge("USA study visa", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const topTitles = results.slice(0, 3).map((r) => r.doc.meta.title);
+  assert.ok(
+    topTitles[0].includes("United States") || topTitles[0].includes("USA"),
+    `top result should be USA, got: ${topTitles[0]}`,
+  );
+  // Ensure USA ranks above visa-concepts
+  const usaIdx = topTitles.findIndex((t) => t.includes("United States") || t.includes("USA"));
+  const visaIdx = topTitles.findIndex((t) => t.toLowerCase().includes("visa concepts"));
+  assert.ok(
+    usaIdx < visaIdx || visaIdx === -1,
+    "USA should rank above visa-concepts",
+  );
+});
+
+test('"Canada visa fees" → Canada ranks above generic visa docs', async () => {
+  const results = await retrieveKnowledge("Canada visa fees", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const topTitles = results.slice(0, 3).map((r) => r.doc.meta.title);
+  assert.ok(
+    topTitles[0].includes("Canada"),
+    `top result should be Canada, got: ${topTitles[0]}`,
+  );
+});
+
+test('"German batch timings" → German ranks first', async () => {
+  const results = await retrieveKnowledge("German batch timings", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const topTitle = results[0].doc.meta.title;
+  assert.ok(
+    topTitle.includes("German"),
+    `top result should be German, got: ${topTitle}`,
+  );
+});
+
+test('"French course fees" → French ranks first', async () => {
+  const results = await retrieveKnowledge("French course fees", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const topTitle = results[0].doc.meta.title;
+  assert.ok(
+    topTitle.includes("French"),
+    `top result should be French, got: ${topTitle}`,
+  );
+});
+
+test('"contact ANU Education" → company ranks first', async () => {
+  const results = await retrieveKnowledge("contact ANU Education", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const topTitle = results[0].doc.meta.title;
+  assert.ok(
+    topTitle.includes("Company") || topTitle.includes("Contact"),
+    `top result should be company, got: ${topTitle}`,
+  );
+});
+
+test('"demo class" → documents with demo availability rank appropriately', async () => {
+  const results = await retrieveKnowledge("demo class", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  // Top results should include courses with demo_available or demo_schedule
+  const topDocs = results.slice(0, 3);
+  const hasDemo = topDocs.some(
+    (r) => r.doc.meta.demo_available === true || r.doc.meta.demo_schedule,
+  );
+  // At least one top result should have demo info
+  assert.ok(hasDemo, "top results should include docs with demo availability");
+});
+
+test('"batch timing" → documents with batch schedules rank appropriately', async () => {
+  const results = await retrieveKnowledge("batch timing", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  // Top results should include courses with batch_schedule
+  const topDocs = results.slice(0, 3);
+  const hasBatch = topDocs.some(
+    (r) => r.doc.meta.batch_schedule && r.doc.meta.batch_schedule.length > 0,
+  );
+  assert.ok(hasBatch, "top results should include docs with batch schedules");
+});
+
+test('generic "visa" still returns useful generic visa documents', async () => {
+  const results = await retrieveKnowledge("visa", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  // Should return visa-related docs
+  const titles = results.map((r) => r.doc.meta.title.toLowerCase());
+  const hasVisa = titles.some(
+    (t) => t.includes("visa") || t.includes("admission") || t.includes("country"),
+  );
+  assert.ok(hasVisa, "should return visa-related documents");
+});
+
+test('generic "pricing" still returns pricing information', async () => {
+  const results = await retrieveKnowledge("pricing", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  // Should return pricing docs
+  const titles = results.map((r) => r.doc.meta.title.toLowerCase());
+  const hasPricing = titles.some(
+    (t) => t.includes("pricing") || t.includes("fees"),
+  );
+  assert.ok(hasPricing, "should return pricing documents");
+});
+
+test("needs_review remains retrievable", async () => {
+  const results = await retrieveKnowledge("Dubai study visa", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const dubai = results.find((r) => r.doc.meta.title.includes("Dubai"));
+  if (dubai) {
+    assert.equal(dubai.doc.meta.status, "needs_review", "Dubai should be needs_review");
+  }
+});
+
+test("coming_soon remains excluded by default", async () => {
+  const results = await retrieveKnowledge("GMAT preparation", { knowledgeDir: KNOWLEDGE_DIR });
+
+  // GMAT is coming_soon, should not appear in default results
+  if (!("kind" in results)) {
+    for (const r of results) {
+      assert.notEqual(
+        r.doc.meta.status,
+        "coming_soon",
+        "coming_soon docs should not appear by default",
+      );
+    }
+  }
+});
+
+test("aliases improve retrieval", async () => {
+  // "ielts exam" should find IELTS via alias
+  const results = await retrieveKnowledge("ielts exam", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const hasIelts = results.some((r) => r.doc.meta.title.includes("IELTS"));
+  assert.ok(hasIelts, "should find IELTS via alias");
+});
+
+test("tags improve retrieval", async () => {
+  // "english test" should find English proficiency courses via tags
+  const results = await retrieveKnowledge("english test", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  // Should find IELTS, PTE, Duolingo (all tagged with "english test")
+  const titles = results.map((r) => r.doc.meta.title);
+  const hasEnglishTest = titles.some(
+    (t) => t.includes("IELTS") || t.includes("PTE") || t.includes("Duolingo"),
+  );
+  assert.ok(hasEnglishTest, "should find English test courses via tags");
+});
+
+test("structured pricing improves pricing queries", async () => {
+  const results = await retrieveKnowledge("IELTS fees", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const ielts = results.find((r) => r.doc.meta.title.includes("IELTS"));
+  assert.ok(ielts, "should find IELTS");
+  assert.ok(
+    ielts.doc.meta.pricing && ielts.doc.meta.pricing.length > 0,
+    "IELTS should have pricing data",
+  );
+});
+
+test("structured schedules improve timing queries", async () => {
+  const results = await retrieveKnowledge("PTE batch timings", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const pte = results.find((r) => r.doc.meta.title.includes("PTE"));
+  assert.ok(pte, "should find PTE");
+  assert.ok(
+    pte.doc.meta.batch_schedule && pte.doc.meta.batch_schedule.length > 0,
+    "PTE should have batch schedule data",
+  );
+});
+
+test("ranking is deterministic", async () => {
+  // Run the same query multiple times and verify same order
+  const query = "IELTS fees pricing";
+  const results1 = await retrieveKnowledge(query, { knowledgeDir: KNOWLEDGE_DIR });
+  const results2 = await retrieveKnowledge(query, { knowledgeDir: KNOWLEDGE_DIR });
+
+  assert.ok(!("kind" in results1) && !("kind" in results2));
+  if ("kind" in results1 || "kind" in results2) return;
+
+  assert.equal(results1.length, results2.length, "same number of results");
+  for (let i = 0; i < results1.length; i++) {
+    assert.equal(
+      results1[i].doc.relPath,
+      results2[i].doc.relPath,
+      `result ${i} should be deterministic`,
+    );
+    assert.equal(
+      results1[i].score,
+      results2[i].score,
+      `score ${i} should be deterministic`,
+    );
+  }
+});
+
+// ── A2.6.1 Regression Tests ──────────────────────────────────────
+
+test("coming_soon entity returns itself with includeComingSoon", async () => {
+  const results = await retrieveKnowledge("GMAT", {
+    knowledgeDir: KNOWLEDGE_DIR,
+    includeComingSoon: true,
+  });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const gmat = results.find((r) => r.doc.meta.title === "GMAT");
+  assert.ok(gmat, "GMAT should be in results");
+  assert.equal(gmat.doc.meta.status, "coming_soon");
+  // GMAT should be first (highest score)
+  assert.equal(results[0].doc.meta.title, "GMAT", "GMAT should rank first");
+});
+
+test("coming_soon entity returns no_match by default", async () => {
+  const results = await retrieveKnowledge("GMAT", { knowledgeDir: KNOWLEDGE_DIR });
+  // GMAT is coming_soon and should be excluded by default
+  if (!("kind" in results)) {
+    for (const r of results) {
+      assert.notEqual(r.doc.meta.status, "coming_soon");
+    }
+  }
+});
+
+test("demo class prioritizes courses with demo_available", async () => {
+  const results = await retrieveKnowledge("demo class", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  // PTE has demo_available=true, should rank first
+  assert.equal(results[0].doc.meta.title, "PTE Academic and PTE Core", "PTE should rank first for demo class");
+  assert.equal(results[0].doc.meta.demo_available, true, "PTE should have demo_available");
+});
+
+test("visa fees prioritizes country docs over pricing overview", async () => {
+  const results = await retrieveKnowledge("visa fees", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  // Country docs should rank first, not ANU Education Pricing Overview
+  const topTitles = results.slice(0, 3).map((r) => r.doc.meta.title);
+  assert.ok(
+    !topTitles.includes("ANU Education Pricing Overview"),
+    "Pricing Overview should not rank first for visa fees",
+  );
+});
+
+test("needs_review docs are retrievable", async () => {
+  const results = await retrieveKnowledge("Dubai UAE", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const dubai = results.find((r) => r.doc.meta.title.includes("Dubai"));
+  assert.ok(dubai, "Dubai should be in results");
+  assert.equal(dubai.doc.meta.status, "needs_review");
+});
+
+test("SAT and TOEFL return no_match by default", async () => {
+  for (const query of ["SAT", "TOEFL"]) {
+    const results = await retrieveKnowledge(query, { knowledgeDir: KNOWLEDGE_DIR });
+    if (!("kind" in results)) {
+      for (const r of results) {
+        assert.notEqual(r.doc.meta.status, "coming_soon", `${query}: coming_soon doc should not appear`);
+      }
+    }
+  }
+});
+
+// ── A2.6.2: Retrieval Safety (alias boundaries + coming_soon) ─────
+
+test('"discuss IELTS fees" → USA must not receive "us" alias boost', async () => {
+  const results = await retrieveKnowledge("discuss IELTS fees", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const titles = results.map((r) => r.doc.meta.title);
+  assert.ok(titles[0].includes("IELTS"), `top result should be IELTS, got: ${titles[0]}`);
+  const ieltsIdx = titles.findIndex((t) => t.includes("IELTS"));
+  const usaIdx = titles.findIndex((t) => t.includes("United States"));
+  // "us" inside "discuss" must not rank USA above IELTS
+  assert.ok(usaIdx === -1 || ieltsIdx < usaIdx, "USA should not outrank IELTS via 'us' substring");
+  assert.ok(usaIdx >= 3 || usaIdx === -1, `USA should not appear in top 3, got index ${usaIdx}`);
+});
+
+test('"discuss fees" → pricing outranks USA', async () => {
+  const results = await retrieveKnowledge("discuss fees", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const titles = results.map((r) => r.doc.meta.title);
+  const pricingIdx = titles.findIndex((t) => t.toLowerCase().includes("pricing"));
+  const usaIdx = titles.findIndex((t) => t.includes("United States"));
+  assert.ok(pricingIdx !== -1, "pricing doc should be present");
+  assert.ok(pricingIdx === 0, `pricing should rank first, got: ${titles.join(", ")}`);
+  assert.ok(usaIdx === -1 || usaIdx > pricingIdx, "pricing should outrank USA");
+});
+
+test('"determine IELTS score" → Duolingo must not receive "det" alias boost', async () => {
+  const results = await retrieveKnowledge("determine IELTS score", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  const titles = results.map((r) => r.doc.meta.title);
+  assert.ok(titles[0].includes("IELTS"), `top result should be IELTS, got: ${titles[0]}`);
+  const duolingoIdx = titles.findIndex((t) => t.includes("Duolingo"));
+  // "det" inside "determine" must not boost Duolingo into the top results
+  assert.ok(duolingoIdx >= 3 || duolingoIdx === -1, `Duolingo should not appear in top 3, got index ${duolingoIdx}`);
+});
+
+test('"US universities" → USA still matches via whole-word "us"', async () => {
+  const results = await retrieveKnowledge("US universities", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  assert.ok(
+    results[0].doc.meta.title.includes("United States"),
+    `top result should be USA, got: ${results[0].doc.meta.title}`,
+  );
+});
+
+test('"UK visa" → UK still matches via whole-word "uk"', async () => {
+  const results = await retrieveKnowledge("UK visa", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  assert.ok(
+    results[0].doc.meta.title.includes("United Kingdom"),
+    `top result should be UK, got: ${results[0].doc.meta.title}`,
+  );
+});
+
+test('"DET exam" → Duolingo still matches via whole-word "det"', async () => {
+  const results = await retrieveKnowledge("DET exam", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  assert.ok(
+    results[0].doc.meta.title.includes("Duolingo"),
+    `top result should be Duolingo, got: ${results[0].doc.meta.title}`,
+  );
+});
+
+test('"which universities accept SAT?" → retrieves verified docs, not no_match', async () => {
+  const results = await retrieveKnowledge("which universities accept SAT?", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  // USA lists SAT in Recommended Tests — an entity mention must not suppress it
+  const topTitles = results.map((r) => r.doc.meta.title);
+  assert.ok(
+    topTitles[0].includes("United States"),
+    `top result should be USA (lists SAT), got: ${topTitles[0]}`,
+  );
+  for (const r of results) {
+    assert.notEqual(r.doc.meta.status, "coming_soon", "no coming_soon doc should appear");
+    assert.notEqual(r.doc.meta.title, "SAT", "SAT course itself remains excluded");
+  }
+});
+
+test('"GMAT 700 target" → retrieves verified docs, not no_match', async () => {
+  const results = await retrieveKnowledge("GMAT 700 target", { knowledgeDir: KNOWLEDGE_DIR });
+  assert.ok(!("kind" in results), "should not be no_match");
+  if ("kind" in results) return;
+
+  for (const r of results) {
+    assert.notEqual(r.doc.meta.status, "coming_soon", "no coming_soon doc should appear");
+    assert.notEqual(r.doc.meta.title, "GMAT", "GMAT course itself remains excluded");
+  }
+});
+
+test("GMAT/SAT/TOEFL excluded by default as course docs; includeComingSoon retrieves them", async () => {
+  for (const query of ["GMAT", "SAT", "TOEFL"]) {
+    const defaultResults = await retrieveKnowledge(query, { knowledgeDir: KNOWLEDGE_DIR });
+    if (!("kind" in defaultResults)) {
+      for (const r of defaultResults) {
+        assert.notEqual(r.doc.meta.title, query, `${query} course doc must be excluded by default`);
+        assert.notEqual(r.doc.meta.status, "coming_soon", `${query}: coming_soon doc should not appear`);
+      }
+    }
+
+    const withComingSoon = await retrieveKnowledge(query, { knowledgeDir: KNOWLEDGE_DIR, includeComingSoon: true });
+    assert.ok(!("kind" in withComingSoon), `"${query}" with includeComingSoon should not be no_match`);
+    if ("kind" in withComingSoon) continue;
+    assert.ok(
+      withComingSoon.some((r) => r.doc.meta.title === query),
+      `${query} should be retrievable with includeComingSoon=true`,
+    );
+    assert.equal(withComingSoon[0].doc.meta.title, query, `${query} should rank first with includeComingSoon=true`);
   }
 });

@@ -12,8 +12,8 @@ demo_schedule: null
 batch_schedule: null
 demo_timings: null
 batch_timings: null
-aliases: []
-tags: []
+aliases: [TOEFL, toefl ibt, english test]
+tags: [english test, proficiency, usa, university]
 ---
 
 # TOEFL

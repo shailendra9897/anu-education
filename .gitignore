@@ -41,3 +41,10 @@ yarn-error.log*
 next-env.d.ts
 
 *.zip
+
+# database artifacts (runtime sqlite db + ad-hoc backups; not for version control)
+prisma/dev.db*
+
+# local docker-compose with plaintext credentials
+# NOT for version control — rotate/sanitize secrets before any future commit
+docker-compose.yml

@@ -167,8 +167,8 @@ batch_schedule:
     label: TEF/TCF Slot 1
 demo_timings: null
 batch_timings: "Basic 6:30-8:00 AM / 4:30-6:00 PM, A1 8:00-9:30 AM / 6:00-7:30 PM, A2 8:00-9:30 AM / 6:00-7:30 PM, B1 6:30-8:00 AM / 7:30-9:00 PM, B2 4:30-6:00 PM, TEF/TCF 8:00-9:30 AM"
-aliases: []
-tags: []
+aliases: [French, french language, tef, tcf, delf]
+tags: [language, france, canada pr, francophone]
 ---
 
 # French Language Coaching

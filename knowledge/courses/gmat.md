@@ -12,8 +12,8 @@ demo_schedule: null
 batch_schedule: null
 demo_timings: null
 batch_timings: null
-aliases: []
-tags: []
+aliases: [GMAT, gmat exam, management admission]
+tags: [mba, business, management, graduate]
 ---
 
 # GMAT

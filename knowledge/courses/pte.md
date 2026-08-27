@@ -76,8 +76,8 @@ batch_schedule:
     label: PTE Academic Evening
 demo_timings: "Mon-Fri 6:00 PM - 7:00 PM"
 batch_timings: "Academic Morning Mon-Fri 9:00-10:30, Academic Evening Mon-Fri 8:00-9:30"
-aliases: []
-tags: []
+aliases: [PTE, pte academic, pte core, pearson test]
+tags: [english test, proficiency, canada sds, australia]
 ---
 
 # PTE Academic and PTE Core

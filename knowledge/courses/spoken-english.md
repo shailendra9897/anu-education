@@ -70,8 +70,8 @@ batch_schedule:
     label: Advance A2 Evening
 demo_timings: null
 batch_timings: "Beginner A1 Morning 7:30-9:00, Afternoon 2:00-3:30, Evening 7:00-8:30, Advance A2 Morning 7:30-9:00, Afternoon 2:00-3:30, Evening 7:00-8:30"
-aliases: []
-tags: []
+aliases: [Spoken English, spoken, english speaking]
+tags: [english, speaking, communication, fluency]
 ---
 
 # Spoken English Champion

@@ -29,8 +29,8 @@ batch_schedule:
     label: Grammar Batch
 demo_timings: null
 batch_timings: "Duolingo Main Mon-Fri 7:00-8:00 PM, Grammar Batch Sat 11:00-12:00"
-aliases: []
-tags: []
+aliases: [Duolingo, DET, duolingo test, duolingo english]
+tags: [english test, online, at home, proficiency]
 ---
 
 # Duolingo English Test

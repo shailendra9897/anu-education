@@ -12,8 +12,8 @@ demo_schedule: null
 batch_schedule: null
 demo_timings: null
 batch_timings: null
-aliases: []
-tags: []
+aliases: [SAT, sat exam, college admission]
+tags: [undergraduate, usa, college, admission]
 ---
 
 # SAT

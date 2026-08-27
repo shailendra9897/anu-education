@@ -94,8 +94,8 @@ batch_schedule:
     label: B1 Evening
 demo_timings: "Morning 11:30 AM - 12:30 PM"
 batch_timings: "Basic 8:00-9:00 AM / 7:30-8:30 PM, A1 9:00-10:30 AM / 9:00-10:30 PM, A2 9:00-10:30 AM / 9:00-10:30 PM, B1 6:00-7:30 PM"
-aliases: []
-tags: []
+aliases: [German, german language, goethe, deutsch]
+tags: [language, germany, goethe, europe]
 ---
 
 # German Language Coaching

@@ -91,8 +91,8 @@ batch_schedule:
     label: Evening Advance
 demo_timings: null
 batch_timings: "Morning Beginners 7:30-9:30, Afternoon Beginners 2:00-4:00, Evening Beginners 8:30-10:30, Morning Advance 7:30-10:30, Afternoon Advance 2:00-5:00, Evening Advance 8:00-11:00"
-aliases: []
-tags: []
+aliases: [IELTS, ielts academic, ielts preparation, ielts exam]
+tags: [english test, proficiency, study abroad, university admission]
 ---
 
 # IELTS Academic
