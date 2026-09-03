@@ -35,6 +35,17 @@
 //                                   it is dropped deterministically
 //                                   before any stateful/AI code.
 //
+//  value.messages[] with a   → GROUP-MESSAGE GUARD (S2): a WhatsApp
+//      GROUP frame            group/community message (…@g.us identity
+//      (…@g.us / "(GROUP)")    or "(GROUP)" profile marker) is a shared
+//                            room, NOT a student thread. The event is
+//                            claimed, logged (masked), and dropped with
+//                            HTTP 200. NO conversation creation, NO
+//                            Message save, NO AI, NO outbound reply. This
+//                            prevents a group transcript — dozens of
+//                            members' names/numbers — from ever entering
+//                            a student conversation or the AI memory.
+//
 //  anything else / other fields   → UNKNOWN: logged once, ignored,
 //      HTTP 200 so Meta does not retry harmless noise.
 //
@@ -116,6 +127,7 @@ export type EventOutcome = {
     | "status_ignored"
     | "echo_ignored"
     | "self_message_ignored"
+    | "group_message_ignored"
     | "unknown_ignored";
 };
 
@@ -319,6 +331,29 @@ export async function processWebhookEvents(
         outcomes.push({
           messageId: event.messageId ?? undefined,
           action: "self_message_ignored",
+        });
+        break;
+
+      case "group_message_ignored":
+        // S2 — a WhatsApp GROUP/community frame. Shared room, NOT a
+        // student: never a conversation, never a Message row, never AI,
+        // never an outbound send. Claim is kept so Meta does not redeliver
+        // the same group event over and over; HTTP 200 so the transport is
+        // content. Logged with a masked identity only — group member names
+        // and full numbers are never logged here.
+        if (event.messageId) {
+          await claimWhatsAppMessageProcessing(event.messageId, deps.claims).catch(
+            () => {}
+          );
+        }
+        console.log("[WhatsApp Webhook] group message ignored", {
+          messageId: event.messageId ?? null,
+          from: maskPhone(event.fromWaId),
+          group: true,
+        });
+        outcomes.push({
+          messageId: event.messageId ?? undefined,
+          action: "group_message_ignored",
         });
         break;
 

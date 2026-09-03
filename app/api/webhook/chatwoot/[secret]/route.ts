@@ -26,7 +26,10 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { handleChatwootWebhookPost } from "@/lib/chatwoot/handler";
+import {
+  handleChatwootWebhookPost,
+  type ChatwootBridgeDeps,
+} from "@/lib/chatwoot/handler";
 
 export const dynamic = "force-dynamic";
 
@@ -36,9 +39,14 @@ interface RouteContext {
 
 export async function POST(
   req: NextRequest,
-  context: RouteContext
+  context: RouteContext,
+  bridgeDeps?: ChatwootBridgeDeps
 ): Promise<NextResponse> {
-  return handleChatwootWebhookPost(req, context.params?.secret);
+  return handleChatwootWebhookPost(
+    req,
+    context.params?.secret,
+    bridgeDeps
+  );
 }
 
 export async function GET(_req: NextRequest): Promise<NextResponse> {

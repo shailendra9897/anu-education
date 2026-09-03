@@ -1,16 +1,15 @@
 // FILE: tests/chatwoot.webhook.test.ts
 //
 // ─────────────────────────────────────────────────────────────────
-// CHATWOOT WEBHOOK OBSERVE-ONLY TESTS (Task 6B verification)
+// CHATWOOT WEBHOOK TESTS (classifier + handler transport + auth)
 //
 // Drives the REAL handler (lib/chatwoot/handler.ts), classifier
-// (lib/chatwoot/payload.ts) and both route controllers.
+// (lib/chatwoot/payload.ts) and both route controllers using FAKE
+// injectable bridge dependencies (no real Prisma).
 //
-// OBSERVE-ONLY GUARANTEE under test:
-//   • a global fetch GUARD throws if ANY network egress is attempted
-//     (Groq / Chatwoot API / Evolution / WhatsApp),
-//   • no prisma/database module exists anywhere in this import graph,
-//   • therefore the endpoint can observe but cannot act.
+// NETWORK GUARD: a global fetch GUARD throws if ANY network egress is
+// attempted (Groq / Chatwoot API / Evolution / WhatsApp), proving the
+// handler cannot send anything.
 //
 // Run: npx tsx tests/chatwoot.webhook.test.ts
 // ─────────────────────────────────────────────────────────────────
@@ -26,10 +25,39 @@ import {
   classifyChatwootMessageEvent,
   type ChatwootIgnoreReason,
 } from "../lib/chatwoot/payload";
+import { resetInMemoryClaimsForTests } from "../lib/chatwoot/idempotency";
 import * as basePathRoute from "../app/api/webhook/chatwoot/route";
 import * as secretPathRoute from "../app/api/webhook/chatwoot/[secret]/route";
 
 const SECRET = "test-chatwoot-webhook-secret";
+
+// ── fake injectable bridge dependencies ──────────────────────────
+function fakeBridgeDeps() {
+  return {
+    findOrCreateConversation: async ({ phone }: { phone?: string }) => ({
+      conversation: {
+        id: "conv-fake",
+        phone: phone ?? null,
+        name: null,
+      },
+      created: false,
+    }),
+    getOwnership: async () => "UNASSIGNED" as const,
+    saveUserMessage: async () => ({}),
+    updateProfileNameIfMissing: async () => ({}),
+    runAiPipeline: async (_conv: unknown, userMessage: string) =>
+      `AI reply to: ${userMessage}`,
+    sendEvolutionWhatsAppText: async (): Promise<{
+      ok: true;
+      messageId: string | null;
+    }> => ({ ok: true, messageId: "evt-x" }),
+    claims: {
+      findMarkers: async () => [],
+      insertMarker: async () => ({}),
+      deleteMarkers: async () => ({}),
+    },
+  };
+}
 
 // ── network egress guard ──────────────────────────────────────────
 const realFetch = global.fetch;
@@ -78,12 +106,16 @@ function postJson(
   body: string,
   secret: string | null = SECRET
 ): Promise<Response> {
+  // Isolate each handler call from the shared in-memory idempotency
+  // tier so transport tests are independent of prior claims.
+  resetInMemoryClaimsForTests();
   return handleChatwootWebhookPost(
     new Request("http://localhost/api/webhook/chatwoot/x", {
       method: "POST",
       body,
     }),
-    secret
+    secret,
+    fakeBridgeDeps()
   );
 }
 
@@ -264,10 +296,10 @@ test("rejects malformed payloads", () => {
 
 // ── handler: HTTP contract & auth ─────────────────────────────────
 
-test("handler returns 200 observed with exact body for accepted events", async () => {
+test("handler returns 200 replied with exact body for accepted events", async () => {
   const res = await postJson(JSON.stringify(BASE_PAYLOAD));
   assert.equal(res.status, 200);
-  assert.deepEqual(await res.json(), { ok: true, outcome: "observed" });
+  assert.deepEqual(await res.json(), { ok: true, outcome: "replied" });
 });
 
 test("handler returns 200 ignored with exact body for rejected events", async () => {
@@ -331,19 +363,25 @@ test("base route GET returns 405 and POST fails closed without secret segment", 
 });
 
 test("[secret] route POST delegates with the path secret end-to-end", async () => {
+  resetInMemoryClaimsForTests();
   const req = new Request("http://localhost/api/webhook/chatwoot/x", {
     method: "POST",
     body: JSON.stringify(BASE_PAYLOAD),
   }) as unknown as Parameters<typeof secretPathRoute.POST>[0];
 
-  const res = await secretPathRoute.POST(req, {
-    params: { secret: SECRET },
-  });
+  const res = await secretPathRoute.POST(
+    req,
+    { params: { secret: SECRET } },
+    fakeBridgeDeps()
+  );
   assert.equal(res.status, 200);
-  assert.deepEqual(await res.json(), { ok: true, outcome: "observed" });
+  assert.deepEqual(await res.json(), { ok: true, outcome: "replied" });
 
-  const bad = await secretPathRoute.POST(req, {
-    params: { secret: "nope" },
-  });
+  resetInMemoryClaimsForTests();
+  const bad = await secretPathRoute.POST(
+    req,
+    { params: { secret: "nope" } },
+    fakeBridgeDeps()
+  );
   assert.equal(bad.status, 403);
 });

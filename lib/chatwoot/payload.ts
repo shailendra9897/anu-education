@@ -25,6 +25,7 @@
 //   • private notes                → "private_note"
 //   • message_updated / other      → "unsupported_event"
 //   • bot / system / agent senders → "sender_not_contact"
+//   • WHATSAPP GROUPS (…@g.us etc) → "group_message"   (Phase 1)
 //   • foreign or missing inbox     → "inbox_mismatch"
 //   • empty / non-text content     → "empty_content"
 //
@@ -40,7 +41,8 @@ export type ChatwootIgnoreReason =
   | "private_note"
   | "sender_not_contact"
   | "empty_content"
-  | "inbox_mismatch";
+  | "inbox_mismatch"
+  | "group_message";
 
 export interface ObservedChatwootMessage {
   /** Chatwoot message id (top-level `id`). */
@@ -82,6 +84,44 @@ function asFiniteNumber(value: unknown): number | null {
 
 function asTrimmedString(value: unknown): string | null {
   return typeof value === "string" ? value.trim() : null;
+}
+
+// Phase 1 — WhatsApp GROUP identity scanner. A group/community JID is a
+// shared room, NOT a student phone number:
+//   <jid>@g.us             — WhatsApp group
+//   <jid>@g.whatsapp.net   — WhatsApp group (alternative domain)
+//   <id>@newsletter        — WhatsApp channel/community
+// If any identity field carries one of these, the message must be
+// routed as a group message and never treated as a student's 1:1.
+const GROUP_JID_RE = /@(g\.us|g\.whatsapp\.net|newsletter)$/i;
+
+function hasGroupJid(...values: Array<string | null | undefined>): boolean {
+  return values.some(
+    (value) => typeof value === "string" && GROUP_JID_RE.test(value.trim())
+  );
+}
+
+// Phase 1 — malformed/unknown sender identity guard. A Chatwoot sender
+// must resolve to a plausible WhatsApp phone. Accept a phone-like value
+// (7–15 digits, relaxed separators) or a phone JID:
+//   <digits>            |  +<digits>
+//   <digits>@s.whatsapp.net  |  <digits>@c.us
+// Anything else (e.g. "unknown", unit IDs, agent handles) is NOT a
+// usable sender identity: accepting it would fabricate a synthetic
+// phone, create a junk Conversation/Lead, and 500-loop on every retry.
+const SENDER_JID_RE = /^\+?[0-9]{7,15}(@s\.whatsapp\.net|@c\.us)?$/i;
+
+function senderIdentifierPhone(identifier: string | null): string | null {
+  if (!identifier) return null;
+  const clamped = identifier.trim();
+  if (!SENDER_JID_RE.test(clamped)) return null;
+  return clamped.replace(/@.*$/, "").replace(/^\+/, "");
+}
+
+function isUsableSenderPhone(value: string | null): boolean {
+  if (!value) return false;
+  const digitsOnly = value.replace(/\D/g, "");
+  return digitsOnly.length >= 7 && digitsOnly.length <= 15;
 }
 
 /**
@@ -166,20 +206,50 @@ export function classifyChatwootMessageEvent(
   const isAgentOrBot =
     senderType === "user" || senderType === "agent_bot";
 
+  // 4a. WhatsApp GROUP protection (Phase 1). A message that resolves to a
+  //     group JID (…@g.us / …@g.whatsapp.net / …@newsletter) anywhere in
+  //     its identity chain is a shared-room message, never a student's
+  //     1:1. This check runs BEFORE the usable-sender gate: a group member
+  //     may carry ONLY a g.us identifier, which would otherwise fail the
+  //     phone-identity gate and be misreported as sender_not_contact.
+  //     Rejecting here means a synthetic "phone" is never built,
+  //     normalized, persisted, or routed into a Conversation/Lead, and the
+  //     reason surfaces observably as "group_message".
+  const conversation = asRecord(root.conversation);
+  const convContact = conversation ? asRecord(conversation.contact) : null;
+  const convMeta = conversation ? asRecord(conversation.meta) : null;
+  const convMetaSender = convMeta ? asRecord(convMeta.sender) : null;
+  const rootContact = asRecord(root.contact);
+
+  if (
+    hasGroupJid(
+      senderPhone,
+      senderIdentifier,
+      convContact ? asTrimmedString(convContact.phone_number) : null,
+      convMetaSender ? asTrimmedString(convMetaSender.phone_number) : null,
+      rootContact ? asTrimmedString(rootContact.phone_number) : null,
+    )
+  ) {
+    return { ok: false, reason: "group_message" };
+  }
+
+  // Sender identity must be USABLE, not just present (Phase 1): a bare
+  // non-phone handle is an unknown/malformed sender, never a student.
   const isExternalContact =
     !!sender &&
     !isAgentOrBot &&
-    (!!senderPhone || !!senderIdentifier);
+    (isUsableSenderPhone(senderPhone) ||
+      senderIdentifierPhone(senderIdentifier) !== null);
 
   if (!isExternalContact) {
     return { ok: false, reason: "sender_not_contact" };
   }
+
   // 5. Text-only acceptance.
   const content = asTrimmedString(root.content);
   if (!content) return { ok: false, reason: "empty_content" };
 
   // 6. Must originate from the configured WhatsApp API-channel inbox.
-  const conversation = asRecord(root.conversation);
   const inboxId = conversation ? asFiniteNumber(conversation.inbox_id) : null;
   if (inboxId === null || inboxId !== expectedInboxId) {
     return { ok: false, reason: "inbox_mismatch" };
