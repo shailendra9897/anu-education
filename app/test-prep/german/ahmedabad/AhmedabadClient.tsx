@@ -34,31 +34,31 @@ export default function OnlineGermanAhmedabadClient() {
                 "@type": "CourseInstance",
                 courseMode: "Online",
                 courseWorkload: "PT90H",
-                offers: { "@type": "Offer", price: "8000", priceCurrency: "INR", name: "German A1" },
+                offers: { "@type": "Offer", price: "7500", priceCurrency: "INR", name: "German A1" },
               },
               {
                 "@type": "CourseInstance",
                 courseMode: "Online",
                 courseWorkload: "PT90H",
-                offers: { "@type": "Offer", price: "10000", priceCurrency: "INR", name: "German A2" },
+                offers: { "@type": "Offer", price: "9750", priceCurrency: "INR", name: "German A2" },
               },
               {
                 "@type": "CourseInstance",
                 courseMode: "Online",
                 courseWorkload: "PT120H",
-                offers: { "@type": "Offer", price: "12000", priceCurrency: "INR", name: "German B1" },
+                name: "German B1 (Contact us for pricing)",
               },
               {
                 "@type": "CourseInstance",
                 courseMode: "Online",
                 courseWorkload: "PT120H",
-                offers: { "@type": "Offer", price: "15000", priceCurrency: "INR", name: "German B2" },
+                name: "German B2 (Contact us for pricing)",
               },
               {
                 "@type": "CourseInstance",
                 courseMode: "Online",
                 courseWorkload: "PT160H",
-                offers: { "@type": "Offer", price: "18000", priceCurrency: "INR", name: "German C1" },
+                name: "German C1 (Contact us for pricing)",
               },
             ],
           }),
@@ -375,8 +375,8 @@ export default function OnlineGermanAhmedabadClient() {
               <div>
                 <h3 className="text-xl font-bold mb-3">🎯 Packages</h3>
                 <ul className="list-disc pl-5 space-y-1 text-gray-700">
-                  <li>German Basic + A1: ₹10,000</li>
-                  <li>German Basic + A1 + A2: ₹16,000</li>
+                  <li>German Basic + A1: ₹7,500</li>
+                  <li>German Basic + A1 + A2: ₹12,000</li>
                 </ul>
                 <h3 className="text-xl font-bold mt-6 mb-3">🕒 Batch Timings</h3>
                 <ul className="list-disc pl-5 space-y-1 text-gray-700">

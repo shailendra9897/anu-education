@@ -4,6 +4,11 @@ import {
   createStaff,
   type CreateStaffInput,
 } from "@/lib/staff/staff.service";
+import {
+  isAdminAuthError,
+  adminAuthErrorResponse,
+  requireAdminAuth,
+} from "@/lib/auth/admin-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +20,8 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(req: NextRequest) {
   try {
+    await requireAdminAuth(req, { role: "ADMIN" });
+
     const activeParam = req.nextUrl.searchParams.get("active");
     const role = req.nextUrl.searchParams.get("role") || undefined;
 
@@ -33,6 +40,9 @@ export async function GET(req: NextRequest) {
       staff,
     });
   } catch (error) {
+    if (isAdminAuthError(error)) {
+      return adminAuthErrorResponse(error);
+    }
     console.error("[ADMIN STAFF] GET error:", error);
     return NextResponse.json(
       { success: false, error: "Unable to load staff." },
@@ -49,6 +59,8 @@ export async function GET(req: NextRequest) {
  */
 export async function POST(req: NextRequest) {
   try {
+    await requireAdminAuth(req, { role: "ADMIN" });
+
     const body = (await req.json()) as CreateStaffInput;
 
     if (!body.name?.trim()) {
@@ -69,6 +81,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, staff }, { status: 201 });
   } catch (error: unknown) {
+    if (isAdminAuthError(error)) {
+      return adminAuthErrorResponse(error);
+    }
     const message =
       error instanceof Error ? error.message : "Unknown error";
 

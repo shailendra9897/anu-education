@@ -3,18 +3,18 @@ title: Duolingo English Test
 category: At-home English proficiency test preparation
 source: data/courses/duolingo.json, data/pricing.json
 status: verified
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-29
 availability: active
 pricing_status: published
 demo_available: null
 pricing:
   - pack_id: duolingo-champion
-    name: Duolingo English Test Champion
-    price: 1999
-    original_price: 5000
-    discount: "60%"
+    name: Duolingo English Test - Champion
+    price: 1875
+    original_price: null
+    discount: null
     currency: INR
-    duration: "60 days"
+    duration: "4 weeks / 60 days"
 demo_schedule: null
 batch_schedule:
   - day: Monday-Friday

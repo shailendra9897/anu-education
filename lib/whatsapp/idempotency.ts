@@ -129,6 +129,15 @@ export async function claimWhatsAppMessageProcessing(
     }
     await impl.insertMarker(key);
   } catch (error) {
+    // C1 — race-safe dedup via @@unique([identifier, endpoint]): if two
+    // instances insert the same new key concurrently, the loser gets a
+    // P2002 unique violation. That is NOT a DB outage — it means the
+    // message was already claimed; treat it as a duplicate, never as a
+    // fresh claim (failing open here would double-process the message).
+    if (isUniqueViolation(error)) {
+      seedMemory(claims, key, now);
+      return false;
+    }
     console.error(
       "[WhatsApp Webhook] idempotency DB tier unavailable, continuing with memory tier only",
       error instanceof Error ? error.message : error
@@ -167,6 +176,11 @@ export async function releaseWhatsAppMessageClaim(
 }
 
 // ── INTERNAL ─────────────────────────────────────────────────────
+
+/** true when the error is a Prisma P2002 unique-constraint violation. */
+function isUniqueViolation(error: unknown): boolean {
+  return (error as { code?: string } | null)?.code === "P2002";
+}
 
 function seedMemory(claims: MemoryClaims, key: string, now: number): void {
   // Opportunistic eviction of expired entries keeps the map bounded.

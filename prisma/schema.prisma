@@ -36,6 +36,54 @@ datasource db {
 }
 
 // ═════════════════════════════════════════════════════════════════
+// LEAD — canonical CRM identity (Phase 3C / C1)
+// ═════════════════════════════════════════════════════════════════
+//
+// One Lead = one real person/student, shared across the website chat
+// and WhatsApp. Each channel keeps its OWN Conversation row (channel-
+// aware, source-scoped reuse — see buildPhoneLookupWhere), but all of
+// them point at the same Lead, so the CRM can answer "does this
+// student exist?" with one canonical profile.
+//
+// Matching order (lib/lead/lead.identity.service.ts):
+//   1. normalized phone → 2. normalized email → 3. explicit Lead ID
+//   → 4. create new. phone/email both nullable here: WhatsApp inbound
+//   only ever guarantees a phone; the website only guarantees a
+//   sessionId until details are shared.
+//
+// DELIBERATELY NOT @unique on phone: real data contains repeated
+// numbers across sessions; a strict unique would force risky merges.
+// email IS @unique — one person, one mailbox — with a race-safe
+// create (P2002 → re-find). identitySource records which channel
+// created the Lead (informational only; a Lead found by phone/email
+// later is never re-labelled).
+// ═════════════════════════════════════════════════════════════════
+
+enum LeadIdentitySource {
+  WEB
+  WHATSAPP
+}
+
+model Lead {
+  id             String              @id @default(cuid())
+  name           String?
+  phone          String? // E.164, e.g. "+919428186817"
+  email          String?             @unique
+  identitySource LeadIdentitySource?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  conversations        Conversation[]
+  demoBookings         DemoBooking[]
+  portalAccessRequests PortalAccessRequest[]
+  admissionEnrollments AdmissionEnrollment[]
+
+  @@index([phone])
+  @@index([identitySource])
+}
+
+// ═════════════════════════════════════════════════════════════════
 // CONVERSATION
 // ═════════════════════════════════════════════════════════════════
 
@@ -63,6 +111,14 @@ model Conversation {
   sessionId String? @unique // web widget session token
   name      String? // captured mid-conversation once known
   email     String?
+
+  // Canonical CRM identity (C1). Nullable: anonymous web visitors keep
+  // `null` until they share a phone or email. One Lead may own MANY
+  // conversations (a WEB row and a WHATSAPP row for the same student).
+  // This is a CRM LINK ONLY — it never participates in conversation
+  // reuse (that stays phone/sessionId, source-scoped as documented).
+  leadId String?
+  lead   Lead?   @relation(fields: [leadId], references: [id], onDelete: SetNull)
 
   // Page context — which anuedu.in page the chat opened from.
   // Useful for understanding intent (e.g. opened from /test-prep/gmat
@@ -95,6 +151,7 @@ model Conversation {
   @@index([status])
   @@index([createdAt])
   @@index([assignedCounsellorId])
+  @@index([leadId])
 }
 
 // ═════════════════════════════════════════════════════════════════
@@ -125,6 +182,16 @@ model Message {
   // Token usage for cost tracking / rate-limit accounting.
   promptTokens     Int?
   completionTokens Int?
+
+  // Provider identity (C1) — the message id granted by the channel
+  // (Meta wamid / Evolution key.id / Chatwoot external id) and its
+  // delivery status. Intentionally nullable and NOT yet auto-populated:
+  // C2 (cross-channel dedup) and B4 (outbound status tracking) will
+  // write these via the same adapter seams. Absent here means
+  // "web-generated message or provider unknown".
+  providerId        String?
+  providerMessageId String?
+  providerStatus    String?
 
   createdAt DateTime @default(now())
 
@@ -220,6 +287,24 @@ enum DemoBookingStatus {
   PENDING
   CONFIRMED
   ATTENDED
+  NO_SHOW
+  CANCELLED
+}
+
+// ═════════════════════════════════════════════════════════════════
+// S6-D2-B — COUNSELLOR-CONTROLLED FREE DEMO ATTENDANCE
+//
+// Audit action taken on a DemoBooking. Only an authenticated human
+// counsellor/admin may change a booking's attendance status — NEITHER
+// the AI (which may classify a student's words as a signal) NOR the
+// student (whose text never writes these) mutate DemoBooking.status.
+// These rows are the immutable, additive audit trail behind the
+// booking's `status` field. Do NOT repurpose AdmissionEvent for
+// demo attendance — attendance truth belongs to DemoBooking.
+// ═════════════════════════════════════════════════════════════════
+enum DemoBookingEventAction {
+  MARKED_ATTENDED
+  MARKED_NO_SHOW
   CANCELLED
 }
 
@@ -227,6 +312,11 @@ model DemoBooking {
   id             String       @id @default(cuid())
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // Canonical CRM identity (C1) — the Lead this booking belongs to,
+  // resolved via the conversation. Nullable; set opportunistically.
+  leadId String?
+  lead   Lead?   @relation(fields: [leadId], references: [id], onDelete: SetNull)
 
   // Snapshotted at booking time, intentionally duplicating
   // Conversation.name/phone/email rather than reading them live —
@@ -247,13 +337,69 @@ model DemoBooking {
   // scheduled job runs more than once before preferredDate.
   reminderSentAt DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // ── S6-D2-B — COUNSELLOR-CONTROLLED DEMO ATTENDANCE ─────────────
+  // Atomic, human-verified attendance truth. Written ONLY by an
+  // authenticated counsellor/admin via the attendance service (never by
+  // AI, never by student text). Timing fields are set exactly once by
+  // the transition that applies them; they never toggle. The verified-by
+  // staff id + note are set on the same transition. The status life is
+  // audited immutably by DemoBookingEvent rows.
+  attendedAt                  DateTime?
+  noShowAt                    DateTime?
+  cancelledAt                 DateTime?
+  attendanceNote              String?
+  // The authenticated staff who verified the outcome (COUNSELLOR/ADMIN).
+  // Server-derived from StaffIdentity — never browser-supplied.
+  attendanceVerifiedByStaffId String?
+  attendanceVerifiedByStaff   Staff?    @relation("StaffDemoAttendanceVerified", fields: [attendanceVerifiedByStaffId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  events    DemoBookingEvent[]
 
   @@index([conversationId])
   @@index([phone])
   @@index([status])
   @@index([preferredDate])
+  @@index([leadId])
+  @@index([attendanceVerifiedByStaffId])
+}
+
+// ═════════════════════════════════════════════════════════════════
+// S6-D2-B — DEMO BOOKING ATTENDANCE AUDIT EVENT
+//
+// Immutable, additive audit history for every attended/no-show/cancel
+// decision. Mirrors the AdmissionEvent idempotency contract: events
+// sharing (demoBookingId, eventKey) collapse to ONE row, so concurrent
+// or repeated issuers of the SAME logical action write a single event.
+// These rows never carry AI reasoning or internal prompts.
+// ═════════════════════════════════════════════════════════════════
+model DemoBookingEvent {
+  id String @id @default(cuid())
+
+  demoBookingId String
+  demoBooking   DemoBooking @relation(fields: [demoBookingId], references: [id], onDelete: Cascade)
+
+  action DemoBookingEventAction
+
+  // Audit payload: what (action + note), who (staffId, server-derived),
+  // when (createdAt), and the status walk.
+  previousStatus DemoBookingStatus?
+  nextStatus     DemoBookingStatus
+
+  staffId String?
+  staff   Staff?  @relation("StaffDemoAttendanceAction", fields: [staffId], references: [id], onDelete: SetNull)
+
+  note String?
+
+  // Idempotency backstop — identical to AdmissionEvent.eventKey semantics.
+  eventKey String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([demoBookingId, eventKey])
+  @@index([demoBookingId, createdAt])
+  @@index([action])
 }
 
 // ═════════════════════════════════════════════════════════════════
@@ -276,10 +422,17 @@ model PortalAccessRequest {
   conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
 
   demoBookingId String?
-  studentName   String
-  email         String
-  phone         String
-  course        String?
+
+  // Canonical CRM identity (C1) — the Lead this portal request
+  // belongs to, resolved via the conversation. Nullable; set
+  // opportunistically.
+  leadId String?
+  lead   Lead?   @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  studentName String
+  email       String
+  phone       String
+  course      String?
 
   status PortalAccessStatus @default(PENDING)
 
@@ -302,6 +455,7 @@ model PortalAccessRequest {
   @@index([phone])
   @@index([status])
   @@index([demoBookingId])
+  @@index([leadId])
 }
 
 // ═════════════════════════════════════════════════════════════════
@@ -320,10 +474,177 @@ model Staff {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  conversations Conversation[] @relation("StaffConversations")
+  conversations        Conversation[]        @relation("StaffConversations")
+  admissionEnrollments AdmissionEnrollment[]
+
+  // S6-D2-B — demo attendance actions this staff member performed.
+  demoAttendanceVerified DemoBooking[]      @relation("StaffDemoAttendanceVerified")
+  demoAttendanceActions  DemoBookingEvent[] @relation("StaffDemoAttendanceAction")
 
   @@index([active])
   @@index([role])
+}
+
+// ═════════════════════════════════════════════════════════════════
+// RATE LIMIT LOG
+// Lightweight table backing lib/ai/rateLimiter.ts when Redis is
+// unavailable (dev/fallback) — production should use Redis directly
+// for speed, but this keeps a durable audit trail either way.
+// ═════════════════════════════════════════════════════════════════
+
+// ═════════════════════════════════════════════════════════════════
+// ADMISSION / CONVERSION (S6-B1)
+//
+// Canonical per-(Lead × coaching course) admission journey — the
+// S6-A audit decision, OPTION D:
+//
+//   · one AdmissionEnrollment row  = canonical CURRENT state
+//   · immutable AdmissionEvent rows = full state-transition history
+//
+// Ownership: Lead × course. NOT conversation-owned, NOT demo-owned.
+// One student may have MANY Conversations, DemoBookings and
+// PortalAccessRequests but exactly ONE admission record per course.
+// The record survives Conversation lifecycle changes — there is no
+// FK from an admission record to a conversation.
+//
+// Absence of a row = NONE (no active conversion journey). A "NONE"
+// enum state is deliberately NOT used — no row means no journey.
+// ═════════════════════════════════════════════════════════════════
+
+enum AdmissionState {
+  INTERESTED
+  COUNSELLOR_CONTACT_PENDING
+  COUNSELLOR_CONTACTED
+  FOLLOW_UP_REQUIRED
+  DOCUMENTS_PENDING
+  PAYMENT_PENDING
+  PAYMENT_VERIFICATION
+  PAYMENT_VERIFIED
+  ADMISSION_CONFIRMED
+  ADMISSION_COMPLETED
+  NOT_INTERESTED
+  LOST
+}
+
+enum AdmissionActor {
+  STUDENT
+  COUNSELLOR
+  ADMIN
+  SYSTEM
+  AI
+}
+
+enum AdmissionEventAction {
+  ENROLLMENT_CREATED
+  INTEREST_DETECTED
+  COUNSELLOR_ASSIGNED
+  COUNSELLOR_CONTACTED
+  NOTE_ADDED
+  FOLLOW_UP_REQUIRED
+  FOLLOW_UP_ATTEMPTED
+  DOCUMENTS_REQUESTED
+  PAYMENT_CLAIMED
+  PAYMENT_VERIFICATION_STARTED
+  PAYMENT_VERIFIED
+  ADMISSION_CONFIRMED
+  ADMISSION_COMPLETED
+  NOT_INTERESTED
+  LOST
+  REACTIVATED
+  SYSTEM_NOTE
+}
+
+model AdmissionEnrollment {
+  id String @id @default(cuid())
+
+  // Canonical ownership — one journey per (Lead × coaching course).
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  // Canonical coaching-course vocabulary — the SAME values as
+  // COACHING_COURSES in lib/lead/leadExtractor.ts, reused by
+  // lib/demo/demo.offer.ts and lib/lead/counsellor.priority.ts
+  // ("IELTS", "PTE", "PTE Academic", "German", "French", "GRE", ...).
+  // See lib/admission/admission.lifecycle.ts normalizeAdmissionCourse.
+  course String
+
+  state AdmissionState @default(INTERESTED)
+
+  // Counsellor ownership — nullable: an opportunity can exist before
+  // anyone is assigned. Assignment is NOT proof the student was
+  // contacted — contact is recorded only via an explicit
+  // COUNSELLOR_CONTACTED transition, which sets `contactedAt`.
+  assignedCounsellorId String?
+  assignedCounsellor   Staff?  @relation(fields: [assignedCounsellorId], references: [id], onDelete: SetNull)
+
+  // First explicit counsellor contact (set by COUNSELLOR_CONTACTED).
+  // Every other milestone (payment verified, admission confirmed,
+  // completed, lost/closed) is DERIVED from the event history, not
+  // duplicated as columns — avoids timestamp sprawl.
+  contactedAt DateTime?
+
+  // S6-F1 — the counsellor's scheduled NEXT follow-up date (nullable).
+  // THE single live "when is the follow-up" value for this canonical
+  // journey. Every set/reschedule/clear is ALSO preserved in the
+  // immutable AdmissionEvent stream (FOLLOW_UP_REQUIRED /
+  // FOLLOW_UP_ATTEMPTED events); this column is only the current derived
+  // value used by the CRM due-status (classifyFollowUpStatus) and never
+  // an edited-in-place history. Indexed for the overdue/upcoming read
+  // derivations on the counsellor queue/workspace surfaces.
+  nextFollowUpAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  events AdmissionEvent[]
+
+  // CRITICAL — the real DB-level idempotency backstop: at most one
+  // admission record per (Lead, course), even under concurrent
+  // requests. P2002 on create → resolve to the existing row
+  // (see lib/admission/admission.service.ts getOrCreateAdmissionEnrollment).
+  @@unique([leadId, course])
+  @@index([state])
+  @@index([course])
+  @@index([assignedCounsellorId])
+  @@index([updatedAt])
+  @@index([contactedAt])
+  @@index([nextFollowUpAt])
+}
+
+model AdmissionEvent {
+  id String @id @default(cuid())
+
+  admissionEnrollmentId String
+  admissionEnrollment   AdmissionEnrollment @relation(fields: [admissionEnrollmentId], references: [id], onDelete: Cascade)
+
+  action AdmissionEventAction
+
+  // Audit payload: what (action + reason), when (createdAt),
+  // who/what (actor + actorId), and the state walk
+  // (previousState → nextState; previousState is null for creation).
+  previousState AdmissionState?
+  nextState     AdmissionState
+
+  actor   AdmissionActor
+  actorId String?
+
+  reason String?
+
+  // Idempotency backstop for a LOGICAL action. Postgres unique indexes
+  // treat NULL as distinct, so events carrying `eventKey = null` (notes,
+  // repeatable occurrences) are always inserted, while events sharing
+  // (admissionEnrollmentId, eventKey) — concurrent OR sequential —
+  // collapse to ONE row. Keys are built deterministically by the pure
+  // domain module (lib/admission/admission.lifecycle.ts); callers pass
+  // a `discriminator` only when a genuinely later repeat of the same
+  // logical action must be recorded as a NEW event.
+  eventKey String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([admissionEnrollmentId, eventKey])
+  @@index([admissionEnrollmentId, createdAt])
+  @@index([action])
 }
 
 // ═════════════════════════════════════════════════════════════════
@@ -339,5 +660,14 @@ model RateLimitLog {
   endpoint   String // e.g. "/api/chat"
   createdAt  DateTime @default(now())
 
+  // Single-row-per-(identifier,endpoint) window counter (C1). The
+  // chat limiter now upserts ONE row per key and increments
+  // `requestCount` within the fixed window, instead of appending one
+  // row per request — this is what makes `@@unique` below safe (and
+  // it also makes idempotency claim inserts (wa-msg:/cw-msg: keys)
+  // race-safe: a unique violation means "already claimed").
+  requestCount Int @default(1)
+
+  @@unique([identifier, endpoint])
   @@index([identifier, endpoint, createdAt])
 }

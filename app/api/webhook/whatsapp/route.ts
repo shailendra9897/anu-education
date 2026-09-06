@@ -29,6 +29,8 @@
 //         backoff and our idempotency layer keeps it safe. ALSO used
 //         when production runs without WHATSAPP_APP_SECRET (fail-
 //         closed: unsigned production webhooks are never processed).
+//   429 → AI rate limited; nothing was saved or sent, the claim is
+//         released, and Meta redelivers with its own backoff (Phase 1).
 // ─────────────────────────────────────────────────────────────────
 
 import { NextRequest, NextResponse } from "next/server";
@@ -47,17 +49,20 @@ import {
 import { verifyWebhookSubscription } from "@/lib/whatsapp/verify";
 import { verifyMetaSignature } from "@/lib/whatsapp/signature";
 import { sendWhatsAppText } from "@/lib/whatsapp/send";
+import { checkChatRateLimit } from "@/lib/ai/rateLimiter";
 
 export const dynamic = "force-dynamic";
 
 // ── REAL DEPENDENCY WIRING ────────────────────────────────────────
 
 const whatsappWebhookDeps: WebhookDeps = {
-  findOrCreateConversation: (input) =>
-    findOrCreateConversation({
+  findOrCreateConversation: async (input) => {
+    const result = await findOrCreateConversation({
       ...input,
       source: input.source as ConversationSource,
-    }),
+    });
+    return { conversation: result.conversation, created: result.created };
+  },
 
   getOwnership: (conversationId: string) =>
     getConversationOwnership(conversationId),
@@ -85,6 +90,19 @@ const whatsappWebhookDeps: WebhookDeps = {
     runAnuAiPipelineForWhatsApp(conversation as Conversation, userMessage),
 
   sendText: (phone: string, text: string) => sendWhatsAppText(phone, text),
+
+  // Phase 1 — shared AI rate limiter (the same one the website /api/chat
+  // route uses). Keyed per phone (the WhatsApp sender) AND per
+  // conversation, so a burst of inbound traffic cannot exhaust the Groq
+  // TPM budget. When limited, the webhook service defers the message and
+  // answers 429 so Meta redelivers with its own natural backoff.
+  checkRateLimit: async (conversationId: string, phone: string | null) => {
+    const result = await checkChatRateLimit({
+      conversationId,
+      ip: phone ?? undefined,
+    });
+    return result.limited;
+  },
 };
 
 // ── GET — Meta webhook verification ───────────────────────────────

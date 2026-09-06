@@ -3,116 +3,53 @@ title: French Language Coaching
 category: Language training and TEF/TCF preparation
 source: data/courses/french.json, data/pricing.json
 status: verified
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-29
 availability: active
 pricing_status: published
 demo_available: null
 pricing:
-  - pack_id: french-basic-to-tef-usd
-    name: French Basic to TEF USD
-    price: 400
-    original_price: null
-    discount: null
-    currency: USD
-    duration: "64 weeks"
-  - pack_id: french-basic-a1-evening
-    name: French Basic & A1 - Evening
+  - pack_id: french-basic-a1-morning-evening
+    name: French - Basic & A1 (Morning / Evening)
     price: 7500
     original_price: null
     discount: null
     currency: INR
-    duration: "150 days / 10 weeks"
-  - pack_id: french-basic-a1-morning
-    name: French Basic & A1 - Morning
-    price: 7500
-    original_price: null
-    discount: null
-    currency: INR
-    duration: "150 days / 10 weeks"
-  - pack_id: french-a2
-    name: French A2
-    price: 9750
-    original_price: null
-    discount: null
-    currency: INR
-    duration: "90 days / 7 weeks"
-  - pack_id: french-b1
-    name: French B1
-    price: 9750
-    original_price: null
-    discount: null
-    currency: INR
-    duration: "90 days / 7 weeks"
-  - pack_id: french-b2
-    name: French B2
-    price: 9750
-    original_price: null
-    discount: null
-    currency: INR
-    duration: "90 days / 7 weeks"
+    duration: "11 weeks / 150 days"
   - pack_id: french-basic-a1-all-timings
-    name: French Basic & A1 - All Timings
+    name: French - Basic & A1 (All Timings)
     price: 9750
     original_price: null
     discount: null
     currency: INR
-    duration: "150 days / 10 weeks"
-  - pack_id: french-basic-a1-night
-    name: French Basic & A1 - Night
-    price: 10000
-    original_price: null
-    discount: null
-    currency: INR
-    duration: "150 days / 10 weeks"
-  - pack_id: french-basic-a1-a2-evening
-    name: French Basic, A1 & A2 - Evening
+    duration: "11 weeks / 150 days"
+  - pack_id: french-basic-a1-a2-morning-evening
+    name: French - Basic, A1 & A2 (Morning / Evening)
     price: 12000
     original_price: null
     discount: null
     currency: INR
-    duration: "224 days / 16 weeks"
-  - pack_id: french-basic-a1-a2-morning
-    name: French Basic, A1 & A2 - Morning
-    price: 12000
-    original_price: null
-    discount: null
-    currency: INR
-    duration: "224 days / 16 weeks"
-  - pack_id: french-basic-a1-weekend
-    name: French Basic & A1 - Weekend
-    price: 12000
-    original_price: null
-    discount: null
-    currency: INR
-    duration: "150 days"
+    duration: "18 weeks / 210 days"
   - pack_id: french-basic-a1-a2-all-timings
-    name: French Basic, A1 & A2 - All Timings
+    name: French - Basic, A1 & A2 (All Timings)
     price: 14250
     original_price: null
     discount: null
     currency: INR
-    duration: "224 days / 16 weeks"
-  - pack_id: french-basic-a1-a2-night
-    name: French Basic, A1 & A2 - Night
-    price: 14500
+    duration: "18 weeks / 210 days"
+  - pack_id: french-basic-a1-b2
+    name: French - Basic, A1-B2
+    price: 28750
     original_price: null
     discount: null
     currency: INR
-    duration: "224 days / 16 weeks"
-  - pack_id: french-b1-b2-tef
-    name: French B1, B2 & TEF
-    price: 22125
+    duration: "32 weeks / 42 weeks"
+  - pack_id: french-a2-b1-b2
+    name: French - A2 / B1 / B2
+    price: 9750
     original_price: null
     discount: null
     currency: INR
-    duration: "224 days / 16 weeks"
-  - pack_id: french-basic-to-tef
-    name: French Basic to TEF
-    price: 34375
-    original_price: null
-    discount: null
-    currency: INR
-    duration: "64 weeks"
+    duration: "7 weeks / 180 days"
 demo_schedule: null
 batch_schedule:
   - day: Monday-Friday

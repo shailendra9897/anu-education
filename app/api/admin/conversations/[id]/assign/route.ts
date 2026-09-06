@@ -3,6 +3,11 @@ import {
   assignCounsellor,
   releaseCounsellor,
 } from "@/lib/staff/assignment.service";
+import {
+  isAdminAuthError,
+  adminAuthErrorResponse,
+  requireAdminAuth,
+} from "@/lib/auth/admin-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +25,8 @@ export async function POST(
   context: { params: Promise<{ id: string }> },
 ) {
   try {
+    await requireAdminAuth(req);
+
     const { id } = await context.params;
     const body = (await req.json()) as { staffId?: string | null };
 
@@ -46,6 +53,9 @@ export async function POST(
 
     return NextResponse.json({ success: true, conversation });
   } catch (error: unknown) {
+    if (isAdminAuthError(error)) {
+      return adminAuthErrorResponse(error);
+    }
     const message =
       error instanceof Error ? error.message : "Unknown error";
 

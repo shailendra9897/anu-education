@@ -26,7 +26,7 @@ last_reviewed: 2026-08-25
 |---------|---------|
 | Email | info@anuedu.in |
 | WhatsApp (primary) | +91 94281 86817 |
-| WhatsApp (course details) | +91 7016497087 |
+| WhatsApp (course details) | +91 94281 86817 |
 | Partner desk | +91 94281 86817 |
 | Website | www.anuedu.in |
 

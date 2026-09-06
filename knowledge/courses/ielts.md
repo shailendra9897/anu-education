@@ -3,60 +3,67 @@ title: IELTS Academic
 category: English proficiency test preparation
 source: data/courses/ielts.json, data/pricing.json
 status: verified
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-29
 availability: active
 pricing_status: published
 demo_available: true
 pricing:
-  - pack_id: ielts-trial-self-prep
-    name: IELTS Academic Self Prep - Trial
-    price: 0
-    original_price: null
-    discount: null
-    currency: INR
-    duration: "5 days"
-  - pack_id: ielts-trial-champion
-    name: IELTS Academic Champion - Trial
-    price: 0
-    original_price: null
-    discount: null
-    currency: INR
-    duration: "5 days"
-  - pack_id: ielts-self-prep
+  - pack_id: ielts-academic-self-prep
     name: IELTS Academic - Self Prep
     price: 1875
-    original_price: 3750
-    discount: "50%"
+    original_price: null
+    discount: null
     currency: INR
     duration: "180 days"
-  - pack_id: ielts-champion-morning
-    name: IELTS Academic - Champion Morning
+  - pack_id: ielts-academic-champion-morning
+    name: IELTS Academic - Champion (Morning)
     price: 5250
-    original_price: 10500
-    discount: "50%"
+    original_price: null
+    discount: null
     currency: INR
-    duration: "180 days"
-  - pack_id: ielts-champion-afternoon
-    name: IELTS Academic - Champion Afternoon
+    duration: "8 weeks / 180 days"
+  - pack_id: ielts-academic-champion-afternoon
+    name: IELTS Academic - Champion (Afternoon)
     price: 5250
-    original_price: 10500
-    discount: "50%"
+    original_price: null
+    discount: null
     currency: INR
-    duration: "180 days"
-  - pack_id: ielts-champion-evening
-    name: IELTS Academic - Champion Evening
+    duration: "8 weeks / 180 days"
+  - pack_id: ielts-academic-champion-evening
+    name: IELTS Academic - Champion (Evening)
     price: 5250
-    original_price: 10500
-    discount: "50%"
+    original_price: null
+    discount: null
     currency: INR
-    duration: "180 days"
-  - pack_id: ielts-champion-all-timings
-    name: IELTS Academic - Champion All Timings
+    duration: "8 weeks / 180 days"
+  - pack_id: ielts-academic-champion-all-timings
+    name: IELTS Academic - Champion (All Timings)
     price: 6375
-    original_price: 12750
-    discount: "50%"
+    original_price: null
+    discount: null
     currency: INR
-    duration: "180 days"
+    duration: "8 weeks / 180 days"
+  - pack_id: ielts-academic-reading-marathon
+    name: IELTS Academic - Reading Marathon
+    price: 3000
+    original_price: null
+    discount: null
+    currency: INR
+    duration: "4 weeks / 45 days"
+  - pack_id: ielts-academic-writing-marathon
+    name: IELTS Academic - Writing Marathon
+    price: 3000
+    original_price: null
+    discount: null
+    currency: INR
+    duration: "4 weeks / 45 days"
+  - pack_id: ielts-academic-speaking-marathon
+    name: IELTS Academic - Speaking Marathon
+    price: 3000
+    original_price: null
+    discount: null
+    currency: INR
+    duration: "4 weeks / 45 days"
 demo_schedule: null
 batch_schedule:
   - day: Monday-Friday

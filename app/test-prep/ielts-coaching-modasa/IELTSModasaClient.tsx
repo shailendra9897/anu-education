@@ -4,7 +4,7 @@
 //
 // AUDIT FIXES APPLIED (June 2026):
 //   ✅ Champion Course is now DEFAULT tab (was Self Prep)
-//   ✅ Course fees shown: "Starting ₹2,000 · Champion from ₹3,500"
+//   ✅ Course fees shown: "Starting ₹1,875 · Champion from ₹5,250" (aligned to price master)
 //   ✅ 3 student testimonials added with band score + city
 //   ✅ Google Review CTA added near stats bar
 //   ✅ IELTS vs PTE comparison section added (new traffic keyword)
@@ -59,7 +59,7 @@ const faqs = [
   },
   {
     q: "What IELTS courses are available at ANU Education Modasa?",
-    a: "ANU Education Modasa offers two IELTS Academic online courses: (1) Self Preparation Course (starting ₹2,000 + GST) — 60 practice tests, 15 full-length timed mock tests, 300+ grammar/vocabulary/spelling videos, 20 hours of foundation video lectures, expert mentor feedback, bonus Saturday test analysis and Sunday doubt-solving sessions, 6-month login access, 5-day free trial. (2) Champion Course (from ₹3,500 + GST) — everything in Self Prep PLUS daily live classes in Morning, Afternoon, and Evening batches, separate Beginner (40 hrs) and Advanced (60 hrs) batches, 8-week structured content cycle, Saturday grammar sessions, and FREE 4-week French Language live course. Both courses also cover IELTS General Training preparation on request.",
+    a: "ANU Education Modasa offers two IELTS Academic online courses: (1) Self Preparation Course (starting ₹1,875 + GST) — 60 practice tests, 15 full-length timed mock tests, 300+ grammar/vocabulary/spelling videos, 20 hours of foundation video lectures, expert mentor feedback, bonus Saturday test analysis and Sunday doubt-solving sessions, 6-month login access, 5-day free trial. (2) Champion Course (from ₹5,250 + GST) — everything in Self Prep PLUS daily live classes in Morning, Afternoon, and Evening batches, separate Beginner (40 hrs) and Advanced (60 hrs) batches, 8-week structured content cycle, Saturday grammar sessions, and FREE 4-week French Language live course. Both courses also cover IELTS General Training preparation on request.",
   },
   {
     q: "What batch timings are available for IELTS coaching in Modasa?",
@@ -113,7 +113,7 @@ export default function IELTSModasaClient() {
     {
       id: 1, name: "Self Preparation Course",
       tag: "Self-Paced + Bonus Live Sessions",
-      price: "Starting ₹2,000 + GST",
+      price: "Starting ₹1,875 + GST",
       badge: "bg-blue-700", border: "border-blue-200", highlight: false,
       rows: [
         ["English Assessment Test", "✅"],
@@ -134,7 +134,7 @@ export default function IELTSModasaClient() {
     {
       id: 2, name: "Champion Course",
       tag: "Live Classes · Best Value · FREE French Course",
-      price: "From ₹3,500 + GST",
+      price: "From ₹5,250 + GST",
       badge: "bg-green-700", border: "border-green-300", highlight: true,
       rows: [
         ["English Assessment Test", "✅"],
@@ -199,8 +199,8 @@ export default function IELTSModasaClient() {
           inLanguage: "en",
           coursePrerequisites: "No prior preparation needed. Beginner batch starts from basics.",
           offers: [
-            { "@type": "Offer", name: "Self Preparation Course", priceCurrency: "INR", price: "2000", description: "6-month access, 15 mock tests, 60 practice tests, no live classes" },
-            { "@type": "Offer", name: "Champion Course", priceCurrency: "INR", price: "3500", description: "6-month access, 15 mock tests, 60 practice tests, daily live classes, FREE French course" },
+{ "@type": "Offer", name: "Self Preparation Course", priceCurrency: "INR", price: "1875", description: "6-month access, 15 mock tests, 60 practice tests, no live classes" },
+          { "@type": "Offer", name: "Champion Course", priceCurrency: "INR", price: "5250", description: "6-month access, 15 mock tests, 60 practice tests, daily live classes, FREE French course" },
           ],
           hasCourseInstance: [
             { "@type": "CourseInstance", name: "Beginner's Batch – Modasa", courseMode: ["Online","Blended"], location: { "@type": "Place", name: "ANU Education, Modasa", address: { "@type": "PostalAddress", addressLocality: "Modasa", addressRegion: "Gujarat", addressCountry: "IN" } } },
@@ -611,7 +611,7 @@ export default function IELTSModasaClient() {
                     ["Canada immigration", "Accepted (IELTS General)", "PTE 60 = Canada SDS accepted ✅"],
                     ["Australia PR points", "Accepted", "65 = Competent · 79 = Proficient ✅"],
                     ["Exam fee (India)", "~₹18,000", "~₹18,000"],
-                    ["ANU Education teaches", "✅ Full batches", "✅ 4 course packs from ₹2,000"],
+                    ["ANU Education teaches", "✅ Full batches", "✅ 4 course packs from ₹1,313"],
                   ].map(([factor, ielts, pte], i) => (
                     <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-indigo-50/40"}>
                       <td className="px-3 py-2 font-medium text-gray-700 text-xs">{factor}</td>

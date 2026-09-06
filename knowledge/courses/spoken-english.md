@@ -3,39 +3,18 @@ title: Spoken English Champion
 category: Communication and English fluency training
 source: data/courses/spoken-english.json, data/pricing.json
 status: verified
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-29
 availability: active
 pricing_status: published
 demo_available: null
 pricing:
-  - pack_id: spoken-trial
-    name: Spoken English Champion - Trial
-    price: 0
+  - pack_id: spoken-english-champion
+    name: Spoken English - Champion
+    price: 3000
     original_price: null
     discount: null
     currency: INR
-    duration: null
-  - pack_id: spoken-study-plan
-    name: Spoken English Study Plan
-    price: 750
-    original_price: 1000
-    discount: "25%"
-    currency: INR
-    duration: null
-  - pack_id: spoken-champion-self-evaluated
-    name: Champion Self Evaluated
-    price: 1575
-    original_price: 2100
-    discount: "25%"
-    currency: INR
-    duration: "180 days"
-  - pack_id: spoken-champion
-    name: Spoken English - Champion
-    price: 3600
-    original_price: 4800
-    discount: "25%"
-    currency: INR
-    duration: "180 days"
+    duration: "10 weeks / 180 days"
 demo_schedule: null
 batch_schedule:
   - day: Monday-Friday

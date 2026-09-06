@@ -3,58 +3,37 @@ title: PTE Academic and PTE Core
 category: Computer-based English proficiency test preparation
 source: data/courses/pte.json, data/pricing.json
 status: verified
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-29
 availability: active
 pricing_status: published
 demo_available: true
 pricing:
-  - pack_id: pte-academic-trial
-    name: PTE Academic - Trial
-    price: 0
-    original_price: null
-    discount: null
-    currency: INR
-    duration: "5 days"
-  - pack_id: pte-academic-self-prep
-    name: PTE Academic - Self Prep
-    price: 2250
-    original_price: 3000
-    discount: "25%"
-    currency: INR
-    duration: "180 days"
   - pack_id: pte-academic-live-class
     name: PTE Academic - Live Class
-    price: 1575
-    original_price: 2100
-    discount: "25%"
-    currency: INR
-    duration: "90 days"
-  - pack_id: pte-academic-champion
-    name: PTE Academic - Champion
-    price: 3600
-    original_price: 4800
-    discount: "25%"
-    currency: INR
-    duration: "180 days"
-  - pack_id: pte-core-trial
-    name: PTE Core - Trial
-    price: 0
+    price: 1313
     original_price: null
     discount: null
     currency: INR
-    duration: "5 days"
-  - pack_id: pte-core-champion-self-evaluated
-    name: PTE Core - Champion Self Evaluated
-    price: 2250
-    original_price: 3000
-    discount: "25%"
+    duration: "6 weeks / 90 days"
+  - pack_id: pte-academic-self-prep
+    name: PTE Academic - Self Prep
+    price: 1875
+    original_price: null
+    discount: null
     currency: INR
     duration: "180 days"
-  - pack_id: pte-core-champion
-    name: PTE Core - Champion
-    price: 3600
-    original_price: 4800
-    discount: "25%"
+  - pack_id: pte-academic-champion
+    name: PTE Academic - Champion
+    price: 3000
+    original_price: null
+    discount: null
+    currency: INR
+    duration: "6 weeks / 180 days"
+  - pack_id: pte-core-mock-tests
+    name: PTE Core - Mock Tests
+    price: 1875
+    original_price: null
+    discount: null
     currency: INR
     duration: "180 days"
 demo_schedule:

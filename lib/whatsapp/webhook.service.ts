@@ -29,11 +29,22 @@
 //      this is what prevents ANU AI from answering its own staff
 //      (infinite loop protection). Same for legacy value.echoes[].
 //
-//  value.messages[] with          → SELF-MESSAGE GUARD (R1): even if
-//      from == our own number       a business-originated message ever
-//                                   appeared inside value.messages[],
-//                                   it is dropped deterministically
-//                                   before any stateful/AI code.
+//  value.messages[] with    → SELF-MESSAGE GUARD (R1): even if
+//      from == our own number a business-originated message ever
+//                            appeared inside value.messages[],
+//                            it is dropped deterministically
+//                            before any stateful/AI code.
+//
+//  value.messages[] with a   → GROUP-MESSAGE GUARD (S2): a WhatsApp
+//      GROUP frame            group/community message (…@g.us identity
+//      (…@g.us / "(GROUP)")    or "(GROUP)" profile marker) is a shared
+//                            room, NOT a student thread. The event is
+//                            claimed, logged (masked), and dropped with
+//                            HTTP 200. NO conversation creation, NO
+//                            Message save, NO AI, NO outbound reply. This
+//                            prevents a group transcript — dozens of
+//                            members' names/numbers — from ever entering
+//                            a student conversation or the AI memory.
 //
 //  anything else / other fields   → UNKNOWN: logged once, ignored,
 //      HTTP 200 so Meta does not retry harmless noise.
@@ -56,6 +67,10 @@
 //
 //  Duplicate deliveries of a wamid after success: HTTP 200, action
 //  "duplicate", zero side effects.
+//
+//  AI rate limited (Phase 1): HTTP 429, action "rate_limited". The claim
+//  is RELEASED and nothing was saved or sent, so Meta's retry (which it
+//  backs off naturally) re-attempts cleanly later.
 // ─────────────────────────────────────────────────────────────────
 
 import {
@@ -86,7 +101,7 @@ export type WebhookDeps = {
     sessionId?: string;
     source: "WEB" | "WHATSAPP";
     sourcePage?: string;
-  }): Promise<OwnedConversation>;
+  }): Promise<{ conversation: OwnedConversation; created: boolean }>;
   getOwnership(conversationId: string): Promise<OwnershipState>;
   saveUserMessage(conversationId: string, content: string): Promise<unknown>;
   updateProfileNameIfMissing(
@@ -95,6 +110,16 @@ export type WebhookDeps = {
   ): Promise<unknown>;
   runAiPipeline(conversation: OwnedConversation, userMessage: string): Promise<string>;
   sendText(phone: string, text: string): Promise<SendWhatsAppResult>;
+  /**
+   * Phase 1 — optional AI rate-limit gate (per conversation and/or phone).
+   * When supplied and returning true for a UNASSIGNED conversation, the AI
+   * pipeline is NOT invoked: the claim is released and the transport
+   * answers HTTP 429 so Meta backs off and redelivers later. Nothing was
+   * persisted and no reply exists, so the retry cannot duplicate work. In
+   * practice this is the shared checkChatRateLimit limiter already used by
+   * the website /api/chat route.
+   */
+  checkRateLimit?(conversationId: string, phone: string | null): Promise<boolean>;
   /** Injectable idempotency store — defaults to memory+RateLimitLog. */
   claims?: IdempotencyDeps;
 };
@@ -103,7 +128,8 @@ export type InboundHandlingOutcome =
   | "replied"
   | "reply_failed"
   | "ai_skipped_assigned"
-  | "ai_skipped_handed_off";
+  | "ai_skipped_handed_off"
+  | "rate_limited";
 
 export type EventOutcome = {
   messageId?: string;
@@ -116,11 +142,13 @@ export type EventOutcome = {
     | "status_ignored"
     | "echo_ignored"
     | "self_message_ignored"
-    | "unknown_ignored";
+    | "group_message_ignored"
+    | "unknown_ignored"
+    | "rate_limited";
 };
 
 export type ProcessPayloadResult = {
-  status: 200 | 400 | 500;
+  status: 200 | 400 | 429 | 500;
   object?: string;
   outcomes: EventOutcome[];
   genuineFailure: boolean;
@@ -148,7 +176,7 @@ export async function handleInboundTextMessage(
   event: InboundMessageEvent
 ): Promise<{ outcome: InboundHandlingOutcome; conversationId: string }> {
   // PHASE 3 — shared Conversation store, source=WHATSAPP.
-  const conversation = await deps.findOrCreateConversation({
+  const { conversation } = await deps.findOrCreateConversation({
     phone: event.fromPhoneE164,
     source: "WHATSAPP",
     sourcePage: "/whatsapp",
@@ -193,6 +221,23 @@ export async function handleInboundTextMessage(
       conversationId: conversation.id,
     });
     return { outcome: "ai_skipped_handed_off", conversationId: conversation.id };
+  }
+
+  // PHASE 6 — AI rate-limit gate (Phase 1). UNASSIGNED only; deferred
+  // messages are NOT saved and NO reply is produced, so the caller may
+  // safely release the claim and answer 429 for Meta to retry later.
+  if (deps.checkRateLimit) {
+    const limited = await deps.checkRateLimit(
+      conversation.id,
+      conversation.phone ?? event.fromPhoneE164
+    );
+    if (limited) {
+      console.log("[WhatsApp Webhook] rate limited — deferred", {
+        conversationId: conversation.id,
+        messageId: event.messageId,
+      });
+      return { outcome: "rate_limited", conversationId: conversation.id };
+    }
   }
 
   // PHASE 5 — UNASSIGNED: eligible for ANU AI.
@@ -254,6 +299,20 @@ export async function processWebhookEvents(
         }
         try {
           const handling = await handleInboundTextMessage(deps, event);
+
+          // Phase 1: AI rate-limited → nothing persisted, no reply exists.
+          // Release the claim and answer 429 so Meta redelivers with its
+          // own backoff instead of an immediate tight retry loop.
+          if (handling.outcome === "rate_limited") {
+            await releaseWhatsAppMessageClaim(event.messageId, deps.claims);
+            outcomes.push({
+              messageId: event.messageId,
+              action: "rate_limited",
+            });
+            genuineFailure = true;
+            return { status: 429, outcomes, genuineFailure };
+          }
+
           outcomes.push({
             messageId: event.messageId,
             action:
@@ -309,6 +368,29 @@ export async function processWebhookEvents(
         outcomes.push({ action: "echo_ignored" });
         break;
 
+      case "group_message_ignored":
+        // S2 — a WhatsApp GROUP/community frame. Shared room, NOT a
+        // student: never a conversation, never a Message row, never AI,
+        // never an Evolution send. Claim is kept so Meta does not redeliver
+        // the same group event over and over; HTTP 200 so the transport is
+        // content. Logged with a masked identity only — group member names
+        // and full numbers are never logged here.
+        if (event.messageId) {
+          await claimWhatsAppMessageProcessing(event.messageId, deps.claims).catch(
+            () => {}
+          );
+        }
+        console.log("[WhatsApp Webhook] group message ignored", {
+          messageId: event.messageId ?? null,
+          from: maskPhone(event.fromWaId),
+          group: true,
+        });
+        outcomes.push({
+          messageId: event.messageId ?? undefined,
+          action: "group_message_ignored",
+        });
+        break;
+
       case "self_message_ignored":
         // R1 — business-originated message inside value.messages[];
         // never AI, never replied, never stored.
@@ -344,7 +426,7 @@ export function processWhatsAppWebhookPayload(
   deps: WebhookDeps,
   raw: unknown
 ): Promise<{
-  status: 200 | 400 | 500;
+  status: 200 | 400 | 429 | 500;
   outcomes: EventOutcome[];
   genuineFailure: boolean;
   object: string | null;

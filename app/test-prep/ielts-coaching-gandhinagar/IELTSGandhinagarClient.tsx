@@ -19,7 +19,7 @@ import {
    ✅ Study plan timeline — 1 month, 8-10 week prep (old file: missing)
    ✅ IELTS Academic vs General comparison (old file: missing)
    ✅ FAQ expanded — only 4 FAQs in old file vs 8-10 in competitors
-   ✅ WhatsApp number corrected: was 9428186817, now 7016497087
+   ✅ WhatsApp number: 9428186817 (approved; 7016497087 is call-only)
    ✅ "2000+ students" claim corrected to match homepage (1100+)
    ✅ BreadcrumbList schema for rich results (old file: missing)
    ✅ Stats were inconsistent — hero said 2000+ vs homepage 1100+

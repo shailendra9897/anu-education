@@ -11,6 +11,11 @@ export type MessageInput = {
   role: MessageRole; // ✅ uses Prisma enum
   content: string;
   toolCalls?: unknown; // ✅ matches schema's 'toolCalls Json?'
+  // Provider identity (C1) — supplied by adapters when known, so C2
+  // (cross-channel dedup) and B4 (outbound status) can read it back.
+  providerId?: string | null;
+  providerMessageId?: string | null;
+  providerStatus?: string | null;
 };
 
 // ── Helper to get the message model ────────────────────────────────
@@ -29,6 +34,9 @@ export async function saveMessage(input: MessageInput): Promise<Message> {
       role: input.role,
       content: input.content,
       toolCalls: input.toolCalls ?? undefined, // Prisma expects undefined if not provided
+      providerId: input.providerId ?? undefined,
+      providerMessageId: input.providerMessageId ?? undefined,
+      providerStatus: input.providerStatus ?? undefined,
     },
   });
 

@@ -425,33 +425,33 @@ export default function IELTSCoachingPage() {
                   color: "from-blue-500 to-cyan-500"
                 },
                 {
-                  name: "IELTS Express",
-                  price: "₹4,999",
-                  duration: "4 Weeks",
+                  name: "Self Preparation",
+                  price: "₹1,875",
+                  duration: "180 Days",
                   features: [
-                    "Daily Live Classes",
-                    "15 Mock Tests",
-                    "Writing Evaluation",
-                    "Speaking Practice",
-                    "Doubt Clearing Sessions",
+                    "60 Practice Tests",
+                    "15 Full-Length Mock Tests",
+                    "300+ Grammar & Vocabulary Videos",
+                    "Expert Mentor Feedback",
+                    "5-Day Free Trial",
                     "Study Abroad Counseling"
                   ],
-                  popular: true,
+                  popular: false,
                   color: "from-green-500 to-emerald-500"
                 },
                 {
-                  name: "IELTS Premium",
-                  price: "₹7,999",
+                  name: "Champion",
+                  price: "₹5,250",
                   duration: "8 Weeks",
                   features: [
-                    "Everything in Express",
-                    "1-on-1 Speaking Sessions",
-                    "Personal Mentor",
-                    "Visa Guidance",
-                    "SOP/LOR Assistance",
-                    "Guaranteed Band 6.5+"
+                    "Everything in Self Prep",
+                    "Daily Live Classes (Morning / Afternoon / Evening)",
+                    "Beginner & Advanced Batches",
+                    "Saturday Grammar & Sunday Doubt Sessions",
+                    "FREE 4-Week French Live Course",
+                    "Study Abroad Counseling"
                   ],
-                  popular: false,
+                  popular: true,
                   color: "from-purple-500 to-pink-500"
                 }
               ].map((plan, index) => (
@@ -545,7 +545,7 @@ export default function IELTSCoachingPage() {
                 },
                 {
                   q: "How many mock tests are included?",
-                  a: "Our IELTS Express and Premium batches include 15+ full-length mock tests with detailed performance analysis."
+                  a: "All our IELTS batches (Self Preparation and Champion) include 15+ full-length mock tests with detailed performance analysis."
                 },
                 {
                   q: "Is there any doubt clearing support?",

@@ -1,9 +1,9 @@
 ---
 title: ANU Education Pricing Overview
 category: Course pricing
-source: data/pricing.json
+source: lib/data/course-prices.ts
 status: verified
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-29
 ---
 
 # ANU Education — Pricing Overview
@@ -11,95 +11,101 @@ last_reviewed: 2026-08-25
 ## Overview
 
 - **Currency default:** INR
-- **Tax note:** GST may apply where stated. Confirm final invoice amount with ANU Education.
+- **Tax note:** GST may apply where stated. Confirm final invoice amount and current batch availability with ANU Education.
 
 ## IELTS Academic Packs
 
-| Pack | Price (INR) | Original | Discount | Access |
-|------|-------------|----------|----------|--------|
-| Self Prep - Trial | Free | -- | -- | 5 days |
-| Champion - Trial | Free | -- | -- | 5 days |
-| Self Prep | 1,875 | 3,750 | 50% | 180 days |
-| Champion Morning | 5,250 | 10,500 | 50% | 180 days |
-| Champion Afternoon | 5,250 | 10,500 | 50% | 180 days |
-| Champion Evening | 5,250 | 10,500 | 50% | 180 days |
-| Champion All Timings | 6,375 | 12,750 | 50% | 180 days |
+| Pack | Pack ID | Price (INR) | Validity |
+|------|---------|-------------|----------|
+| Self Prep | ielts-academic-self-prep | 1,875 | 180 days |
+| Champion (Morning) | ielts-academic-champion-morning | 5,250 | 8 weeks / 180 days |
+| Champion (Afternoon) | ielts-academic-champion-afternoon | 5,250 | 8 weeks / 180 days |
+| Champion (Evening) | ielts-academic-champion-evening | 5,250 | 8 weeks / 180 days |
+| Champion (All Timings) | ielts-academic-champion-all-timings | 6,375 | 8 weeks / 180 days |
+| Reading Marathon | ielts-academic-reading-marathon | 3,000 | 4 weeks / 45 days |
+| Writing Marathon | ielts-academic-writing-marathon | 3,000 | 4 weeks / 45 days |
+| Speaking Marathon | ielts-academic-speaking-marathon | 3,000 | 4 weeks / 45 days |
+
+## IELTS General Packs
+
+| Pack | Pack ID | Price (INR) | Validity |
+|------|---------|-------------|----------|
+| Self Preparation | ielts-general-self-preparation | 1,875 | 180 days |
+| Champion | ielts-general-champion | 4,125 | 6 weeks / 180 days |
+| Reading Marathon | ielts-general-reading-marathon | 3,000 | 4 weeks / 45 days |
+| Writing Marathon | ielts-general-writing-marathon | 3,000 | 4 weeks / 45 days |
+| Speaking Marathon | ielts-general-speaking-marathon | 3,000 | 4 weeks / 45 days |
 
 ## PTE Packs
 
-| Pack | Price (INR) | Original | Discount | Access |
-|------|-------------|----------|----------|--------|
-| Academic - Trial | Free | -- | -- | 5 days |
-| Academic - Self Prep | 2,250 | 3,000 | 25% | 180 days |
-| Academic - Live Class | 1,575 | 2,100 | 25% | 90 days |
-| Academic - Champion | 3,600 | 4,800 | 25% | 180 days |
-| Core - Trial | Free | -- | -- | 5 days |
-| Core - Champion Self Evaluated | 2,250 | 3,000 | 25% | 180 days |
-| Core - Champion | 3,600 | 4,800 | 25% | 180 days |
+| Pack | Pack ID | Price (INR) | Validity |
+|------|---------|-------------|----------|
+| Academic - Live Class | pte-academic-live-class | 1,313 | 6 weeks / 90 days |
+| Academic - Self Prep | pte-academic-self-prep | 1,875 | 180 days |
+| Academic - Champion | pte-academic-champion | 3,000 | 6 weeks / 180 days |
+| Core - Mock Tests | pte-core-mock-tests | 1,875 | 180 days |
 
 ## Duolingo English Test
 
-| Pack | Price (INR) | Original | Discount | Access |
-|------|-------------|----------|----------|--------|
-| Champion | 1,999 (+ GST) | 5,000 | 60% | 60 days |
+| Pack | Pack ID | Price (INR) | Validity |
+|------|---------|-------------|----------|
+| Champion | duolingo-champion | 1,875 | 4 weeks / 60 days |
 
 ## Shorter GRE
 
-| Pack | Price (INR) | Original | Discount | Access |
-|------|-------------|----------|----------|--------|
-| Trial | Free | -- | -- | 5 days |
-| Self Prep | 9,000 | 12,000 | 25% | 180 days |
-| Live Class | 9,000 | 12,000 | 25% | 90 days |
-| Champion | 15,750 | 21,000 | 25% | 180 days |
+| Pack | Pack ID | Price (INR) | Validity |
+|------|---------|-------------|----------|
+| Live Class / Self Prep | shorter-gre-live-class-self-prep | 7,500 | 12 weeks / Self / 90 / 180 days |
+| Champion | shorter-gre-champion | 13,125 | 12 weeks / 180 days |
 
 ## Spoken English
 
-| Pack | Price (INR) | Original | Discount | Access |
-|------|-------------|----------|----------|--------|
-| Trial | Free | -- | -- | 5 days |
-| Study Plan | 750 | 1,000 | 25% | -- |
-| Champion Self Evaluated | 1,575 | 2,100 | 25% | 180 days |
-| Champion | 3,600 | 4,800 | 25% | 180 days |
+| Pack | Pack ID | Price (INR) | Validity |
+|------|---------|-------------|----------|
+| Champion | spoken-english-champion | 3,000 | 10 weeks / 180 days |
 
 ## French
 
-| Pack | Price (INR) | Duration |
-|------|-------------|----------|
-| Basic to TEF USD | 400 USD | 64 weeks |
-| Basic and A1 (Evening) | 7,500 | 150 days / 10 weeks |
-| Basic and A1 (Morning) | 7,500 | 150 days / 10 weeks |
-| A2 | 9,750 | 90 days / 7 weeks |
-| B1 | 9,750 | 90 days / 7 weeks |
-| B2 | 9,750 | 90 days / 7 weeks |
-| Basic and A1 (All Timings) | 9,750 | 150 days / 10 weeks |
-| Basic and A1 (Night) | 10,000 | 150 days / 10 weeks |
-| Basic, A1 and A2 (Evening) | 12,000 | 224 days / 16 weeks |
-| Basic, A1 and A2 (Morning) | 12,000 | 224 days / 16 weeks |
-| Basic and A1 (Weekend) | 12,000 | 150 days |
-| Basic, A1 and A2 (All Timings) | 14,250 | 224 days / 16 weeks |
-| Basic, A1 and A2 (Night) | 14,500 | 224 days / 16 weeks |
-| B1, B2 and TEF | 22,125 | 224 days / 16 weeks |
-| Basic to TEF | 34,375 | 64 weeks |
+| Pack | Pack ID | Price (INR) | Validity |
+|------|---------|-------------|----------|
+| Basic & A1 (Morning / Evening) | french-basic-a1-morning-evening | 7,500 | 11 weeks / 150 days |
+| Basic & A1 (All Timings) | french-basic-a1-all-timings | 9,750 | 11 weeks / 150 days |
+| Basic, A1 & A2 (Morning / Evening) | french-basic-a1-a2-morning-evening | 12,000 | 18 weeks / 210 days |
+| Basic, A1 & A2 (All Timings) | french-basic-a1-a2-all-timings | 14,250 | 18 weeks / 210 days |
+| Basic, A1-B2 | french-basic-a1-b2 | 28,750 | 32 / 42 weeks |
+| A2 / B1 / B2 | french-a2-b1-b2 | 9,750 | 7 weeks / 180 days |
 
 ## German
 
-| Pack | Price (INR) | Duration |
-|------|-------------|----------|
-| Free 3-Day Demo | Free | 5 days access |
-| Basic and A1 | 7,500 | 150 days / 11 weeks |
-| A2 | 9,750 | 90 days / 7 weeks |
-| B1 | 9,750 | 90 days / 7 weeks |
-| Basic, A1 and A2 | 12,000 | 210 days / 18 weeks |
-| Basic to B1 | 18,750 | 308 days / 28 weeks |
+| Pack | Pack ID | Price (INR) | Validity |
+|------|---------|-------------|----------|
+| Basic & A1 | german-basic-a1 | 7,500 | 11 weeks / 150 days |
+| Basic, A1 & A2 | german-basic-a1-a2 | 12,000 | 18 weeks / 210 days |
+| A2 | german-a2 | 9,750 | 7 weeks / 180 days |
+
+## CELPIP
+
+| Pack | Pack ID | Price (INR) | Validity |
+|------|---------|-------------|----------|
+| Self Prep | celpip-self-prep | 3,000 | 180 days |
+| Champion | celpip-champion | 5,250 | 6 weeks / 180 days |
+
+## My Career Mentor
+
+| Pack | Pack ID | Price (INR) | Validity |
+|------|---------|-------------|----------|
+| Online | my-career-mentor-online | 5,250 | 6 weeks / 45 days |
 
 ## Coming Soon
 
-TOEFL, GMAT, SAT — no pricing available yet.
+- **TOEFL iBT** — coaching not yet launched; no pricing available.
+- **Digital SAT** — coaching not yet launched; no pricing available.
+- **GMAT** — coaching not yet launched; no pricing available.
 
 ## Important Notes
 
-- All prices are wallet/limited-offer pricing from source material. Confirm final retail price, GST, batch availability, and discounts with ANU Education before quoting to students.
+- All prices above are the current ANU Education course prices. Confirm final invoice amount, GST, and batch availability with ANU Education before quoting to students.
 
 ## Status
 
-Verified from ANU source material.
+Verified against the ANU Education price master.

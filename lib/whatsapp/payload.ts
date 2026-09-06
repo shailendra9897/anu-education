@@ -23,15 +23,24 @@
 //                                to the Cloud API. → IGNORED, never
 //                                passed to AI.
 //   value.echoes[]             → legacy echo shape → IGNORED
-//   value.messages[] where     → SELF-MESSAGE GUARD: even inside
+//   value.messages[] where   → SELF-MESSAGE GUARD: even inside
 //   from == metadata.            the inbound array, a message whose
 //   display_phone_number         sender equals OUR OWN number can
-//                                never be a student — classified
-//                                self_message_ignored → IGNORED
-//                                (defense-in-depth against coexistence
-//                                shape drift).
+//                               never be a student — classified
+//                               self_message_ignored → IGNORED
+//                               (defense-in-depth against coexistence
+//                               shape drift).
+//   value.messages[] where     → GROUP-MESSAGE GUARD (S2): a WhatsApp
+//   group signal (…@g.us /      group/community ID or the "(GROUP)"
+//   " (GROUP)" profile name)    contact-profile marker is a shared room,
+//                               NOT a student. Classified
+//                               group_message_ignored → IGNORED before
+//                               ANY 1:1 classification → no conversation,
+//                               no Message, no AI, no reply.
 //   anything else              → unknown_value → IGNORED
 //
+// Classification order within value.messages[]:
+//   group guard → self-message guard → supported-type gate → inbound.
 // Only `inbound_message` events with type "text" ever reach the AI.
 // Every other classification is logged and dropped with HTTP 200.
 //
@@ -117,6 +126,26 @@ export type SelfMessageEvent = {
   fromWaId: string | null;
 };
 
+/**
+ * GroupMessageEvent — a WhatsApp GROUP/community message (Phase S2).
+ *
+ * A group is a shared room, NEVER a single student. Its messages carry
+ * multiple members' identities and MUST NOT be treated as a 1:1 student
+ * thread: no conversation, no Message row, no AI, no outbound reply.
+ *
+ * Detected BEFORE normal inbound-student processing (see
+ * detectGroupMessage). Enough identity metadata is kept for idempotency
+ * (provider message id) and safe logging — never the full member list.
+ */
+export type GroupMessageEvent = {
+  kind: "group_message_ignored";
+  messageId: string | null;
+  fromWaId: string | null;
+  phoneNumberId: string | null;
+  /** Group display name from the contact profile, when present. */
+  groupName: string | null;
+};
+
 export type UnknownValueEvent = {
   kind: "unknown_value";
   field: string | null;
@@ -128,6 +157,7 @@ export type WhatsAppWebhookEvent =
   | StatusEvent
   | EchoEvent
   | SelfMessageEvent
+  | GroupMessageEvent
   | UnknownValueEvent;
 
 export type ParsePayloadResult =
@@ -254,6 +284,30 @@ export function parseWhatsAppWebhookPayload(
           const messageType =
             typeof message.type === "string" ? message.type : "unknown";
 
+          // Contact profile name for THIS sender (used both by the group
+          // guard below and the inbound event).
+          const profileName = contactProfileNameFor(fromWaId, contacts);
+
+          // ── S2 GROUP-MESSAGE GUARD ────────────────────────────────
+          // A WhatsApp group is a shared room, not a student. Its members'
+          // messages must NEVER become a 1:1 conversation, enter AI history,
+          // trigger an AI reply, or consume Groq/Evolution budget. This runs
+          // BEFORE every other message classification: group frames are
+          // detectably different (…@g.us identity and/or the "(GROUP)"
+          // display name Meta attaches to group senders), so any group
+          // frame is dropped here regardless of text/media type.
+          const groupSignal = detectGroupMessage({ fromWaId, message, profileName });
+          if (groupSignal.isGroup) {
+            events.push({
+              kind: "group_message_ignored",
+              messageId,
+              fromWaId,
+              phoneNumberId,
+              groupName: groupSignal.groupName,
+            });
+            continue;
+          }
+
           // ── R1 SELF-NUMBER GUARD ──────────────────────────────────
           // A message whose sender equals OUR OWN business number can
           // never originate from a student (coexistence shape-drift
@@ -321,17 +375,6 @@ export function parseWhatsAppWebhookPayload(
             ? new Date(Number.parseInt(timestampSec, 10) * 1000 || Date.now())
             : null;
 
-          const contactProfileName = contacts.find(
-            (c) => c.wa_id === fromWaId
-          );
-
-          const profileName =
-            isRecord(contactProfileName) &&
-            isRecord(contactProfileName.profile) &&
-            typeof contactProfileName.profile.name === "string"
-              ? contactProfileName.profile.name
-              : null;
-
           events.push({
             kind: "inbound_message",
             wabaId,
@@ -368,6 +411,81 @@ export function parseWhatsAppWebhookPayload(
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/**
+ * GROUP_JID_SUFFIX_RE — WhatsApp group/community identity suffix.
+ * A group JID resolves to a shared room, never to a single student phone:
+ *   <jid>@g.us             — WhatsApp group
+ *   <jid>@g.whatsapp.net   — WhatsApp group (alternative domain)
+ *   <id>@newsletter        — WhatsApp channel/community
+ * Identical semantics to the Chatwoot path (lib/chatwoot/payload.ts).
+ */
+const GROUP_JID_SUFFIX_RE = /@(g\.us|g\.whatsapp\.net|newsletter)$/i;
+
+/**
+ * GROUP_PROFILE_NAME_RE — Meta appends " (GROUP)" to the contact profile
+ * name of a group sender. This is the documented, per-message signal and
+ * matches what production actually stored (e.g. "Talod Ward No - 6 (GROUP)").
+ */
+const GROUP_PROFILE_NAME_RE = /\(group\)/i;
+
+function isGroupIdentifier(value: string | null | undefined): boolean {
+  return typeof value === "string" && GROUP_JID_SUFFIX_RE.test(value.trim());
+}
+
+function looksLikeGroupProfileName(name: string | null | undefined): boolean {
+  return typeof name === "string" && GROUP_PROFILE_NAME_RE.test(name.trim());
+}
+
+/** Profile display name for the given sender, if Meta supplied one. */
+function contactProfileNameFor(
+  fromWaId: string | null,
+  contacts: Array<Record<string, unknown>>
+): string | null {
+  if (!fromWaId) return null;
+  const match = contacts.find((c) => c.wa_id === fromWaId);
+  if (!isRecord(match)) return null;
+  const profile = isRecord(match.profile) ? match.profile : null;
+  return profile && typeof profile.name === "string" ? profile.name : null;
+}
+
+/**
+ * detectGroupMessage — S2 group-frame detection.
+ *
+ * TRUE if ANY signal marks the message as coming from a WhatsApp group:
+ *   1. the sender identity (from) itself carries a group JID suffix
+ *      (…@g.us / …@g.whatsapp.net / …@newsletter);
+ *   2. a reply-context sender identity carries a group JID suffix;
+ *   3. the contact profile name for this sender carries Meta's "(GROUP)"
+ *      marker — the exact indicator observed in production for the
+ *      "Talod Ward No - 6 (GROUP)" group conversation.
+ *
+ * Multi-signal on purpose: one fragile string match is not enough (a
+ * group may surface with a digits-only id in `from` and " (GROUP)" in the
+ * profile name; a reply context may carry the parent sender the same way).
+ * Detection is defended by the adapter guard as the last line of defense.
+ */
+export function detectGroupMessage(input: {
+  fromWaId: string | null;
+  message: Record<string, unknown>;
+  profileName: string | null;
+}): { isGroup: boolean; groupName: string | null } {
+  const context = isRecord(input.message.context)
+    ? input.message.context
+    : null;
+  const contextFrom =
+    context && typeof context.from === "string" ? context.from : null;
+
+  const isGroup =
+    isGroupIdentifier(input.fromWaId) ||
+    isGroupIdentifier(contextFrom) ||
+    looksLikeGroupProfileName(input.profileName);
+
+  return {
+    isGroup,
+    groupName: isGroup ? input.profileName : null,
+  };
 }
 
 /**

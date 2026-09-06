@@ -38,6 +38,10 @@ import {
   buildCoachingContextString,
   type CoachingLeadContext,
 } from "@/lib/lead/leadExtractor";
+import { assertAiMayRespond } from "@/lib/chat/ownership.gate";
+import { checkChatRateLimit, getClientIp } from "@/lib/ai/rateLimiter";
+import { ensureLeadLinkedToConversation } from "@/lib/lead/lead.identity.service";
+import { LeadIdentitySource } from "@prisma/client";
 
 // ── REQUEST / RESPONSE CONTRACT ────────────────────────────────────
 
@@ -59,10 +63,17 @@ interface ChatResponseBody {
 async function saveMessage(
   conversationId: string,
   role: MessageRole,
-  content: string
+  content: string,
+  tokens?: { promptTokens?: number | null; completionTokens?: number | null },
 ): Promise<Message> {
   return prisma.message.create({
-    data: { conversationId, role, content },
+    data: {
+      conversationId,
+      role,
+      content,
+      promptTokens: tokens?.promptTokens ?? null,
+      completionTokens: tokens?.completionTokens ?? null,
+    },
   });
 }
 
@@ -153,18 +164,57 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
       });
       conversation =
         existing ??
-        (await findOrCreateConversation({
+        (
+          await findOrCreateConversation({
+            phone: body.phone,
+            sessionId: body.sessionId,
+            source: ConversationSource.WEB,
+            sourcePage: body.sourcePage,
+          })
+        ).conversation;
+    } else {
+      conversation = (
+        await findOrCreateConversation({
           phone: body.phone,
           sessionId: body.sessionId,
           source: ConversationSource.WEB,
           sourcePage: body.sourcePage,
-        }));
-    } else {
-      conversation = await findOrCreateConversation({
-        phone: body.phone,
-        sessionId: body.sessionId,
-        source: ConversationSource.WEB,
-        sourcePage: body.sourcePage,
+        })
+      ).conversation;
+    }
+
+    // ── Rate limit (fixed window, RateLimitLog-backed) ──────────
+    const rateLimit = await checkChatRateLimit({
+      ip: getClientIp(req),
+      conversationId: conversation.id,
+    });
+
+    if (rateLimit.limited) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again shortly." },
+        { status: 429 },
+      );
+    }
+
+    // ── Ownership safety gate (same rule as WhatsApp) ────────────
+    const gate = await assertAiMayRespond(conversation.id);
+
+    if (gate.outcome === "counsellor_hold") {
+      await saveMessage(
+        conversation.id,
+        MessageRole.USER,
+        userMessage,
+      );
+
+      await saveMessage(
+        conversation.id,
+        MessageRole.ASSISTANT,
+        gate.reply,
+      );
+
+      return NextResponse.json({
+        reply: gate.reply,
+        conversationId: conversation.id,
       });
     }
 
@@ -193,6 +243,18 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
         },
       });
     }
+
+    // ── Canonical CRM identity (C1) ──────────────────────────────
+    // Conversation identity may have just been captured (or may already
+    // exist from findOrCreateConversation). Link the conversation to the
+    // canonical Lead as best-effort; anonymous sessions stay unlinked.
+    ({
+      conversation,
+    } = await ensureLeadLinkedToConversation({
+      conversationId: conversation.id,
+      knownConversation: conversation,
+      identitySource: LeadIdentitySource.WEB,
+    }));
 
     // ── Demo Handling Flow ───────────────────────────────────────
     const awaitingDemoConfirmation =
@@ -309,6 +371,7 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
         await createPortalAccessRequest({
           conversationId: conversation.id,
           demoBookingId: updatedDemoBooking.id,
+          leadId: conversation.leadId ?? undefined,
           studentName: updatedDemoBooking.name,
           phone: updatedDemoBooking.phone,
           email: updatedDemoBooking.email,
@@ -341,6 +404,7 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
         name: conversation.name ?? undefined,
         phone: conversation.phone ?? body.phone,
         email: conversation.email ?? undefined,
+        leadId: conversation.leadId ?? undefined,
         awaitingConfirmation: awaitingDemoConfirmation,
         pendingCourse: pendingDemoCourse,
       });
@@ -448,10 +512,17 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
           data: {
             ...(coachingExtraction.name  ? { name: coachingExtraction.name }  : {}),
             ...(coachingExtraction.phone ? { phone: coachingExtraction.phone } : {}),
-            ...(coachingExtraction.email ? { email: coachingExtraction.email } : {}),
-          },
-        });
-      }
+...(coachingExtraction.email ? { email: coachingExtraction.email } : {}),
+        },
+      });
+    }
+
+    // Canonical CRM identity may have gained name/phone/email here too.
+    ({ conversation } = await ensureLeadLinkedToConversation({
+      conversationId: conversation.id,
+      knownConversation: conversation,
+      identitySource: LeadIdentitySource.WEB,
+    }));
 
       // Build coaching context for AI prompt
       coachingContextStr = buildCoachingContextString(coachingExtraction);
@@ -489,8 +560,11 @@ export async function POST(req: Request): Promise<NextResponse<ChatResponseBody 
 
     const reply = aiResponse.content;
 
-    // ── saveMessage(ASSISTANT) ────────────────────────────────────
-    await saveMessage(conversation.id, MessageRole.ASSISTANT, reply);
+    // ── saveMessage(ASSISTANT) with Groq token usage ─────────────
+    await saveMessage(conversation.id, MessageRole.ASSISTANT, reply, {
+      promptTokens: aiResponse.usage.promptTokens,
+      completionTokens: aiResponse.usage.completionTokens,
+    });
 
     // ── Return JSON ────────────────────────────────────────────────
     return NextResponse.json({

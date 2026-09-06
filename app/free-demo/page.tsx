@@ -3,7 +3,7 @@
 // FILE: app/free-demo/page.tsx  (or wherever FreeDemoPage lives)
 //
 // CHANGES vs old file:
-//   ✅ WhatsApp corrected: 9428186817 → 7016497087
+//   ✅ WhatsApp: 9428186817 (approved wa.me number)
 //   ✅ "1000+" corrected → 1,100+
 //   ✅ Course dropdown expanded: IELTS · PTE · GRE · GMAT · SAT · Duolingo
 //      · German · French · Study Abroad · MBBS Abroad
@@ -60,7 +60,7 @@ const COURSES: {
     tagline: "Results in 48 hrs · Canada SDS accepted · AI scored",
     colour: "from-indigo-600 to-indigo-500", textColour: "text-indigo-700",
     benefits: [
-      "4 course packs from Free to ₹3,500 · 14 mock tests",
+      "4 course packs from Free to ₹3,000 · 14 mock tests",
       "180+ exercises · 800+ practice questions",
       "Live 90-min classes Mon–Fri (Morning & Evening)",
       "Saturday doubt session 10–11 AM",
@@ -281,7 +281,7 @@ export default function FreeDemoPage() {
               className="bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-400 hover:to-green-400 text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-2xl shadow-emerald-500/30 hover:-translate-y-1 transition-all duration-300">
               🚀 Reserve Free Seat
             </button>
-            <a href="https://wa.me/917016497087?text=Hi%2C%20I%20want%20to%20book%20a%20free%20demo%20class%20at%20ANU%20Education"
+            <a href="https://wa.me/919428186817?text=Hi%2C%20I%20want%20to%20book%20a%20free%20demo%20class%20at%20ANU%20Education"
               target="_blank" rel="noopener noreferrer"
               className="border-2 border-emerald-400/50 hover:border-emerald-400 text-emerald-400 hover:bg-emerald-400/10 px-10 py-5 rounded-2xl font-bold text-xl hover:-translate-y-1 transition-all duration-300">
               💬 WhatsApp Chat
@@ -392,7 +392,7 @@ export default function FreeDemoPage() {
                 <h3 className="text-2xl font-bold text-emerald-400 mb-2">🎉 Seat Confirmed!</h3>
                 <p className="text-white/70 mb-2">Your <strong className="text-white">{selectedCourse}</strong> demo details are being sent to WhatsApp.</p>
                 <p className="text-white/50 text-sm mb-6">Our counsellor will contact you within 30 minutes.</p>
-                <a href={`https://wa.me/917016497087?text=Hi%2C%20I%20just%20registered%20for%20a%20free%20demo%20class%20for%20${encodeURIComponent(selectedCourse)}.%20My%20name%20is%20${encodeURIComponent(name)}.`}
+                <a href={`https://wa.me/919428186817?text=Hi%2C%20I%20just%20registered%20for%20a%20free%20demo%20class%20for%20${encodeURIComponent(selectedCourse)}.%20My%20name%20is%20${encodeURIComponent(name)}.`}
                   target="_blank" rel="noopener noreferrer"
                   className="block w-full bg-gradient-to-r from-emerald-500 to-green-500 text-white py-4 rounded-2xl font-bold text-lg shadow-2xl shadow-emerald-500/30 hover:-translate-y-1 transition-all duration-300 text-center">
                   💬 Open WhatsApp Chat
@@ -597,7 +597,7 @@ export default function FreeDemoPage() {
               className="bg-white text-emerald-700 px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               🎓 Reserve Free Seat
             </button>
-            <a href="https://wa.me/917016497087?text=Hi%2C%20I%20want%20to%20book%20a%20free%20demo%20class"
+            <a href="https://wa.me/919428186817?text=Hi%2C%20I%20want%20to%20book%20a%20free%20demo%20class"
               target="_blank" rel="noopener noreferrer"
               className="border-2 border-white/70 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white/10 hover:-translate-y-1 transition-all duration-300">
               💬 +91 70164 97087

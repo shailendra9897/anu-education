@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { toggleStaffActive } from "@/lib/staff/staff.service";
+import {
+  isAdminAuthError,
+  adminAuthErrorResponse,
+  requireAdminAuth,
+} from "@/lib/auth/admin-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -9,15 +14,20 @@ export const dynamic = "force-dynamic";
  * Toggle a staff member's active status.
  */
 export async function POST(
-  _req: NextRequest,
+  req: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
   try {
+    await requireAdminAuth(req, { role: "ADMIN" });
+
     const { id } = await context.params;
     const staff = await toggleStaffActive(id);
 
     return NextResponse.json({ success: true, staff });
   } catch (error: unknown) {
+    if (isAdminAuthError(error)) {
+      return adminAuthErrorResponse(error);
+    }
     const message =
       error instanceof Error ? error.message : "Unknown error";
 

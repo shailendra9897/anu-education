@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getConversationOwnership } from "@/lib/staff/assignment.service";
+import {
+  isAdminAuthError,
+  adminAuthErrorResponse,
+  requireAdminAuth,
+} from "@/lib/auth/admin-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -9,15 +14,20 @@ export const dynamic = "force-dynamic";
  * Returns the deterministic ownership state of a conversation.
  */
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
   try {
+    await requireAdminAuth(req);
+
     const { id } = await context.params;
     const ownership = await getConversationOwnership(id);
 
     return NextResponse.json({ success: true, ownership });
   } catch (error: unknown) {
+    if (isAdminAuthError(error)) {
+      return adminAuthErrorResponse(error);
+    }
     const message =
       error instanceof Error ? error.message : "Unknown error";
 

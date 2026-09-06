@@ -29,6 +29,7 @@ export type PortalErrorCode =
   | "INVALID_INPUT"
   | "PORTAL_TIMEOUT"
   | "REGISTRATION_FAILED"
+  | "CONFIGURATION"
   | "UNKNOWN_ERROR";
 
 export type PortalRegistrationResult = {

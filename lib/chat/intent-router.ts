@@ -147,7 +147,23 @@ function normalize(value: string): string {
     .trim();
 }
 
+// Phase S5-A: exported so lib/demo/demo.offer.ts reuses the exact same
+// normalization the router uses — one deterministic source of truth.
+export function normalizeMessage(value: string): string {
+  return normalize(value);
+}
+
 function isBookingConfirmation(normalized: string): boolean {
+  // Phase S5-A: the previously accepted phrases are unchanged; on top of
+  // them, short natural acceptances ("sure", "okay", "ok", "go ahead",
+  // "definitely", "attend") now count as demo-booking confirmations so a
+  // bare assent after ANY booking offer (memory.service strict phrasing OR
+  // a natural AI demo offer) resolves into the existing booking flow.
+  //
+  // Word boundaries (not substring matches) are mandatory — "ok" appears
+  // inside "book"/"look", "sure" inside "unsure"/"ensure" — and an
+  // affirmative is rejected when a negation ("no", "not", "not sure")
+  // is present in the same message.
   const confirmations = [
     "yes",
     "yes please",
@@ -162,9 +178,37 @@ function isBookingConfirmation(normalized: string): boolean {
     "reserve my seat",
   ];
 
-  return confirmations.some(
-    (phrase) => normalized === phrase || normalized.includes(phrase),
-  );
+  if (
+    confirmations.some(
+      (phrase) => normalized === phrase || normalized.includes(phrase),
+    )
+  ) {
+    return true;
+  }
+
+  return isAffirmativeAcceptance(normalized);
+}
+
+const AFFIRMATIVE_ACCEPTANCES = [
+  /\bsure\b/,
+  /\bokay\b/,
+  /\bok\b/,
+  /\bgo ahead\b/,
+  /\bdefinitely\b/,
+  /\battend\b/,
+  /\byes sure\b/,
+];
+
+// Operates on the ROUTER-normalized string (punctuation stripped,
+// apostrophes → spaces): "don't" becomes "don t", "isn't" becomes
+// "isn t", so both "isnt" and "isn t" forms must be covered.
+const AFFIRMATIVE_NEGATION = /\b(?:no|not|never|unsure)\b|\b(?:don|won|isn|aren|can|couldn|shouldn|wouldn)\s*t\b/;
+
+function isAffirmativeAcceptance(normalized: string): boolean {
+  if (AFFIRMATIVE_NEGATION.test(normalized)) {
+    return false;
+  }
+  return AFFIRMATIVE_ACCEPTANCES.some((pattern) => pattern.test(normalized));
 }
 
 function isExplicitHumanHandoffRequest(normalized: string): boolean {
@@ -250,7 +294,10 @@ function isLeadQualificationMessage(normalized: string): boolean {
   return false;
 }
 
-function isPureInformationalCourseQuestion(normalized: string): boolean {
+// Phase S5-A: exported so lib/demo/demo.offer.ts gates FREE-demo offers
+// with the exact same info-only predicate the router uses for COACHING_LEAD
+// routing — one deterministic source of truth.
+export function isPureInformationalCourseQuestion(normalized: string): boolean {
   return /^(?:what is|what s|what are|tell me about|define|meaning of|how (?:many|long|much)|explain)\s+(?:ielts|pte|german|french|gre|gmat|sat|toefl|duolingo|spoken english)\b/.test(normalized);
 }
 

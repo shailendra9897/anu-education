@@ -46,10 +46,18 @@ if (!GROQ_API_KEY) {
   throw new Error("GROQ_API_KEY is not set in environment variables.");
 }
 
-// Point standard OpenAI SDK to Groq's endpoint
-const groq = new OpenAI({
+// Point standard OpenAI SDK to Groq's endpoint.
+// SINGLE RETRY POLICY (S4): maxRetries: 0 disables the SDK's intrinsic
+// automatic retries (top of create(), default maxRetries=2 for 408/409/429/5xx).
+// Without this, SDK retries stacked UNDER our withRetry() below multiplied a
+// persistent 429 into up to ~12 underlying HTTP attempts per message. Now the
+// SDK performs zero automatic retries and withRetry() is the ONE retry owner
+// (429 / Retry-After / 500-504 / ECONNRESET / ETIMEDOUT) — exactly one HTTP
+// attempt per withRetry attempt, no nested multiplication.
+export const groq = new OpenAI({
   apiKey: GROQ_API_KEY,
   baseURL: "https://api.groq.com/openai/v1",
+  maxRetries: 0,
 });
 
 // ── Types ──────────────────────────────────────────────────────────
@@ -102,7 +110,61 @@ function stripThinkingTags(content: string): string {
 }
 
 // ── Retry logic with exponential backoff ──────────────────────────
-async function withRetry<T>(
+// Phase 1: 429 rate-limit responses are now RETRYABLE. Previously Groq
+// rate limits bypassed the retry loop entirely (only 5xx/network codes
+// were caught), so a burst would skip the 429 → release the webhook
+// claim → HTTP 500 → Meta/Chatwoot immediate retry → another 429:
+// a self-amplifying loop that made the TPM problem far worse.
+//
+// For a 429 the wait honors Groq's Retry-After header when present. All
+// retryable failures get exponential backoff + jitter, bounded by
+// MAX_RETRY_DELAY_MS and MAX_RETRIES so a wedged service can never stall
+// a webhook indefinitely.
+const HTTP_429 = 429;
+const RETRYABLE_HTTP = new Set([500, 502, 503, 504]);
+const RETRYABLE_CODES = new Set(["ECONNRESET", "ETIMEDOUT"]);
+
+export function isRetryableStatus(status: number | undefined): boolean {
+  return status === HTTP_429 || (status !== undefined && RETRYABLE_HTTP.has(status));
+}
+
+/** Retry-After header ("42", "42.5" seconds, or an HTTP-date) → ms. */
+export function parseRetryAfterMs(error: unknown): number | null {
+  const headers = (error as any)?.headers;
+  if (!headers) return null;
+
+  const header =
+    typeof headers.get === "function"
+      ? headers.get("retry-after")
+      : headers["retry-after"] ?? headers["Retry-After"];
+
+  if (typeof header !== "string" || header.trim() === "") return null;
+
+  const seconds = Number(header);
+  if (Number.isFinite(seconds) && seconds >= 0) {
+    return Math.min(seconds * 1000, MAX_RETRY_DELAY_MS);
+  }
+
+  const date = Date.parse(header);
+  if (Number.isFinite(date)) {
+    return Math.max(0, Math.min(date - Date.now(), MAX_RETRY_DELAY_MS));
+  }
+
+  return null;
+}
+
+/** Single-delay computation: Retry-After wins; else backoff + jitter. */
+export function computeRetryDelayMs(
+  error: unknown,
+  baseDelayMs: number
+): number {
+  const retryAfter = parseRetryAfterMs(error);
+  if (retryAfter !== null) return retryAfter;
+  const jitter = Math.floor(Math.random() * 250);
+  return Math.min(baseDelayMs + jitter, MAX_RETRY_DELAY_MS);
+}
+
+export async function withRetry<T>(
   fn: () => Promise<T>,
   retries = MAX_RETRIES,
   delay = INITIAL_RETRY_DELAY_MS
@@ -113,19 +175,18 @@ async function withRetry<T>(
     if (retries === 0) throw error;
 
     const isRetryable =
-      error?.status === 500 ||
-      error?.status === 502 ||
-      error?.status === 503 ||
-      error?.status === 504 ||
-      error?.code === "ECONNRESET" ||
-      error?.code === "ETIMEDOUT";
+      isRetryableStatus(error?.status) ||
+      RETRYABLE_CODES.has(error?.code as string);
 
     if (!isRetryable) throw error;
 
-    const backoff = Math.min(delay * 2, MAX_RETRY_DELAY_MS);
-    console.warn(`[AI] Retryable error, retrying in ${backoff}ms...`, error.message);
-    await new Promise((resolve) => setTimeout(resolve, backoff));
-    return withRetry(fn, retries - 1, backoff);
+    const waitMs = computeRetryDelayMs(error, delay);
+    console.warn(
+      `[AI] Retryable error (status=${error?.status ?? error?.code ?? "unknown"}), retrying in ${waitMs}ms...`,
+      error.message
+    );
+    await new Promise((resolve) => setTimeout(resolve, waitMs));
+    return withRetry(fn, retries - 1, Math.min(delay * 2, MAX_RETRY_DELAY_MS));
   }
 }
 

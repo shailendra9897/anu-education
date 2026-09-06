@@ -473,7 +473,10 @@ export interface CoachingLeadContext {
   email?:           string;
 }
 
-const COACHING_COURSES: Record<string, string> = {
+// Phase S5-A: exported so lib/demo/demo.offer.ts reuses this exact
+// course vocabulary (same canonical values) when deciding a FREE-demo
+// opportunity — one deterministic source of truth for coaching courses.
+export const COACHING_COURSES: Record<string, string> = {
   "ielts academic":  "IELTS Academic",
   "ielts general":   "IELTS General",
   "ielts":           "IELTS",

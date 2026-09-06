@@ -5,7 +5,7 @@
 //
 // ─────────────────────────────────────────────────────────────────
 // CURRENT PAGE ISSUES (live audit)
-//   ❌ Wrong WhatsApp: 9428186817 → must be 7016497087
+//   ❌ WhatsApp is 9428186817 (7016497087 is call-only — do not swap)
 //   ❌ Wrong stats: "1000+ students / 92% success" → 1,100+ / 98%
 //   ❌ No course pack details (brochure has 4 packs with fees)
 //   ❌ No batch timings from brochure (Morning 9–10:30AM, Eve 8–9:30PM)
@@ -17,7 +17,7 @@
 //   ❌ No schema: Course, FAQ, Breadcrumb
 //   ❌ Only ~400 words — extremely thin
 //   ❌ FAQs have no content (collapsible but empty)
-//   ❌ No pricing transparency (brochure shows ₹2000/₹2500/₹3500)
+//   ✅ Pricing aligned to master: Self Prep ₹1,875 / Live Class ₹1,313 / Champion ₹3,000
 //   ❌ No Eduvantage PTE features listed (concept builders, simulated engine, etc.)
 //
 // COMPETITOR GAPS vs E2Language / EEC / Vision Language Experts
@@ -36,7 +36,7 @@
 //   ✅ Course schema + FAQ schema + Breadcrumb schema
 //   ✅ 12 LLM-citation-ready FAQs (from brochure FAQs + expanded)
 //   ✅ All CTAs point to study.anuedu.in/register
-//   ✅ WhatsApp corrected to 7016497087
+//   ✅ WhatsApp verified: 9428186817 (approved wa.me number)
 //   ✅ Stats corrected: 1,100+ · 98%
 //   ✅ Word count ~2,400
 // ─────────────────────────────────────────────────────────────────
@@ -70,7 +70,7 @@ const packs = [
   {
     id: "selfprep", name: "Self Prep Pack", tag: "Best for Self-Starters",
     badge: "bg-blue-700", border: "border-blue-200", highlight: false,
-    price: "₹2,000", validity: "180 Days",
+    price: "₹1,875", validity: "180 Days",
     rows: [
       ["English Assessment Test", "✅"],
       ["Vocab, Grammar Videos", "300+"],
@@ -80,13 +80,13 @@ const packs = [
       ["Practice Exercises", "180+ (800+ Questions)"],
       ["Results by Expert Mentors", "✅"],
       ["Login Validity", "180 Days"],
-      ["Price (GST extra)", "₹2,000"],
+      ["Price (GST extra)", "₹1,875"],
     ],
   },
   {
     id: "liveclass", name: "Live Class Pack", tag: "Live Classes + Mentors",
     badge: "bg-indigo-700", border: "border-indigo-200", highlight: false,
-    price: "₹2,500", validity: "180 Days",
+    price: "₹1,313", validity: "90 Days",
     rows: [
       ["English Assessment Test", "✅"],
       ["Vocab, Grammar Videos", "300+"],
@@ -95,14 +95,14 @@ const packs = [
       ["Timed Mock Tests", "❌"],
       ["Practice Exercises", "❌"],
       ["Results by Expert Mentors", "✅"],
-      ["Login Validity", "180 Days"],
-      ["Price (GST extra)", "₹2,500"],
+      ["Login Validity", "90 Days"],
+      ["Price (GST extra)", "₹1,313"],
     ],
   },
   {
     id: "champion", name: "Champion Pack", tag: "Everything Included",
     badge: "bg-green-700", border: "border-green-300", highlight: true,
-    price: "₹3,500", validity: "180 Days",
+    price: "₹3,000", validity: "180 Days",
     rows: [
       ["English Assessment Test", "✅"],
       ["Vocab, Grammar Videos", "300+"],
@@ -112,7 +112,7 @@ const packs = [
       ["Practice Exercises", "180+ (800+ Questions)"],
       ["Results by Expert Mentors", "✅"],
       ["Login Validity", "180 Days"],
-      ["Price (GST extra)", "₹3,500"],
+      ["Price (GST extra)", "₹3,000"],
     ],
   },
 ];
@@ -124,7 +124,7 @@ const faqs = [
   },
   {
     q: "What are the PTE course fees at ANU Education?",
-    a: "ANU Education offers 4 PTE Academic course packs: Demo Pack — Free (3-day access, 1 mock test). Self Prep Pack — ₹2,000 (180 days, 14 mock tests, 180+ exercises, no live classes). Live Class Pack — ₹2,500 (180 days, 90 min/day live classes, 6-week curriculum, expert mentor results). Champion Pack — ₹3,500 (180 days, everything in Self Prep + Live Class together — 14 mock tests, 800+ practice questions, 90 min/day live classes). All prices exclude GST.",
+    a: "ANU Education offers 4 PTE Academic course packs: Demo Pack — Free (3-day access, 1 mock test). Self Prep Pack — ₹1,875 (180 days, 14 mock tests, 180+ exercises, no live classes). Live Class Pack — ₹1,313 (90 days, 90 min/day live classes, 6-week curriculum, expert mentor results). Champion Pack — ₹3,000 (180 days, everything in Self Prep + Live Class together — 14 mock tests, 800+ practice questions, 90 min/day live classes). All prices exclude GST.",
   },
   {
     q: "What is the PTE live class schedule for Gandhinagar students?",
@@ -144,7 +144,7 @@ const faqs = [
   },
   {
     q: "What is the PTE exam fee in India in 2026?",
-    a: "The PTE Academic exam fee in India is approximately ₹18,000. Results are available within 5 working days. The exam can be taken on over 360 days per year at 35+ test locations across India. The ANU Education course fee (₹2,000–₹3,500) is separate from the PTE exam registration fee, which is paid directly to Pearson through the myPTE account.",
+    a: "The PTE Academic exam fee in India is approximately ₹18,000. Results are available within 5 working days. The exam can be taken on over 360 days per year at 35+ test locations across India. The ANU Education course fee (₹1,313–₹3,000) is separate from the PTE exam registration fee, which is paid directly to Pearson through the myPTE account.",
   },
   {
     q: "Is PTE computer-based or paper-based?",
@@ -164,7 +164,7 @@ const faqs = [
   },
   {
     q: "What makes ANU Education's PTE coaching different in Gandhinagar?",
-    a: "ANU Education offers the most complete PTE coaching package available for Gandhinagar students: 4 course packs from free to ₹3,500 (GST extra), 14 full-length timed mock tests, 180+ practice exercises with 800+ questions, 300+ vocab and grammar videos, live Morning and Evening batches (90 min/day, Mon–Fri), Saturday doubt-solving sessions, AI-based scoring and feedback, free English Assessment Test, Eduvantage PTE platform with simulated test engine, concept builders, and mentor support, and free study abroad counselling. Skill India certified. 1,100+ students guided. 98% success rate.",
+    a: "ANU Education offers the most complete PTE coaching package available for Gandhinagar students: 4 course packs from free to ₹3,000 (GST extra), 14 full-length timed mock tests, 180+ practice exercises with 800+ questions, 300+ vocab and grammar videos, live Morning and Evening batches (90 min/day, Mon–Fri), Saturday doubt-solving sessions, AI-based scoring and feedback, free English Assessment Test, Eduvantage PTE platform with simulated test engine, concept builders, and mentor support, and free study abroad counselling. Skill India certified. 1,100+ students guided. 98% success rate.",
   },
 ];
 
@@ -187,9 +187,9 @@ export default function PTEGandhinagarClient() {
         coursePrerequisites: "Basic English. No prior PTE experience needed.",
         offers: [
           { "@type": "Offer", name: "Demo Pack", priceCurrency: "INR", price: "0", description: "3-day free trial, 1 mock test" },
-          { "@type": "Offer", name: "Self Prep Pack", priceCurrency: "INR", price: "2000", description: "180 days, 14 mock tests, 800+ questions" },
-          { "@type": "Offer", name: "Live Class Pack", priceCurrency: "INR", price: "2500", description: "180 days, live 90 min/day classes" },
-          { "@type": "Offer", name: "Champion Pack", priceCurrency: "INR", price: "3500", description: "180 days, live classes + 14 mocks + 800+ exercises" },
+          { "@type": "Offer", name: "Self Prep Pack", priceCurrency: "INR", price: "1875", description: "180 days, 14 mock tests, 800+ questions" },
+          { "@type": "Offer", name: "Live Class Pack", priceCurrency: "INR", price: "1313", description: "90 days, live 90 min/day classes" },
+          { "@type": "Offer", name: "Champion Pack", priceCurrency: "INR", price: "3000", description: "180 days, live classes + 14 mocks + 800+ exercises" },
         ],
         hasCourseInstance: { "@type": "CourseInstance", courseMode: "Online", courseWorkload: "PT1H30M", startDate: "2026-06-01", location: { "@type": "VirtualLocation", url: "https://www.anuedu.in/test-prep/pte-coaching-gandhinagar" } },
         about: { "@type": "Thing", name: "Pearson Test of English Academic", sameAs: "https://en.wikipedia.org/wiki/Pearson_Test_of_English" },
@@ -239,7 +239,7 @@ export default function PTEGandhinagarClient() {
             </nav>
             <div className="text-center">
               <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold mb-5 float">
-                🎯 100% Online · 4 Course Packs · Free Demo · From ₹2,000
+                🎯 100% Online · 4 Course Packs · Free Demo · From ₹1,313
               </div>
               <h1 className="anim d1 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5">
                 PTE Classes in Gandhinagar
@@ -249,7 +249,7 @@ export default function PTEGandhinagarClient() {
                 </span>
               </h1>
               <p className="anim d2 text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed mb-8">
-                ANU Education offers the most complete <strong className="text-white">online PTE classes</strong> for Gandhinagar students — 4 course packs from free to ₹3,500, <strong className="text-white">14 full-length mock tests</strong>, 800+ practice questions, live Morning &amp; Evening batches, Saturday doubt sessions, and AI-based scoring. Join from Kudasan, Sector 21, Infocity, Sargasan, or anywhere in Gandhinagar.
+                ANU Education offers the most complete <strong className="text-white">online PTE classes</strong> for Gandhinagar students — 4 course packs from free to ₹3,000, <strong className="text-white">14 full-length mock tests</strong>, 800+ practice questions, live Morning &amp; Evening batches, Saturday doubt sessions, and AI-based scoring. Join from Kudasan, Sector 21, Infocity, Sargasan, or anywhere in Gandhinagar.
               </p>
               <div className="anim d3 flex flex-col sm:flex-row justify-center gap-4 mb-8">
                 <a href="https://study.anuedu.in/register" target="_blank" rel="noopener noreferrer"
@@ -282,7 +282,7 @@ export default function PTEGandhinagarClient() {
               { stat: "14", label: "Full-length timed mock tests" },
               { stat: "800+", label: "Practice questions (Champion)" },
               { stat: "300+", label: "Vocab & grammar videos" },
-              { stat: "₹2,000", label: "Self Prep Pack starting price" },
+              { stat: "₹1,313", label: "Live Class Pack starting price" },
             ].map((s, i) => (
               <div key={i} className="bg-blue-50 border border-blue-100 rounded-2xl p-5 text-center">
                 <div className="text-2xl font-black text-blue-700 mb-1">{s.stat}</div>
@@ -390,9 +390,9 @@ export default function PTEGandhinagarClient() {
                   <tr>
                     <th className="text-left px-3 py-3">Feature</th>
                     <th className="text-center px-3 py-3">Demo</th>
-                    <th className="text-center px-3 py-3">Self Prep<br/>₹2,000</th>
-                    <th className="text-center px-3 py-3">Live Class<br/>₹2,500</th>
-                    <th className="text-center px-3 py-3 bg-green-700">Champion ⭐<br/>₹3,500</th>
+                    <th className="text-center px-3 py-3">Self Prep<br/>₹1,875</th>
+                    <th className="text-center px-3 py-3">Live Class<br/>₹1,313</th>
+                    <th className="text-center px-3 py-3 bg-green-700">Champion ⭐<br/>₹3,000</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -403,7 +403,7 @@ export default function PTEGandhinagarClient() {
                     ["Timed Mock Tests", "1", "14", "❌", "14"],
                     ["Practice Exercises", "✅", "800+", "❌", "800+"],
                     ["Expert Mentor Results", "❌", "✅", "✅", "✅"],
-                    ["Validity", "3 Days", "180 Days", "180 Days", "180 Days"],
+                    ["Validity", "3 Days", "180 Days", "90 Days", "180 Days"],
                   ].map(([feat, d, sp, lc, ch], i) => (
                     <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                       <td className="px-3 py-2 font-medium text-gray-700">{feat}</td>

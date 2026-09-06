@@ -4,6 +4,8 @@ import { PortalAccessStatus } from "@prisma/client";
 export type CreatePortalAccessRequestInput = {
   conversationId?: string;
   demoBookingId?: string;
+  // Canonical CRM identity (C1) — nullable; set when known.
+  leadId?: string;
   studentName: string;
   email: string;
   phone: string;
@@ -66,6 +68,7 @@ export async function createPortalAccessRequest(
     data: {
       conversationId: input.conversationId,
       demoBookingId: input.demoBookingId,
+      leadId: input.leadId,
       studentName: input.studentName,
       email: input.email,
       phone: input.phone,

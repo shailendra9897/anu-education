@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { AdminCrmNav } from "@/components/admin/AdminCrmNav";
 
 type PortalStatus =
   | "PENDING"
@@ -207,6 +208,7 @@ export default function PortalAccessPage() {
   return (
     <main className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl">
+        <AdminCrmNav current="/admin/portal-access" />
         {/* HEADER */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>

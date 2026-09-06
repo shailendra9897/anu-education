@@ -98,7 +98,7 @@ function makeFakes(options?: {
   const deps: WebhookDeps = {
     findOrCreateConversation: async (input) => {
       calls.conversationsCreated.push({ ...input });
-      return conversation;
+      return { conversation, created: false };
     },
     getOwnership: async (conversationId) => {
       calls.ownershipChecks.push(conversationId);

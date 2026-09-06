@@ -31,7 +31,7 @@ export default function GermanClient() {
             },
             offers: {
               "@type": "Offer",
-              price: "10000",
+              price: "7500",
               priceCurrency: "INR",
               availability: "https://schema.org/OnlineOnly",
               validFrom: "2026-04-01",
@@ -307,8 +307,8 @@ export default function GermanClient() {
               <div>
                 <h3 className="text-xl font-bold mb-3">🎯 Packages & Pricing</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li><strong>German Basic + A1:</strong> ₹10,000</li>
-                  <li><strong>German Basic + A1 + A2:</strong> ₹16,000</li>
+                  <li><strong>German Basic + A1:</strong> ₹7,500</li>
+                  <li><strong>German Basic + A1 + A2:</strong> ₹12,000</li>
                 </ul>
                 <h3 className="text-xl font-bold mt-6 mb-3">🕒 Batch Timings</h3>
                 <ul className="space-y-1 text-gray-700">

@@ -1,8 +1,9 @@
 // FILE: lib/staff/staff.service.ts
 //
 // Server-side Staff CRUD. Used by /api/admin/staff routes.
-// Authentication is handled by app/middleware.ts (Basic Auth
-// on /api/admin/*). This service does NOT handle auth.
+// Authentication is handled by middleware.ts + lib/auth/admin-guard.ts
+// (Basic Auth on /admin/* and /api/admin/*). This service does NOT
+// handle auth.
 
 import prisma from "@/lib/prisma";
 

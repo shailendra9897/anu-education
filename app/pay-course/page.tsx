@@ -1,13 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-
-const COURSE_FEES: Record<string, number> = {
-  IELTS: 9999,
-  PTE: 8000,
-  'German A1': 12000,
-  'French A1': 10000,
-};
+import { COURSE_FEES } from '@/lib/data/course-fees';
 
 export default function PayCoursePage() {
   const [course, setCourse] = useState('');

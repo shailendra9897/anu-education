@@ -3,39 +3,25 @@ title: Shorter GRE
 category: Graduate admissions test preparation
 source: data/courses/gre.json, data/pricing.json
 status: verified
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-29
 availability: active
 pricing_status: published
 demo_available: true
 pricing:
-  - pack_id: gre-trial
-    name: Shorter GRE - Trial
-    price: 0
+  - pack_id: shorter-gre-live-class-self-prep
+    name: Shorter GRE - Live Class / Self Prep
+    price: 7500
     original_price: null
     discount: null
     currency: INR
-    duration: "5 days"
-  - pack_id: gre-self-prep
-    name: Shorter GRE - Self Prep
-    price: 9000
-    original_price: 12000
-    discount: "25%"
-    currency: INR
-    duration: "180 days"
-  - pack_id: gre-live-class
-    name: Shorter GRE - Live Class
-    price: 9000
-    original_price: 12000
-    discount: "25%"
-    currency: INR
-    duration: "90 days"
-  - pack_id: gre-champion
+    duration: "12 weeks / 90 / 180 days"
+  - pack_id: shorter-gre-champion
     name: Shorter GRE - Champion
-    price: 15750
-    original_price: 21000
-    discount: "25%"
+    price: 13125
+    original_price: null
+    discount: null
     currency: INR
-    duration: "180 days"
+    duration: "12 weeks / 180 days"
 demo_schedule:
   - day: Mon-Wed-Fri
     start: "5:00 PM"

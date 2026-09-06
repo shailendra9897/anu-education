@@ -8,6 +8,12 @@ import {
 } from "@/lib/portal/portal.access.service";
 import { registerStudentOnPortal } from "@/lib/demo/portal/portal.registration";
 import type { PortalCourseKey } from "@/lib/portal/portal.types";
+import { hasPortalPassword } from "@/lib/portal/portal.config";
+import {
+  isAdminAuthError,
+  adminAuthErrorResponse,
+  requireAdminAuth,
+} from "@/lib/auth/admin-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +30,8 @@ export async function POST(
   },
 ) {
   try {
+    const identity = await requireAdminAuth(req, { role: "ADMIN" });
+
     const { id } = await context.params;
 
     if (!id) {
@@ -86,15 +94,32 @@ export async function POST(
         );
       }
 
-      await markPortalAccessProcessing(id, "admin");
+      await markPortalAccessProcessing(id, identity.email);
 
       try {
+        // Safe-fail: refuse to attempt portal registration when the
+        // required password configuration is absent. The password value
+        // itself is never read back, logged, or returned here.
+        if (!hasPortalPassword()) {
+          const failedRequest = await markPortalAccessFailed(
+            id,
+            "Portal registration is not configured (missing password).",
+          );
+          return NextResponse.json({
+            success: false,
+            request: failedRequest,
+            message: "Portal registration is not configured.",
+            errorCode: "CONFIGURATION",
+          });
+        }
+
         const course = normalizePortalCourse(portalRequest.course);
+        // No explicit password is passed — registerStudentOnPortal reads
+        // PORTAL_PASSWORD from configuration (never hardcoded here).
         const result = await registerStudentOnPortal({
           name: portalRequest.studentName,
           email: portalRequest.email,
           phone: portalRequest.phone,
-          password: "Demo@123",
           course,
         });
 
@@ -174,6 +199,9 @@ export async function POST(
     const request = await retryPortalAccess(id);
     return NextResponse.json({ success: true, request });
   } catch (error) {
+    if (isAdminAuthError(error)) {
+      return adminAuthErrorResponse(error);
+    }
     console.error(
       "[ADMIN PORTAL ACTION] Error:",
       error,

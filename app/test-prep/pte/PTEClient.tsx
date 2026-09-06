@@ -257,8 +257,9 @@ export default function PTEClient() {
           <section className="text-center">
             <h2 className="text-3xl font-bold mb-4">Our PTE 4‑Week Online Coaching Plan</h2>
             <div className="inline-block price-card bg-white rounded-3xl shadow-2xl p-8 max-w-md mx-auto border-2 border-green-200">
-              <div className="text-4xl font-bold text-green-600">₹ 7,999</div>
-              <p className="text-gray-500 line-through">₹ 12,999</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-green-700 bg-green-100 rounded-full px-3 py-1 inline-block">Limited-time offer</p>
+              <div className="text-4xl font-bold text-green-600 mt-3">₹ 7,999</div>
+              <p className="text-gray-500 line-through">Regular price ₹ 12,999</p>
               <p className="text-sm text-gray-500 mt-1">(or adjust according to your pricing)</p>
               <ul className="mt-6 space-y-2 text-left text-gray-700">
                 <li>✅ Structured 4‑Week Study Plan</li>

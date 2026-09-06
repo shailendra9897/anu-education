@@ -7,7 +7,7 @@
 // ─────────────────────────────────────────────────────────────────
 // ANALYSIS OF CURRENT PAGE (anuedu.in/test-prep/ielts-online):
 //   ❌ No schema at all (no Course, FAQ, Breadcrumb)
-//   ❌ WhatsApp number wrong (9428186817 instead of 7016497087)
+//   ❌ WhatsApp number: 9428186817 is the approved number (7016497087 is call-only)
 //   ❌ "10,000+ students" — inconsistent with homepage 1,100+
 //   ❌ ~300 words total — far too thin to rank
 //   ❌ No Academic vs General Training explanation
@@ -42,7 +42,7 @@
 //   ✅ IELTS exam fee ₹18,000 mentioned
 //   ✅ Band score requirements by country
 //   ✅ Performance tracker + Daily video library from brochure
-//   ✅ Corrected WhatsApp to +917016497087
+//   ✅ WhatsApp verified: 9428186817 (approved wa.me number)
 //   ✅ Consistent stats: 1,100+ students
 //   ✅ Word count ~2,200 (from ~300)
 // ─────────────────────────────────────────────────────────────────

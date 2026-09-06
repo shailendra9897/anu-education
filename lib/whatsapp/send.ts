@@ -11,10 +11,12 @@
 //   WHATSAPP_GRAPH_API_VERSION  → Graph version, single source of
 //                                 truth (defaults to v21.0)
 //
-// This is deliberately SEPARATE from app/api/send, /api/send-bulk,
-// /api/reminder and /api/demo-lead — those campaign/template routes
-// are untouched and remain responsible for bulk messaging. Bulk
-// messaging is explicitly out of scope for this utility.
+// This is the SHARED conversational outbound sender (AI replies, Meta/
+// Evolution flows). It is deliberately separate from the bulk campaign
+// surfaces (app/api/send, /api/send-bulk, /admin, /admin/whatsapp,
+// /admin/bulk, /admin/send-template) which were AUDITED and REMOVED in
+// S6-D3 as obsolete marketing templates, along with their /api/send-template
+// dead reference. getDemoReminderReadiness / /api/reminder remain.
 //
 // SECURITY: access tokens are never logged; Meta error bodies are
 // truncated to their message field so tokens cannot leak through

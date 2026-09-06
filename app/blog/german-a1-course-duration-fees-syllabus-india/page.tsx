@@ -198,7 +198,7 @@ export default function GermanA1BlogPage() {
             </table>
           </div>
           <p className="text-gray-700">
-            At <strong>ANU Education</strong>, you can enrol in a structured German A1 course starting from <strong>₹10,000</strong> – inclusive of study materials, speaking practice sessions, and post‑class support.
+            At <strong>ANU Education</strong>, you can enrol in a structured German A1 course starting from <strong>₹7,500</strong> – inclusive of study materials, speaking practice sessions, and post‑class support.
           </p>
 
           {/* Syllabus */}

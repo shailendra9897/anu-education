@@ -43,6 +43,10 @@ export type BookDemoInput = {
   phone?: string;
   email?: string;
 
+  // Canonical CRM identity (C1) — nullable; attached to the booking
+  // (and the portal request) when known.
+  leadId?: string;
+
   // True only when the previous AI message asked
   // the student to confirm a demo booking.
   awaitingConfirmation?: boolean;
@@ -105,6 +109,7 @@ export async function processDemoRequest(
     // attach captured details to on the student's next message(s).
     const booking = await createDemoBooking({
       conversationId: input.conversationId,
+      leadId: input.leadId,
       name: input.name,
       phone: input.phone,
       email: input.email,
@@ -118,6 +123,7 @@ export async function processDemoRequest(
       await createPortalAccessRequest({
         conversationId: input.conversationId,
         demoBookingId: booking.id,
+        leadId: input.leadId,
         studentName: input.name,
         email: input.email,
         phone: input.phone,
@@ -256,9 +262,39 @@ function isBookingConfirmation(message: string): boolean {
     "reserve my seat",
   ];
 
-  return confirmations.some(
-    (phrase) =>
-      text === phrase ||
-      text.includes(phrase),
-  );
+  if (
+    confirmations.some(
+      (phrase) =>
+        text === phrase ||
+        text.includes(phrase),
+    )
+  ) {
+    return true;
+  }
+
+  // Phase S5-A: mirror of lib/chat/intent-router.ts's extended acceptance.
+  // Short natural assents ("sure", "okay", "ok", "go ahead", "definitely",
+  // "attend") count as demo-booking confirmations. Word boundaries keep
+  // "ok" from matching inside "book"/"look" and "sure" from matching inside
+  // "unsure"/"ensure"; any negation in the same message rejects the assent
+  // (e.g. "not sure"). This copy works on RAW text (apostrophes intact), so
+  // the negation regex covers both "isn't" and "isnt"/"isn t" spellings.
+  const acceptances = [
+    /\bsure\b/,
+    /\bokay\b/,
+    /\bok\b/,
+    /\bgo ahead\b/,
+    /\bdefinitely\b/,
+    /\battend\b/,
+    /\byes sure\b/,
+  ];
+
+  const negation =
+    /\b(?:no|not|never|unsure)\b|\b(?:don|won|isn|aren|can|couldn|shouldn|wouldn)\s*(?:'|’)?t\b/;
+
+  if (negation.test(text)) {
+    return false;
+  }
+
+  return acceptances.some((pattern) => pattern.test(text));
 }

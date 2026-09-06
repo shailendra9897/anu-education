@@ -74,7 +74,11 @@ function formatKnowledgeResults(
     remaining -= chunk.length;
   }
 
-  return chunks.join("").trim();
+  // Hard bound: the join+trim must never exceed maxCharacters. The
+  // "\n..." truncation marker is appended AFTER filling the budget, so a
+  // final slice guarantees callers a prompt no larger than requested
+  // (critical for the tightened WhatsApp knowledge budget).
+  return chunks.join("").trim().slice(0, maxCharacters);
 }
 export type BuildPromptInput = {
   userMessage: string;
@@ -82,6 +86,14 @@ export type BuildPromptInput = {
   sourcePage?: string;
   knowledgeOptions?: KnowledgeContextOptions;
   memoryOptions?: ConversationContextOptions;
+  /**
+   * Phase 1: when false, the memory replay is skipped entirely. Used by
+   * the WhatsApp pipeline, which already supplies the recent-message
+   * history inline (chronological) and would otherwise double-count the
+   * same rows — twice the tokens for no additional signal. Defaults to
+   * true (website chat keeps the current behavior).
+   */
+  includeMemory?: boolean;
 };
 
 // ── Build the full prompt structure using a single input object ──
@@ -91,6 +103,7 @@ export async function buildPrompt({
   sourcePage,
   knowledgeOptions,
   memoryOptions,
+  includeMemory = true,
 }: BuildPromptInput): Promise<{
   system: string;
   memory: string;
@@ -103,9 +116,10 @@ export async function buildPrompt({
     system += `\n\nCurrent Page: ${sourcePage}`;
   }
 
-  const memory = conversationId
-    ? await buildConversationContext(conversationId, memoryOptions?.limit)
-    : "";
+  const memory =
+    conversationId && includeMemory
+      ? await buildConversationContext(conversationId, memoryOptions?.limit)
+      : "";
 
   const knowledge = await buildKnowledgeContext(userMessage, knowledgeOptions);
 

@@ -10,6 +10,8 @@ export type CreateDemoBookingInput = {
   preferredBatch?: string;
   preferredDate?: Date;
   notes?: string;
+  // Canonical CRM identity (C1) — nullable; set when known.
+  leadId?: string;
 };
 
 export async function createDemoBooking(
@@ -18,6 +20,7 @@ export async function createDemoBooking(
   return prisma.demoBooking.create({
     data: {
       conversationId: input.conversationId,
+      leadId: input.leadId,
       name: input.name,
       phone: input.phone,
       email: input.email,
