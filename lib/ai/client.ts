@@ -71,6 +71,12 @@ export type StreamChatCompletionParams = {
   model?: string;
   temperature?: number;
   maxTokens?: number;
+  /**
+   * Groq reasoning_effort — supported by qwen3.x thinking models.
+   * "none" = non-thinking/instruct mode (no <think> blocks emitted).
+   * Defaults to thinking mode when omitted (Groq default).
+   */
+  reasoningEffort?: "none" | "low" | "medium" | "high";
   onToken?: (token: string) => void;
   onError?: (error: Error) => void;
 };
@@ -198,7 +204,13 @@ export function estimateTokenCount(text: string): number {
 export async function generateChatCompletion(
   params: Omit<StreamChatCompletionParams, "onToken" | "onError">
 ): Promise<{ content: string; usage: TokenUsage }> {
-  const { messages, model = GROQ_MODEL, temperature = 0.3, maxTokens = 2000 } = params;
+  const {
+    messages,
+    model = GROQ_MODEL,
+    temperature = 0.3,
+    maxTokens = 2000,
+    reasoningEffort,
+  } = params;
 
   const response = await withRetry(async () => {
     return groq.chat.completions.create({
@@ -206,6 +218,7 @@ export async function generateChatCompletion(
       messages: messages.map((m) => ({ role: m.role, content: m.content })),
       temperature,
       max_tokens: maxTokens,
+      ...(reasoningEffort ? { reasoning_effort: reasoningEffort } : {}),
     });
   });
 

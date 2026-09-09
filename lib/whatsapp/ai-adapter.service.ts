@@ -154,6 +154,28 @@ async function saveMessage(
   });
 }
 
+/**
+ * assertNonEmptyAssistantReply — EMPTY-REPLY GUARD.
+ *
+ * A stripped thinking response (or any other reason) that yields
+ * empty/whitespace-only content is a GENERATION FAILURE, not a successful
+ * assistant reply. Returns the trimmed content when non-empty, otherwise
+ * throws BEFORE the ASSISTANT message can be persisted — so no empty row
+ * is written, Evolution is never called with empty text, and the transport
+ * releases the idempotency claim and allows a clean retry.
+ */
+export function assertNonEmptyAssistantReply(
+  content: string,
+  conversationId: string
+): string {
+  if (!content || !content.trim()) {
+    throw new Error(
+      `[WhatsApp AI] empty assistant response after generation (conversation ${conversationId})`
+    );
+  }
+  return content;
+}
+
 async function getRecentMessages(
   conversationId: string,
   limit = 10
@@ -845,10 +867,29 @@ export async function runAnuAiPipelineForWhatsApp(
   const aiResponse = await generateChatCompletion({
     messages: fullMessages,
     maxTokens: WHATSAPP_MAX_TOKENS,
+    // Non-thinking mode for WhatsApp's short-reply workload. The default
+    // GROQ_MODEL (qwen/qwen3.6-27b) is a thinking model: with a 500-token
+    // completion ceiling it can spend the ENTIRE budget on its  thinking
+    // block, leaving stripThinkingTags() with nothing but an empty string.
+    // reasoning_effort="none" switches it to instruct mode — direct
+    // answers only, so a valid user message is never silently answered
+    // with an empty ASSISTANT reply.
+    reasoningEffort: "none",
   });
 
-  // ── Persist assistant reply BEFORE sending to WhatsApp ────────
-  await saveMessage(current.id, MessageRole.ASSISTANT, aiResponse.content);
+  // EMPTY-REPLY GUARD: a stripped thinking response (or any other reason)
+  // that yields empty/whitespace-only content is a GENERATION FAILURE, not
+  // a successful assistant reply. Throw BEFORE persisting the ASSISTANT
+  // message so no empty row is written, Evolution is never called with
+  // empty text, and the transport releases the idempotency claim and
+  // allows a clean retry.
+  const content = assertNonEmptyAssistantReply(
+    aiResponse.content,
+    current.id
+  );
 
-  return aiResponse.content;
+  // ── Persist assistant reply BEFORE sending to WhatsApp ────────
+  await saveMessage(current.id, MessageRole.ASSISTANT, content);
+
+  return content;
 }
