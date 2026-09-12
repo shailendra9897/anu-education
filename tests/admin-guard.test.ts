@@ -31,6 +31,11 @@ import {
   type StaffIdentity,
   type AdminIdentityPorts,
 } from "../lib/auth/admin-guard";
+import {
+  ADMIN_SESSION_COOKIE,
+  issueAdminSession,
+  signSessionToken,
+} from "../lib/auth/admin-session";
 
 // ── helpers ────────────────────────────────────────────────────────
 
@@ -41,6 +46,12 @@ function basicHeader(user: string, pass: string): string {
 function apiRequest(header?: string): NextRequest {
   return new NextRequest("http://localhost:3000/api/admin/staff", {
     headers: header ? { authorization: header } : {},
+  });
+}
+
+function apiRequestWithSession(token: string): NextRequest {
+  return new NextRequest("http://localhost:3000/api/admin/staff", {
+    headers: { cookie: `${ADMIN_SESSION_COOKIE}=${token}` },
   });
 }
 
@@ -167,6 +178,99 @@ test("non-email admin username resolves via the active ADMIN staff", async () =>
     { db: identityPorts(ACTIVE_ADMIN) },
   );
   assert.equal(identity.email, "admin@anu.in");
+});
+
+// ── secure session cookie authentication (CRM-UI-AUTH-FIX-01) ──────
+
+test("valid session cookie (no Basic header) → allowed, resolves staff identity", async () => {
+  const { token } = await issueAdminSession("admin");
+  const identity = await requireAdminAuth(
+    apiRequestWithSession(token),
+    { db: identityPorts(ACTIVE_ADMIN) },
+  );
+  assert.equal(identity.email, "admin@anu.in");
+  assert.equal(identity.role, "ADMIN");
+  assert.equal(identity.active, true);
+});
+
+test("valid session cookie with an email username → email staff match", async () => {
+  const adminByEmail: StaffIdentity = {
+    ...ACTIVE_ADMIN,
+    email: "admin@anu.in",
+  };
+  const { token } = await issueAdminSession("admin@anu.in");
+  const identity = await requireAdminAuth(
+    apiRequestWithSession(token),
+    { db: identityPorts(adminByEmail) },
+  );
+  assert.equal(identity.email, "admin@anu.in");
+});
+
+test("inactive staff with a valid session → 403 (fail closed on identity)", async () => {
+  const inactive: StaffIdentity = {
+    ...ACTIVE_ADMIN,
+    email: "admin@anu.in",
+    active: false,
+  };
+  const { token } = await issueAdminSession("admin@anu.in");
+  await assert.rejects(
+    requireAdminAuth(apiRequestWithSession(token), {
+      db: identityPorts(inactive),
+    }),
+    (err: unknown) => err instanceof AdminAuthError && err.status === 403,
+  );
+});
+
+test("wrong staff role with a valid session + role requirement → 403", async () => {
+  const counsellor: StaffIdentity = {
+    ...ACTIVE_ADMIN,
+    id: "staff-2",
+    email: "counsellor@anu.in",
+    role: "COUNSELLOR",
+  };
+  const { token } = await issueAdminSession("counsellor@anu.in");
+  await assert.rejects(
+    requireAdminAuth(apiRequestWithSession(token), {
+      db: identityPorts(counsellor),
+      role: "ADMIN",
+    }),
+    (err: unknown) => err instanceof AdminAuthError && err.status === 403,
+  );
+});
+
+test("expired session cookie → 401", async () => {
+  const expired = await signSessionToken({
+    v: "v1",
+    u: "admin",
+    e: Date.now() - 1000,
+  });
+  await assert.rejects(
+    requireAdminAuth(apiRequestWithSession(expired), {
+      db: identityPorts(ACTIVE_ADMIN),
+    }),
+    (err: unknown) => err instanceof AdminAuthError && err.status === 401,
+  );
+});
+
+test("tampered session cookie → 401", async () => {
+  const { token } = await issueAdminSession("admin");
+  const tampered = `${token.slice(0, -2)}AA`;
+  await assert.rejects(
+    requireAdminAuth(apiRequestWithSession(tampered), {
+      db: identityPorts(ACTIVE_ADMIN),
+    }),
+    (err: unknown) => err instanceof AdminAuthError && err.status === 401,
+  );
+});
+
+test("no credentials and no session → 401 'Authentication required.'", async () => {
+  await assert.rejects(
+    requireAdminAuth(apiRequest(), { db: identityPorts(ACTIVE_ADMIN) }),
+    (err: unknown) =>
+      err instanceof AdminAuthError &&
+      err.status === 401 &&
+      err.message === "Authentication required.",
+  );
 });
 
 test("non-email admin username with no active ADMIN staff → 401", async () => {

@@ -4,9 +4,11 @@
 // SHARED ADMIN AUTHENTICATION + AUTHORIZATION HELPER
 //
 // Used by every /api/admin/* route handler. The root middleware.ts
-// provides the fast path (env Basic-auth check + HTTP 401 before the
-// handler runs); this module is the defense-in-depth layer that runs
-// inside each handler and adds the STAFF identity checks:
+// provides the fast path (env Basic-auth check or the short-lived
+// HttpOnly session cookie established after a successful Basic login —
+// both HTTP 401 before the handler runs); this module is the
+// defense-in-depth layer that runs inside each handler and adds the
+// STAFF identity checks:
 //
 //   1. Basic credentials must match ADMIN_USER / ADMIN_PASS
 //      (fail closed: missing header / bad base64 / no ":" → 401).
@@ -27,6 +29,10 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import {
+  ADMIN_SESSION_COOKIE,
+  verifyAdminSession,
+} from "@/lib/auth/admin-session";
 
 // ── Typed error carrying an HTTP status ────────────────────────────
 
@@ -201,18 +207,28 @@ export async function requireAdminAuth(
   options: RequireAdminAuthOptions = {},
 ): Promise<StaffIdentity> {
   const credentials = parseBasicCredentials(req);
-  if (!credentials) {
-    throw new AdminAuthError(401, "Authentication required.");
-  }
 
-  const valid = verifyBasicCredentials(credentials);
-  if (!valid) {
-    throw new AdminAuthError(401, "Invalid credentials.");
+  let username: string | null;
+
+  if (credentials) {
+    const valid = verifyBasicCredentials(credentials);
+    if (!valid) {
+      throw new AdminAuthError(401, "Invalid credentials.");
+    }
+    username = credentials.username;
+  } else {
+    const sessionUsername = await verifyAdminSession(
+      req.cookies.get(ADMIN_SESSION_COOKIE)?.value,
+    );
+    if (!sessionUsername) {
+      throw new AdminAuthError(401, "Authentication required.");
+    }
+    username = sessionUsername;
   }
 
   const db = options.db ?? defaultAdminIdentityPorts();
 
-  const staff = await resolveAdminIdentity(credentials.username, db);
+  const staff = await resolveAdminIdentity(username, db);
   if (!staff) {
     throw new AdminAuthError(
       401,
