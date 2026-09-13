@@ -142,7 +142,7 @@ export async function markPortalAccessFailed(
     data: {
       status: PortalAccessStatus.FAILED,
       failedAt: new Date(),
-      errorMessage: errorMessage.slice(0, 2000),
+      errorMessage: errorMessage.slice(0, 6000),
     },
   });
 }
