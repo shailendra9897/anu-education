@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  getPortalAccessRequest,
-  markPortalAccessProcessing,
   markPortalAccessCompleted,
   markPortalAccessFailed,
   retryPortalAccess,
 } from "@/lib/portal/portal.access.service";
-import { registerStudentOnPortal } from "@/lib/demo/portal/portal.registration";
-import type { PortalCourseKey } from "@/lib/portal/portal.types";
-import { hasPortalPassword } from "@/lib/portal/portal.config";
+import { processPortalAccessRequest } from "@/lib/portal/portal.processor";
 import {
   isAdminAuthError,
   adminAuthErrorResponse,
@@ -67,107 +63,51 @@ export async function POST(
     }
 
     if (action === "PROCESS") {
-      const portalRequest = await getPortalAccessRequest(id);
+      const result = await processPortalAccessRequest(id, {
+        processedBy: identity.email,
+      });
 
-      if (!portalRequest) {
-        return NextResponse.json(
-          { success: false, error: "Portal access request not found." },
-          { status: 404 },
-        );
-      }
-
-      if (portalRequest.status === "COMPLETED") {
-        return NextResponse.json({
-          success: true,
-          request: portalRequest,
-          message: "Portal access is already completed.",
-        });
-      }
-
-      if (portalRequest.status === "PROCESSING") {
-        return NextResponse.json(
-          {
-            success: false,
-            error: "This portal request is already being processed.",
-          },
-          { status: 409 },
-        );
-      }
-
-      await markPortalAccessProcessing(id, identity.email);
-
-      try {
-        // Safe-fail: refuse to attempt portal registration when the
-        // required password configuration is absent. The password value
-        // itself is never read back, logged, or returned here.
-        if (!hasPortalPassword()) {
-          const failedRequest = await markPortalAccessFailed(
-            id,
-            "Portal registration is not configured (missing password).",
+      switch (result.status) {
+        case "NOT_FOUND":
+          return NextResponse.json(
+            { success: false, error: result.message },
+            { status: 404 },
           );
+        case "ALREADY_COMPLETED":
+          return NextResponse.json({
+            success: true,
+            request: result.request,
+            message: result.message,
+          });
+        case "ALREADY_PROCESSING":
+        case "NOT_PROCESSABLE":
+          return NextResponse.json(
+            {
+              success: false,
+              error: result.message,
+            },
+            { status: 409 },
+          );
+        case "CONFIGURATION":
           return NextResponse.json({
             success: false,
-            request: failedRequest,
-            message: "Portal registration is not configured.",
+            request: result.request,
+            message: result.message,
             errorCode: "CONFIGURATION",
           });
-        }
-
-        const course = normalizePortalCourse(portalRequest.course);
-        // No explicit password is passed — registerStudentOnPortal reads
-        // PORTAL_PASSWORD from configuration (never hardcoded here).
-        const result = await registerStudentOnPortal({
-          name: portalRequest.studentName,
-          email: portalRequest.email,
-          phone: portalRequest.phone,
-          course,
-        });
-
-        if (!result.success) {
-          const request = await markPortalAccessFailed(
-            id,
-            result.errorMessage || result.message || "Portal registration failed.",
-          );
-
+        case "FAILED":
           return NextResponse.json({
             success: false,
-            request,
+            request: result.request,
             message: result.message,
             errorCode: result.errorCode,
           });
-        }
-
-        const notes = [
-          result.message,
-          result.selectedCourse ? `Course: ${result.selectedCourse}` : null,
-          result.portalStatus ? `Portal status: ${result.portalStatus}` : null,
-        ]
-          .filter(Boolean)
-          .join(" | ");
-
-        const request = await markPortalAccessCompleted(id, {
-          portalStudentId: result.portalStudentId,
-          portalLogin: result.portalLogin,
-          notes,
-        });
-
-        return NextResponse.json({
-          success: true,
-          request,
-          message: "Portal registration completed successfully.",
-        });
-      } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "Unknown portal registration error.";
-        const request = await markPortalAccessFailed(id, message);
-
-        return NextResponse.json({
-          success: false,
-          request,
-          message,
-        });
+        case "COMPLETED":
+          return NextResponse.json({
+            success: true,
+            request: result.request,
+            message: result.message,
+          });
       }
     }
 
@@ -215,23 +155,4 @@ export async function POST(
       { status: 500 },
     );
   }
-}
-
-function normalizePortalCourse(course?: string | null): PortalCourseKey {
-  const value = (course ?? "").trim().toLowerCase();
-
-  if (value.includes("ielts")) return "ielts";
-  if (value.includes("pte")) return "pte";
-  if (value.includes("german")) return "german";
-  if (value.includes("french")) return "french";
-  if (value.includes("toefl")) return "toefl";
-  if (value.includes("gre")) return "gre";
-  if (value.includes("gmat")) return "gmat";
-  if (value.includes("sat")) return "sat";
-  if (value.includes("duolingo")) return "duolingo";
-  if (value.includes("spoken english") || value.includes("spoken")) {
-    return "spoken_english";
-  }
-
-  throw new Error(`No portal course mapping found for "${course ?? ""}".`);
 }

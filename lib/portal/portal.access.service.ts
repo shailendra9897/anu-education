@@ -106,28 +106,6 @@ export async function listPortalAccessRequests(
 }
 
 /**
- * Move a request into PROCESSING.
- */
-export async function markPortalAccessProcessing(
-  id: string,
-  processedBy?: string,
-) {
-  return prisma.portalAccessRequest.update({
-    where: { id },
-    data: {
-      status: PortalAccessStatus.PROCESSING,
-      attemptCount: {
-        increment: 1,
-      },
-      lastAttemptAt: new Date(),
-      processedBy,
-      errorMessage: null,
-      failedAt: null,
-    },
-  });
-}
-
-/**
  * Mark portal access as successfully completed.
  */
 export async function markPortalAccessCompleted(

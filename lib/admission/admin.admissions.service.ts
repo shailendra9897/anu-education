@@ -50,6 +50,7 @@ import {
   normalizeAdmissionCourse,
 } from "./admission.lifecycle";
 import { COACHING_COURSES } from "../lead/leadExtractor";
+import { autoProvisionPortalForAdmission } from "@/lib/portal/portal.processor";
 import {
   isAdminAuthError,
   adminAuthErrorResponse,
@@ -545,7 +546,7 @@ export async function performAdminAdmissionAction(
           `Unknown admission action "${String(action)}".`,
         );
       }
-      return recordAdmissionTransition({
+      const result = await recordAdmissionTransition({
         enrollmentId: admissionEnrollmentId,
         toState,
         actor,
@@ -553,6 +554,34 @@ export async function performAdminAdmissionAction(
         reason: input.reason ?? null,
         discriminator: input.discriminator ?? undefined,
       });
+
+      // CRM-PORTAL-AUTO-02 — automatic portal provisioning. Fires ONLY
+      // when the ADMIN/Counsellor action actually APPLIED the terminal
+      // ADMISSION_COMPLETED transition (result.applied). The S6-B1
+      // lifecycle guarantees only COUNSELLOR | ADMIN can reach that
+      // state, so STUDENT / AI / SYSTEM can never trigger automation;
+      // re-running the same action when already completed returns
+      // applied:false and never re-triggers. A portal-processing
+      // failure must not reject the (already committed) admission
+      // transition — it lands on the PortalAccessRequest (FAILED +
+      // retryable) and is logged.
+      if (
+        result.applied &&
+        toState === AdmissionState.ADMISSION_COMPLETED
+      ) {
+        try {
+          await autoProvisionPortalForAdmission(admissionEnrollmentId, {
+            processedBy: actorId ?? "admission-system",
+          });
+        } catch (error) {
+          console.error(
+            "[ADMISSION AUTO-PROVISION] error:",
+            error,
+          );
+        }
+      }
+
+      return result;
     }
   }
 }
