@@ -136,7 +136,7 @@ export async function registerStudentOnPortal(
   }
 
   const browser = await chromium.launch({
-    headless: false,
+    headless: process.env.NODE_ENV === "production",
   });
 
   try {

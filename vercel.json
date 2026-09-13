@@ -1,0 +1,3 @@
+{
+  "installCommand": "npm install && PLAYWRIGHT_BROWSERS_PATH=0 npx playwright install --only-shell chromium"
+}

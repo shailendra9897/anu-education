@@ -11,6 +11,7 @@ import { requireAdminAuth } from "@/lib/auth/admin-guard";
 import prisma from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 300;
 
 /**
  * POST /api/admin/admissions/[id]/actions
