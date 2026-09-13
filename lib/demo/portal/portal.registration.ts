@@ -395,6 +395,27 @@ export async function registerStudentOnPortal(
         : "Unknown portal registration error.";
     const errorCode = classifyPortalError(message);
 
+    let diag = "";
+    try {
+      const { execFileSync } = await import("child_process");
+      const bin =
+        "/var/task/node_modules/playwright-core/.local-browsers/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell";
+      diag =
+        "\n\n[LDD]\n" +
+        execFileSync("ldd", [bin], {
+          encoding: "utf8",
+          timeout: 30000,
+          stdio: ["ignore", "pipe", "pipe"],
+        })
+          .toString()
+          .slice(0, 2500);
+    } catch (e) {
+      diag =
+        "\n\n[LDD-ERR]\n" +
+        (e instanceof Error ? e.message : String(e)).slice(0, 1000);
+      diag += e instanceof Error && "stdout" in (e as any) ? "\n" + (e as any).stdout : "";
+    }
+
     console.error(
       `[PORTAL] Registration diagnostic error (${errorCode})`,
     );
@@ -403,7 +424,7 @@ export async function registerStudentOnPortal(
       success: false,
       message: `Portal registration failed (${errorCode}).`,
       errorCode,
-      errorMessage: buildRegistrationErrorMessage(errorCode),
+      errorMessage: buildRegistrationErrorMessage(errorCode) + diag,
     };
   } finally {
     await browser.close();
