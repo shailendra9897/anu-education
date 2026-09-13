@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
+  getPortalAccessRequest,
   markPortalAccessCompleted,
   markPortalAccessFailed,
   retryPortalAccess,
+  buildManualPortalSetupPayload,
 } from "@/lib/portal/portal.access.service";
 import { processPortalAccessRequest } from "@/lib/portal/portal.processor";
 import {
@@ -18,7 +20,8 @@ type Action =
   | "PROCESS"
   | "COMPLETE"
   | "FAIL"
-  | "RETRY";
+  | "RETRY"
+  | "MANUAL_SETUP";
 
 export async function POST(
   req: NextRequest,
@@ -52,7 +55,8 @@ export async function POST(
       action !== "PROCESS" &&
       action !== "COMPLETE" &&
       action !== "FAIL" &&
-      action !== "RETRY"
+      action !== "RETRY" &&
+      action !== "MANUAL_SETUP"
     ) {
       return NextResponse.json(
         {
@@ -112,11 +116,39 @@ export async function POST(
       }
     }
 
+    if (action === "MANUAL_SETUP") {
+      // Read-only manual provisioning support: returns the registration
+      // URL + the student details required to register a portal account
+      // BY HAND. It NEVER changes status — opening the registration page
+      // is deliberately distinct from marking the request COMPLETED.
+      const request = await getPortalAccessRequest(id);
+
+      if (!request) {
+        return NextResponse.json(
+          { success: false, error: "Portal access request not found." },
+          { status: 404 },
+        );
+      }
+
+      const setup = buildManualPortalSetupPayload(request);
+
+      return NextResponse.json({
+        success: true,
+        request,
+        setup,
+        message:
+          request.status === "COMPLETED"
+            ? "This portal access request is already completed."
+            : "Manual portal setup prepared — complete it from the registration page.",
+      });
+    }
+
     if (action === "COMPLETE") {
       const request = await markPortalAccessCompleted(id, {
         portalStudentId: body.portalStudentId,
         portalLogin: body.portalLogin,
         notes: body.notes,
+        processedBy: identity.email,
       });
 
       return NextResponse.json({ success: true, request });

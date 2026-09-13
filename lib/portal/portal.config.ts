@@ -35,6 +35,19 @@ export function getPortalPassword(): string | null {
 }
 
 /**
+ * The public ANU student learning portal registration URL used by both
+ * the automatic provisioning flow and the CRM manual fallback.
+ *
+ * Single source of truth — the automatic registration module imports
+ * this instead of carrying its own copy, so an admin-facing URL can
+ * never drift from the URL the automation targets.
+ */
+export function getPortalRegistrationUrl(): string {
+  return process.env.PORTAL_REGISTRATION_URL?.trim() ||
+    "https://study.anuedu.in/register";
+}
+
+/**
  * Whether the registration password is configured. Boolean-only — the
  * value itself is never exposed here for diagnostics.
  */

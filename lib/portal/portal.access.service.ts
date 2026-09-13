@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import { PortalAccessStatus } from "@prisma/client";
+import type { PortalAccessRequest } from "@prisma/client";
+import { getPortalRegistrationUrl } from "./portal.config";
 
 export type CreatePortalAccessRequestInput = {
   conversationId?: string;
@@ -92,6 +94,39 @@ export async function getPortalAccessRequest(id: string) {
 }
 
 /**
+ * Safe fields an admin needs to provision a portal account manually.
+ * Derived from the EXISTING PortalAccessRequest row only — never
+ * includes the portal password or any secret.
+ */
+export type ManualPortalSetupPayload = {
+  registrationUrl: string;
+  studentName: string;
+  email: string;
+  phone: string;
+  course: string | null;
+};
+
+/**
+ * Build the manual-provisioning payload for a request. Pure function —
+ * deterministic, no I/O, and structurally incapable of carrying the
+ * portal password (that value is not stored on the row at all).
+ */
+export function buildManualPortalSetupPayload(
+  request: Pick<
+    PortalAccessRequest,
+    "studentName" | "email" | "phone" | "course"
+  >,
+): ManualPortalSetupPayload {
+  return {
+    registrationUrl: getPortalRegistrationUrl(),
+    studentName: request.studentName,
+    email: request.email,
+    phone: request.phone,
+    course: request.course,
+  };
+}
+
+/**
  * List requests for the admin queue.
  */
 export async function listPortalAccessRequests(
@@ -114,6 +149,8 @@ export async function markPortalAccessCompleted(
     portalStudentId?: string;
     portalLogin?: string;
     notes?: string;
+    /** Who completed the request (staff email / actor id). */
+    processedBy?: string;
   },
 ) {
   return prisma.portalAccessRequest.update({
@@ -123,6 +160,7 @@ export async function markPortalAccessCompleted(
       portalStudentId: input?.portalStudentId,
       portalLogin: input?.portalLogin,
       notes: input?.notes,
+      processedBy: input?.processedBy,
       completedAt: new Date(),
       errorMessage: null,
       failedAt: null,
@@ -142,7 +180,7 @@ export async function markPortalAccessFailed(
     data: {
       status: PortalAccessStatus.FAILED,
       failedAt: new Date(),
-      errorMessage: errorMessage.slice(0, 6000),
+      errorMessage: errorMessage.slice(0, 2000),
     },
   });
 }

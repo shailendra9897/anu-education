@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   listPortalAccessRequests,
 } from "@/lib/portal/portal.access.service";
+import { getPortalRegistrationUrl } from "@/lib/portal/portal.config";
 import { PortalAccessStatus } from "@prisma/client";
 import {
   isAdminAuthError,
@@ -50,6 +51,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       success: true,
       count: requests.length,
+      registrationUrl: getPortalRegistrationUrl(),
       requests,
     });
   } catch (error) {
