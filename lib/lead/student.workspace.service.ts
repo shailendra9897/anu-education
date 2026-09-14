@@ -40,6 +40,11 @@ import {
 } from "./counsellor.action";
 import { classifyFollowUpStatus } from "../admission/admission.lifecycle";
 import { resolveStaffDisplayNames } from "../admission/admission.service";
+import {
+  qualifyLead,
+  validateLeadQualification,
+  type LeadQualification,
+} from "./lead.qualification";
 
 // ── Output types ───────────────────────────────────────────────────
 
@@ -164,6 +169,8 @@ export type StudentWorkspace = {
   admissions: StudentWorkspaceAdmission[];
   portalAccessRequests: StudentWorkspacePortalRequest[];
   latestAction: StudentWorkspaceAction;
+  /** Deterministic lead qualification (null = unavailable / validation failure). */
+  qualification: LeadQualification | null;
 };
 
 // ═════════════════════════════════════════════════════════════════
@@ -340,6 +347,21 @@ export async function getStudentWorkspace(
     admissionEnrollments.flatMap((a) => a.events.map((e) => e.actorId)),
   );
 
+  // Deterministic lead qualification (read-only, compute-on-read). Built
+  // ONLY from aggregates that were already loaded above — no extra
+  // queries, no AI, no stored score. A validation failure returns null
+  // (unavailable) rather than propagating malformed data to the UI.
+  const qualification = buildQualification({
+    conversationId,
+    conversation,
+    lead,
+    leadContext: conversation.leadContext,
+    demoBookings,
+    admissionEnrollments,
+    transcript,
+    latestAction,
+  });
+
   return {
     conversation: mapConversation(conversation),
     lead,
@@ -402,6 +424,7 @@ export async function getStudentWorkspace(
     }),
     portalAccessRequests,
     latestAction,
+    qualification,
   };
 }
 
@@ -435,4 +458,66 @@ function mapConversation(
     updatedAt: c.updatedAt,
     assignedCounsellor: c.assignedCounsellor,
   };
+}
+
+// ── Deterministic lead qualification (compute-on-read) ──────────────
+// Reuses the already-loaded workspace aggregates. Never throws:
+// validation failure silently returns null (unavailable) so the
+// workspace boundary can render the rest of the view normally.
+
+function buildQualification(overrides: {
+  conversationId: string;
+  conversation: {
+    name: string | null;
+    phone: string | null;
+    email: string | null;
+    status: string | null;
+    assignedCounsellorId: string | null;
+  };
+  lead: StudentWorkspaceLead;
+  leadContext: StudentWorkspaceLeadContext;
+  demoBookings: Array<{
+    course: string | null;
+    status: string;
+    preferredBatch: string | null;
+    preferredDate: Date | null;
+  }>;
+  admissionEnrollments: Array<{ course: string; state: string }>;
+  transcript: StudentTranscriptEntry[];
+  latestAction: StudentWorkspaceAction;
+}): LeadQualification | null {
+  try {
+    const input = {
+      conversation: {
+        id: overrides.conversationId,
+        name: overrides.conversation.name,
+        phone: overrides.conversation.phone,
+        email: overrides.conversation.email,
+        status: overrides.conversation.status,
+        assignedCounsellorId: overrides.conversation.assignedCounsellorId,
+      },
+      lead: overrides.lead
+        ? { name: overrides.lead.name, phone: overrides.lead.phone, email: overrides.lead.email }
+        : null,
+      leadContext: overrides.leadContext,
+      demoBookings: overrides.demoBookings.map((b) => ({
+        course: b.course,
+        status: b.status,
+        preferredBatch: b.preferredBatch,
+        preferredDate: b.preferredDate,
+      })),
+      admissions: overrides.admissionEnrollments.map((a) => ({
+        course: a.course,
+        state: a.state,
+      })),
+      latestAction: overrides.latestAction,
+      transcript: overrides.transcript.map((t) => ({ role: t.role, content: t.content })),
+    };
+    const result = qualifyLead(input);
+    const validation = validateLeadQualification(result);
+    if (!validation.valid) return null;
+    return result;
+  } catch {
+    return null;
+  }
 }

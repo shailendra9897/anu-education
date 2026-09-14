@@ -16,6 +16,7 @@ import {
   matchesActionFilter,
   type CounsellorActionState,
 } from "@/lib/lead/counsellor.action";
+import { deriveLeadStage, type LeadStage } from "@/lib/lead/lead.qualification";
 
 // ── OWNERSHIP STATE ────────────────────────────────────────────
 
@@ -160,6 +161,15 @@ export type ConversationWithOwnership = {
     course: string | null;
     reason: string;
   } | null;
+  /**
+   * LEAD-QUALIFICATION-AGENT-02 — presentation-only qualification stage
+   * (batch-computed, compute-on-read). Approximation for the list: demos
+   * and transcript intent are NOT re-fetched per page; the stage here is
+   * derived from the page's leadContext + admission states only. The
+   * conversation detail workspace re-derives the full stage. null when
+   * no page data could be computed.
+   */
+  qualificationStage: LeadStage | null;
 };
 
 export type ListConversationsOptions = {
@@ -270,10 +280,53 @@ export async function listConversations(options?: ListConversationsOptions) {
     },
   });
 
+  // LEAD-QUALIFICATION-AGENT-02 — lightweight list stage, batch-computed
+  // with exactly 2 queries (never per-row): leadContexts by
+  // conversationId + admission enrollments by leadId for this page. The
+  // qualification module stays DB-free; only its pure stage derivation is
+  // fed here. Transcript/demo signals are intentionally excluded to keep
+  // the list cheap — the detail workspace re-derives the full stage.
+  const leadContexts = await prisma.leadContext.findMany({
+    where: { conversationId: { in: pageIds } },
+  });
+  const leadIds = rows.map((r) => r.leadId).filter((id): id is string => Boolean(id));
+  const admissionsByLead = new Map<string, Array<{ course: string; state: string }>>();
+  if (leadIds.length > 0) {
+    const enrollments = await prisma.admissionEnrollment.findMany({
+      where: { leadId: { in: leadIds } },
+      select: { leadId: true, course: true, state: true },
+    });
+    for (const e of enrollments) {
+      const list = admissionsByLead.get(e.leadId) ?? [];
+      list.push({ course: e.course, state: e.state });
+      admissionsByLead.set(e.leadId, list);
+    }
+  }
+  const leadContextById = new Map(leadContexts.map((c) => [c.conversationId, c]));
+  const stageByConversation = new Map<string, LeadStage>();
+  for (const r of rows) {
+    const leadContext = leadContextById.get(r.id) ?? undefined;
+    const admissions = r.leadId && admissionsByLead.get(r.leadId)
+      ? admissionsByLead.get(r.leadId)
+      : undefined;
+    try {
+      const { stage } = deriveLeadStage({
+        conversation: { id: r.id, name: r.name, status: r.status, assignedCounsellorId: r.assignedCounsellorId },
+        leadContext,
+        admissions,
+      });
+      stageByConversation.set(r.id, stage);
+    } catch {
+      // Pure derivation should never throw; leave the stage null so the
+      // list simply omits the badge for this row.
+    }
+  }
+
   const rowById = new Map(rows.map((r) => [r.id, r]));
   const conversations = page.map((item) => ({
     ...(rowById.get(item.id) as NonNullable<(typeof rows)[number]>),
     derivedAction: item.derivedAction,
+    qualificationStage: stageByConversation.get(item.id) ?? null,
   }));
 
   return {

@@ -30,6 +30,15 @@ type Conversation = {
     course: string | null;
     reason: string;
   } | null;
+  qualificationStage:
+    | "LOST"
+    | "ADMISSION_READY"
+    | "HIGH_INTENT"
+    | "QUALIFIED"
+    | "QUALIFYING"
+    | "ENGAGED"
+    | "NEW"
+    | null;
 };
 
 type Counsellor = {
@@ -227,6 +236,38 @@ export default function ConversationsPage() {
     );
   };
 
+  // LEAD-QUALIFICATION-AGENT-02 — read-only qualification stage badge.
+  // Presentation only: derived compute-on-read, never a stored score.
+  const stageLabel: Record<string, string> = {
+    LOST: "Lost",
+    ADMISSION_READY: "Admission ready",
+    HIGH_INTENT: "High intent",
+    QUALIFIED: "Qualified",
+    QUALIFYING: "Qualifying",
+    ENGAGED: "Engaged",
+    NEW: "New",
+  };
+  const stageColor: Record<string, string> = {
+    LOST: "bg-gray-200 text-gray-800",
+    ADMISSION_READY: "bg-emerald-100 text-emerald-800 ring-1 ring-emerald-300",
+    HIGH_INTENT: "bg-orange-100 text-orange-800 ring-1 ring-orange-300",
+    QUALIFIED: "bg-amber-100 text-amber-800",
+    QUALIFYING: "bg-blue-100 text-blue-800",
+    ENGAGED: "bg-indigo-100 text-indigo-800",
+    NEW: "bg-slate-100 text-slate-700",
+  };
+  const stageBadge = (stage: Conversation["qualificationStage"]) => {
+    if (!stage) return <span className="text-slate-300">—</span>;
+    return (
+      <span
+        title="Approximate — derived from lead context and admission state only. Open the conversation for the full qualification."
+        className={`inline-flex w-fit whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-semibold ${stageColor[stage] ?? "bg-slate-100 text-slate-600"}`}
+      >
+        {stageLabel[stage] ?? stage}
+      </span>
+    );
+  };
+
   return (
     <main className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl">
@@ -341,6 +382,17 @@ export default function ConversationsPage() {
                       <th className="px-4 py-3">Status</th>
                       <th className="px-4 py-3">Messages</th>
                       <th className="px-4 py-3">Action</th>
+                      <th className="px-4 py-3">
+                        <span className="flex items-center gap-1">
+                          Stage
+                          <span
+                            title="Approximate stage derived from lead context and admission state only — transcript and demo signals are excluded here. Open the conversation for the full qualification."
+                            className="rounded bg-slate-200 px-1 text-[10px] font-semibold text-slate-600"
+                          >
+                            approx
+                          </span>
+                        </span>
+                      </th>
                       <th className="px-4 py-3">Assigned To</th>
                       <th className="px-4 py-3">Updated</th>
                       <th className="px-4 py-3">Action</th>
@@ -386,6 +438,10 @@ export default function ConversationsPage() {
 
                         <td className="px-4 py-3">
                           {actionBadge(conv)}
+                        </td>
+
+                        <td className="px-4 py-3">
+                          {stageBadge(conv.qualificationStage)}
                         </td>
 
                         <td className="px-4 py-3 text-sm">
@@ -462,6 +518,9 @@ export default function ConversationsPage() {
                         </p>
                         {conv.derivedAction && (
                           <div className="mt-1.5">{actionBadge(conv)}</div>
+                        )}
+                        {conv.qualificationStage && (
+                          <div className="mt-1.5">{stageBadge(conv.qualificationStage)}</div>
                         )}
                       </div>
                       <span

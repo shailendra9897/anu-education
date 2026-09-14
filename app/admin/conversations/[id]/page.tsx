@@ -141,6 +141,31 @@ type LatestAction = {
   reason: string;
 } | null;
 
+// Deterministic lead qualification (LEAD-QUALIFICATION-AGENT-02).
+type QualField = {
+  value: string | null;
+  basis: "FACT" | "INFERENCE" | "UNKNOWN";
+  confidence: number | null;
+};
+
+type Qualification = {
+  intent: QualField;
+  course: QualField;
+  exam: QualField;
+  destination: QualField;
+  studentType: QualField;
+  intake: QualField;
+  timeline: QualField;
+  budget: QualField;
+  urgency: QualField;
+  leadStage: QualField;
+  confidence: number | null;
+  missingInfo: string[];
+  nextAction: string;
+  counsellorSummary: string;
+  reason: string;
+};
+
 type Workspace = {
   conversation: Conv;
   lead: Lead;
@@ -151,6 +176,7 @@ type Workspace = {
   admissions: Admission[];
   portalAccessRequests: PortalRequest[];
   latestAction: LatestAction;
+  qualification: Qualification | null;
 };
 
 // ── Presentation helpers ──────────────────────────────────────────
@@ -294,6 +320,62 @@ function FollowUpBadge({ status }: { status: string }) {
   return (
     <span className={`inline-flex whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-semibold ${FOLLOW_UP_STATUS_COLORS[status] ?? "bg-slate-100 text-slate-700"}`}>
       {status === "NONE" ? "No follow-up" : status === "OVERDUE" ? "Overdue" : status === "DUE_SOON" ? "Due soon" : status === "UPCOMING" ? "Upcoming" : status}
+    </span>
+  );
+}
+
+// ── Deterministic lead qualification presentation (read-only) ───────
+
+const QUAL_STAGE_LABELS: Record<string, string> = {
+  LOST: "Lost",
+  ADMISSION_READY: "Admission ready",
+  HIGH_INTENT: "High intent",
+  QUALIFIED: "Qualified",
+  QUALIFYING: "Qualifying",
+  ENGAGED: "Engaged",
+  NEW: "New",
+};
+
+const QUAL_STAGE_COLORS: Record<string, string> = {
+  LOST: "bg-gray-200 text-gray-800",
+  ADMISSION_READY: "bg-emerald-100 text-emerald-800 ring-1 ring-emerald-300",
+  HIGH_INTENT: "bg-orange-100 text-orange-800 ring-1 ring-orange-300",
+  QUALIFIED: "bg-amber-100 text-amber-800",
+  QUALIFYING: "bg-blue-100 text-blue-800",
+  ENGAGED: "bg-indigo-100 text-indigo-800",
+  NEW: "bg-slate-100 text-slate-700",
+};
+
+const QUAL_BASIS_LABELS: Record<string, string> = {
+  FACT: "Fact",
+  INFERENCE: "Inferred",
+  UNKNOWN: "Unknown",
+};
+
+const QUAL_BASIS_COLORS: Record<string, string> = {
+  FACT: "bg-emerald-100 text-emerald-800",
+  INFERENCE: "bg-blue-100 text-blue-800",
+  UNKNOWN: "bg-slate-100 text-slate-600",
+};
+
+const QUAL_URGENCY_LABELS: Record<string, string> = {
+  HIGH: "High",
+  MEDIUM: "Medium",
+  LOW: "Low",
+};
+
+// Human-friendly confidence wording — the numeric confidence is never
+// shown to staff (no false precision); only present FACT fields count.
+function confidenceWording(confidence: number | null, factCount: number): string {
+  if (factCount === 0 || confidence === null) return "none";
+  if (confidence >= 0.9) return "high";
+  return "medium";
+}
+
+function QualBasisBadge({ basis }: { basis: string }) {
+  return (
+    <span className={`inline-block whitespace-nowrap rounded px-1.5 py-0.5 text-[10px] font-semibold ${QUAL_BASIS_COLORS[basis] ?? "bg-slate-100 text-slate-600"}`}>
+      {QUAL_BASIS_LABELS[basis] ?? basis}
     </span>
   );
 }
@@ -687,6 +769,98 @@ export default function StudentWorkspacePage() {
                     <dd className="text-slate-900">{workspace.lead.identitySource || "—"}</dd>
                   </div>
                 </div>
+              )}
+            </section>
+
+            <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                Lead qualification
+              </h2>
+              {!workspace.qualification ? (
+                <p className="text-sm text-slate-400">Qualification is not available for this conversation.</p>
+              ) : (
+                (() => {
+                  const q = workspace.qualification;
+                  const basisFlags = [
+                    q.course,
+                    q.exam,
+                    q.destination,
+                    q.studentType,
+                    q.intake,
+                    q.timeline,
+                    q.budget,
+                  ];
+                  const factCount = basisFlags.filter((f) => f.basis === "FACT" && f.value).length;
+                  return (
+                    <>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span
+                          className={`inline-flex whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-semibold ${QUAL_STAGE_COLORS[q.leadStage.value ?? ""] ?? "bg-slate-100 text-slate-700"}`}
+                        >
+                          {QUAL_STAGE_LABELS[q.leadStage.value ?? ""] ?? q.leadStage.value ?? "—"}
+                        </span>
+                        {q.urgency.value && (
+                          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">
+                            Urgency: {QUAL_URGENCY_LABELS[q.urgency.value] ?? q.urgency.value}
+                          </span>
+                        )}
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+                          Confidence: {confidenceWording(q.confidence, factCount)}
+                        </span>
+                      </div>
+
+                      <dl className="mt-3 space-y-1.5 text-sm">
+                        {(
+                          [
+                            ["Intent", q.intent],
+                            ["Course", q.course],
+                            ["Exam", q.exam],
+                            ["Destination", q.destination],
+                            ["Student type", q.studentType],
+                            ["Intake", q.intake],
+                            ["Timeline", q.timeline],
+                            ["Budget", q.budget],
+                          ] as Array<[string, QualField]>
+                        ).map(([k, f]) => (
+                          <div key={k} className="flex items-center justify-between gap-3">
+                            <dt className="shrink-0 text-slate-500">{k}</dt>
+                            <dd className="flex items-center gap-2 text-right">
+                              <span className={f.value ? "text-slate-900" : "text-slate-400"}>
+                                {f.value || "Unknown"}
+                              </span>
+                              <QualBasisBadge basis={f.basis} />
+                            </dd>
+                          </div>
+                        ))}
+                      </dl>
+
+                      {q.missingInfo.length > 0 && (
+                        <div className="mt-3 border-t border-slate-100 pt-3">
+                          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                            Still to collect
+                          </p>
+                          <div className="mt-1.5 flex flex-wrap gap-1.5">
+                            {q.missingInfo.map((m) => (
+                              <span key={m} className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 ring-1 ring-amber-200">
+                                {m}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="mt-3 border-t border-slate-100 pt-3">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Next action</p>
+                        <p className="mt-1 text-sm text-slate-800">{q.nextAction}</p>
+                      </div>
+
+                      <div className="mt-3 border-t border-slate-100 pt-3">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Summary</p>
+                        <p className="mt-1 text-sm text-slate-800">{q.counsellorSummary}</p>
+                      </div>
+                    </>
+                  );
+                })()
               )}
             </section>
 
