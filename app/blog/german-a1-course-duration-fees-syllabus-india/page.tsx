@@ -15,20 +15,11 @@ export const metadata = {
     siteName: "ANU Education",
     type: "article",
     locale: "en_IN",
-    images: [
-      {
-        url: "/images/german-a1-guide.jpg",
-        width: 1200,
-        height: 630,
-        alt: "German A1 Course Guide 2026",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "German A1 Course – Duration, Fees & Syllabus (2026)",
     description: "Affordable online German A1 classes. Live interactive sessions, free demo.",
-    images: ["/images/german-a1-guide.jpg"],
   },
   alternates: {
     canonical: "https://www.anuedu.in/blog/german-a1-course-duration-fees-syllabus-india",

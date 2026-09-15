@@ -26,20 +26,11 @@ export const metadata = {
     siteName: "ANU Education",
     type: "article",
     locale: "en_IN",
-    images: [
-      {
-        url: "/images/aps-certificate-guide.jpg", // Will be resolved with metadataBase
-        width: 1200,
-        height: 630,
-        alt: "APS Certificate for Germany",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "APS Certificate for Germany – Complete Guide",
     description: "Mandatory document for Indian students applying for German student visa. Fees, documents, processing time.",
-    images: ["/images/aps-certificate-guide.jpg"],
   },
   alternates: {
     canonical: "https://www.anuedu.in/study-in/germany/aps-certificate",

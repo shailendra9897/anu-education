@@ -99,12 +99,12 @@ export default function FrenchClient() {
         "@type": "Course",
         name: "French Language Course Online India – A1 to B2, TEF & TCF 2026",
         description: "Live online French classes in India from Basic to B2 level. TEF Canada & TCF exam preparation, Canada PR CRS points advantage, C1-certified trainers, 5-day free trial, rolling batches. Offered by ANU Education, Skill India certified institute.",
-        provider: { "@type": "EducationalOrganization", name: "ANU Education", sameAs: "https://www.anuedu.in", telephone: "+917016497087", address: { "@type": "PostalAddress", addressLocality: "Modasa", addressRegion: "Gujarat", addressCountry: "IN" } },
+        provider: { "@type": "EducationalOrganization", name: "ANU Education", telephone: "+917016497087", address: { "@type": "PostalAddress", addressLocality: "Modasa", addressRegion: "Gujarat", addressCountry: "IN" } },
         educationalLevel: "Beginner to Upper Intermediate (A1–B2)",
         inLanguage: "fr",
         coursePrerequisites: "No prior French knowledge required for A1 level",
         offers: { "@type": "Offer", priceCurrency: "INR", availability: "https://schema.org/OnlineOnly", validFrom: "2026-01-01", description: "5-day free trial available. Contact for course fees." },
-        hasCourseInstance: { "@type": "CourseInstance", courseMode: "Online", courseWorkload: "PT1H30M", location: { "@type": "VirtualLocation", url: "https://www.anuedu.in/language/french" } },
+        hasCourseInstance: { "@type": "CourseInstance", courseMode: "Online", courseWorkload: "PT1H30M", location: { "@type": "VirtualLocation", url: "https://www.anuedu.in/languages/french" } },
       })}} />
 
       {/* ── FAQ Schema ── */}
@@ -120,8 +120,8 @@ export default function FrenchClient() {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: "https://www.anuedu.in" },
-          { "@type": "ListItem", position: 2, name: "Languages", item: "https://www.anuedu.in/language" },
-          { "@type": "ListItem", position: 3, name: "French Language Course", item: "https://www.anuedu.in/language/french" },
+          { "@type": "ListItem", position: 2, name: "Languages", item: "https://www.anuedu.in/languages" },
+          { "@type": "ListItem", position: 3, name: "French Language Course", item: "https://www.anuedu.in/languages/french" },
         ],
       })}} />
 

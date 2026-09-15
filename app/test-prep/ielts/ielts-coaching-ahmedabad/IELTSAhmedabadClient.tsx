@@ -226,12 +226,6 @@ export default function IELTSAhmedabadClient() {
               "Prahlad Nagar",
               "Ambawadi",
             ],
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: "4.8",
-              bestRating: "5",
-              reviewCount: "120",
-            },
             dateModified: `${LAST_MODIFIED}`,
           })
         }}

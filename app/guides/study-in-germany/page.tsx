@@ -186,71 +186,6 @@ export default function StudyInGermanyGuide() {
     </li>
   </ul>
 </section>
-  {/* FAQ Schema */}
-import Script from "next/script";
-
-<Script
-  id="faq-schema-germany"
-  type="application/ld+json"
-  strategy="afterInteractive"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What are the main intakes in Germany for Indian students?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Germany has two main intakes for Indian students. The Winter Intake starts in October and offers the maximum number of courses. The Summer Intake starts in April and has limited course availability."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Which intake is best to study in Germany?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The Winter Intake is considered the best intake for Indian students because most universities open admissions and more programs are available."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is APS certificate mandatory to study in Germany?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, the APS certificate is mandatory for Indian students applying to German universities and for the German student visa process."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How much money is required in a blocked account for Germany?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Indian students are required to show approximately €11,208 in a blocked account to cover one year of living expenses in Germany."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are public universities in Germany free?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Most public universities in Germany do not charge tuition fees. Students usually pay only a semester contribution. An exception is the state of Baden-Württemberg."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is IELTS or German language required to study in Germany?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "English-taught programs usually require IELTS, while German-taught programs require German language proficiency. Requirements depend on the course and university."
-          }
-        }
-      ]
-    })
-  }}
-/>
-
 {/* Breadcrumb Schema */}
 <Script
   id="breadcrumb-schema-germany"
@@ -270,20 +205,14 @@ import Script from "next/script";
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Study Abroad",
-          "item": "https://www.anuedu.in/study-in"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
           "name": "Study in Germany",
           "item": "https://www.anuedu.in/study-in/germany"
         },
         {
           "@type": "ListItem",
-          "position": 4,
+          "position": 3,
           "name": "Germany Study Guide",
-          "item": "https://www.anuedu.in/study-in/germany-guide"
+          "item": "https://www.anuedu.in/guides/study-in-germany"
         }
       ]
     })

@@ -121,48 +121,6 @@ export default function StudyAbroadPrep2026() {
         </a>
       </section>
 
-      {/* FAQ SCHEMA */}
-      <Script
-        id="faq-study-abroad-prep"
-        type="application/ld+json"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "Which exam is better for study abroad in 2026: IELTS or PTE?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text":
-                    "IELTS is widely accepted for the UK and Canada, while PTE is popular for Australia. Choice depends on destination and university requirements."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Is German language mandatory for studying in Germany?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text":
-                    "Yes, German language proficiency is mandatory for most public universities in Germany, especially for German-taught programs."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Can I study abroad without IELTS?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text":
-                    "Some universities accept PTE or German/French language proficiency depending on the country and program."
-                }
-              }
-            ]
-          })
-        }}
-      />
-
       {/* BREADCRUMB SCHEMA */}
       <Script
         id="breadcrumb-study-abroad-prep"

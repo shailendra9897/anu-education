@@ -88,51 +88,6 @@ export default function ForexPage() {
         </a>
       </div>
 
-      {/* FAQ Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "What is a student forex service?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "A student forex service helps international students transfer tuition fees, living expenses, and education-related funds abroad at competitive exchange rates."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Why choose ANU Education for student forex services?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "ANU Education offers best student forex rates, transparent pricing, fast transfers, and a fully paperless process."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "How long does an international student transfer take?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "International student transfers usually take 1–5 business days depending on banks and countries involved."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Is student forex required for studying in Germany?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Yes, students studying in Germany require forex services for tuition fees, blocked account funding, and living expenses."
-                }
-              }
-            ]
-          })
-        }}
-      />
-
       {/* Service Schema */}
       <script
         type="application/ld+json"

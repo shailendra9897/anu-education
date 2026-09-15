@@ -20,7 +20,7 @@ export default function IELTSSpeakingPage() {
                 name: "What topics are asked in IELTS Speaking?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Common topics include hobbies, education, work, travel, technology, and daily life experiences.",
+                  text: "Common topics include hobbies, education, work, travel, technology, and daily life experiences. Part 2 cue cards often ask you to describe a person, place, event, or object.",
                 },
               },
               {
@@ -28,7 +28,7 @@ export default function IELTSSpeakingPage() {
                 name: "How to score Band 7 in IELTS Speaking?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Speak fluently, use advanced vocabulary, avoid repetition, and give structured answers with examples.",
+                  text: "Speak fluently without long pauses, use advanced vocabulary appropriately, avoid repetition, give structured answers with examples, and maintain good pronunciation.",
                 },
               },
               {
@@ -36,7 +36,15 @@ export default function IELTSSpeakingPage() {
                 name: "Is IELTS Speaking difficult?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "No, it is a simple conversation test. With practice and confidence, you can score high.",
+                  text: "No, it is a simple conversation test. With regular practice, confidence building, and proper guidance from experts, you can easily score high.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "How long is the Speaking test?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "The test lasts 11-14 minutes. Part 1 (4-5 min), Part 2 (3-4 min), Part 3 (4-5 min).",
                 },
               },
             ],

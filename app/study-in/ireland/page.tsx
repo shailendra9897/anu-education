@@ -17,21 +17,12 @@ export const metadata: Metadata = {
       "Step‑by‑step overview of Ireland as a study destination. English‑speaking environment, affordable education, generous post‑graduation stay‑back & European job market.",
     url: "https://www.anuedu.in/study-in/ireland",
     type: "website",
-    images: [
-      {
-        url: "/images/study-in-ireland-og.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Irish universities and student life",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Study in Ireland – 2026 Complete Guide",
     description:
       "Everything about Ireland student visa, costs, scholarships, part‑time work and PR pathways.",
-    images: ["/images/study-in-ireland-og.jpg"],
   },
 };
 
@@ -55,7 +46,6 @@ export default function IrelandPage() {
               logo: { "@type": "ImageObject", url: "https://www.anuedu.in/logo.png" },
             },
             datePublished: "2026-05-10",
-            image: "https://www.anuedu.in/images/study-in-ireland-og.jpg",
             mainEntityOfPage: {
               "@type": "WebPage",
               "@id": "https://www.anuedu.in/study-in/ireland",

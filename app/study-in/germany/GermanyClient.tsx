@@ -53,8 +53,7 @@ export default function GermanyPage() {
             "description": "Complete guidance for Indian students: APS certificate, blocked account, university selection, visa assistance, and German language preparation.",
             "provider": {
               "@type": "Organization",
-              "name": "ANU Education",
-              "sameAs": "https://www.anuedu.in"
+              "name": "ANU Education"
             },
             "offers": {
               "@type": "Offer",
@@ -148,7 +147,6 @@ export default function GermanyPage() {
             "@type": "Article",
             "headline": "Study in Germany for Indian Students – Free Education & PR Opportunities",
             "description": "Complete guide for Indian students to study in Germany: free public universities, APS certificate, blocked account, visa process, work opportunities, and PR pathways.",
-            "image": "https://www.anuedu.in/images/study-in-germany.jpg",
             "author": {
               "@type": "Organization",
               "name": "ANU Education"

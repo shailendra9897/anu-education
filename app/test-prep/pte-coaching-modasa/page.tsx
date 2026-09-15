@@ -19,7 +19,7 @@ export const metadata = {
     siteName: "ANU Education",
     images: [
       {
-        url: "/images/pte-coaching-modasa.jpg",
+        url: "/images/pte-coaching.jpg",
         width: 1200,
         height: 630,
         alt: "PTE Coaching in Modasa",
@@ -33,7 +33,7 @@ export const metadata = {
     title: "PTE Coaching in Modasa – ANU Education",
     description:
       "Join the best PTE classes in Modasa with AI practice, mock tests, and flexible online options for nearby towns.",
-    images: ["/images/pte-coaching-modasa.jpg"],
+    images: ["/images/pte-coaching.jpg"],
   },
   alternates: {
     canonical: "https://www.anuedu.in/test-prep/pte-coaching-modasa",
@@ -60,11 +60,6 @@ export default function PTEModasaPage() {
               addressLocality: "Modasa",
               addressRegion: "Gujarat",
               addressCountry: "India",
-            },
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: "4.8",
-              reviewCount: "28",
             },
           }),
         }}
@@ -118,7 +113,6 @@ export default function PTEModasaPage() {
             provider: {
               "@type": "Organization",
               name: "ANU Education",
-              sameAs: "https://www.anuedu.in",
             },
             offers: {
               "@type": "Offer",

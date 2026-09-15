@@ -13,14 +13,6 @@ export const metadata = {
       "Compare IELTS and PTE side-by-side with the latest 2026 updates: fees, format, acceptance, and the game‑changing IELTS One Skill Retake.",
     url: "https://www.anuedu.in/blog/ielts-vs-pte-2026",
     siteName: "ANU Education",
-    images: [
-      {
-        url: "/images/ielts-vs-pte-2026.jpg",
-        width: 1200,
-        height: 630,
-        alt: "IELTS vs PTE 2026 comparison",
-      },
-    ],
     locale: "en_IN",
     type: "article",
     publishedTime: "2026-03-28",
@@ -30,7 +22,6 @@ export const metadata = {
     card: "summary_large_image",
     title: "IELTS vs PTE 2026: Which is Better for Indian Students?",
     description: "Full comparison including fees, format, One Skill Retake, and PTE Core for Canada PR.",
-    images: ["/images/ielts-vs-pte-2026.jpg"],
   },
   alternates: {
     canonical: "https://www.anuedu.in/blog/ielts-vs-pte-2026",
@@ -51,7 +42,6 @@ export default function BlogPage() {
             headline: "IELTS vs PTE 2026: Which is Better for Indian Students?",
             description:
               "Updated for 2026: Compare IELTS vs PTE fees, format, acceptance, and the new IELTS One Skill Retake feature.",
-            image: "https://www.anuedu.in/images/ielts-vs-pte-2026.jpg",
             author: {
               "@type": "Organization",
               name: "ANU Education",

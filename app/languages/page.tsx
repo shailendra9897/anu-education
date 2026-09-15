@@ -17,20 +17,11 @@ export const metadata: Metadata = {
       "Learn German, French, and Spoken English online. Live interactive classes with certified trainers. Prepare for study abroad, Canada PR, and global careers.",
     url: "https://www.anuedu.in/languages",
     type: "website",
-    images: [
-      {
-        url: "/images/languages-og.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Online Language Classes",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Online Language Classes | German, French & Spoken English",
     description: "Live, interactive language courses for study abroad and career success.",
-    images: ["/images/languages-og.jpg"],
   },
   // Added robots and verification metadata
   robots: "index, follow",
@@ -52,11 +43,6 @@ export default function LanguagesPage() {
             name: "ANU Education",
             url: "https://www.anuedu.in",
             logo: "https://www.anuedu.in/logo.png",
-            sameAs: [
-              "https://www.facebook.com/anueducation",
-              "https://www.instagram.com/anueducation",
-              "https://www.youtube.com/anueducation",
-            ],
             telephone: "+91 7016497087",
             email: "info@anuedu.in",
             address: {
@@ -107,7 +93,6 @@ export default function LanguagesPage() {
             provider: {
               "@type": "EducationalOrganization",
               name: "ANU Education",
-              sameAs: "https://www.anuedu.in",
             },
             url: "https://www.anuedu.in/test-prep/german",
           }),

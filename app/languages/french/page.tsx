@@ -23,7 +23,7 @@ export const metadata = {
     title: "French Language Course Online – TEF, TCF, A1–B2 | ANU Education",
     description:
       "Live online French classes · C1 certified trainers · TEF & TCF prep · Canada PR advantage · Free 5-day trial. Enrol at ANU Education.",
-    url: "https://www.anuedu.in/language/french",
+    url: "https://www.anuedu.in/languages/french",
     type: "website",
   },
 };

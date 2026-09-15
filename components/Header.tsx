@@ -64,7 +64,6 @@ const ORG_SCHEMA = {
     postalCode: "383315",
     addressCountry: "IN",
   },
-  sameAs: ["https://www.anuedu.in"],
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Courses and Services",
@@ -72,9 +71,8 @@ const ORG_SCHEMA = {
       { "@type": "Course", name: "IELTS Academic Coaching", url: "https://www.anuedu.in/test-prep/ielts-online" },
       { "@type": "Course", name: "PTE Academic Coaching", url: "https://www.anuedu.in/test-prep/pte" },
       { "@type": "Course", name: "GRE Coaching", url: "https://www.anuedu.in/test-prep/gre" },
-      { "@type": "Course", name: "French Language Course", url: "https://www.anuedu.in/language/french" },
-      { "@type": "Course", name: "German Language Course", url: "https://www.anuedu.in/language/german" },
-      { "@type": "Service", name: "Study Abroad Consultancy", url: "https://www.anuedu.in/study-abroad" },
+      { "@type": "Course", name: "French Language Course", url: "https://www.anuedu.in/languages/french" },
+      { "@type": "Course", name: "German Language Course", url: "https://www.anuedu.in/test-prep/german" },
     ],
   },
 };
@@ -83,13 +81,12 @@ const SITENAV_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "SiteNavigationElement",
   name: [
-    "Home", "About", "Study Abroad", "Test Prep",
+    "Home", "About", "Test Prep",
     "Services", "Finance", "Contact", "Free Demo",
   ],
   url: [
     "https://www.anuedu.in",
     "https://www.anuedu.in/about",
-    "https://www.anuedu.in/study-abroad",
     "https://www.anuedu.in/test-prep/ielts-online",
     "https://www.anuedu.in/services/visa-assistance",
     "https://www.anuedu.in/finance/education-loan",

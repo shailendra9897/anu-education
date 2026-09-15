@@ -72,7 +72,6 @@ export default function APSClient() {
               logo: { "@type": "ImageObject", url: "https://www.anuedu.in/logo.png" },
             },
             datePublished: "2026-05-09",
-            image: "https://www.anuedu.in/images/aps-certificate-guide.jpg",
             mainEntityOfPage: {
               "@type": "WebPage",
               "@id": "https://www.anuedu.in/study-in/germany/aps-certificate",

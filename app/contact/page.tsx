@@ -46,12 +46,6 @@ export default function ContactPage() {
       "longitude": 73.3084437,
     },
     "openingHours": "Mo-Sa 09:00-19:00",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "bestRating": "5",
-      "reviewCount": "120",
-    },
     "contactPoint": [
       {
         "@type": "ContactPoint",
@@ -70,10 +64,6 @@ export default function ContactPage() {
       { "@type": "Service", "name": "Duolingo English Test Preparation" },
       { "@type": "Service", "name": "Study Abroad Consultant" },
       { "@type": "Service", "name": "Visa Assistance" },
-    ],
-    "sameAs": [
-      "https://www.facebook.com/anueducation",
-      "https://www.instagram.com/anueducation",
     ],
   };
 

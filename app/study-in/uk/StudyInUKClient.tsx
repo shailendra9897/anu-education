@@ -137,8 +137,7 @@ export default function StudyInUKClient() {
           "@type": "BreadcrumbList",
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: "https://www.anuedu.in" },
-            { "@type": "ListItem", position: 2, name: "Study Abroad", item: "https://www.anuedu.in/study-abroad" },
-            { "@type": "ListItem", position: 3, name: "Study in UK", item: "https://www.anuedu.in/study-in/uk" },
+            { "@type": "ListItem", position: 2, name: "Study in UK", item: "https://www.anuedu.in/study-in/uk" },
           ],
         })}}
       />

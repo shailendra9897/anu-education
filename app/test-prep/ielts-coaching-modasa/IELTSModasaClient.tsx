@@ -173,7 +173,6 @@ export default function IELTSModasaClient() {
           address: { "@type": "PostalAddress", streetAddress: "Krishna 137, Dwarkapuri Bunglows, Gitanjali Society", addressLocality: "Modasa", addressRegion: "Gujarat", postalCode: "383315", addressCountry: "IN" },
           geo: { "@type": "GeoCoordinates", latitude: 23.4675584, longitude: 73.3084437 },
           openingHours: "Mo-Sa 09:00-19:00",
-          aggregateRating: { "@type": "AggregateRating", ratingValue: "4.8", bestRating: "5", reviewCount: "120" },
           hasMap: "https://www.google.com/maps?q=23.4675584,73.3084437",
           makesOffer: [
             { "@type": "Offer", itemOffered: { "@type": "Service", name: "IELTS Academic Online Coaching – Self Preparation Course" } },
@@ -181,7 +180,6 @@ export default function IELTSModasaClient() {
             { "@type": "Offer", itemOffered: { "@type": "Service", name: "Free Study Abroad Counselling" } },
           ],
           areaServed: ["Modasa","Himmatnagar","Idar","Bayad","Shamlaji","Bhiloda","Malpur","Dhansura","Meghraj","Talod","Prantij","Aambaliyasan","Mehsana","Vijapur"],
-          sameAs: ["https://www.anuedu.in"],
         })}}
       />
 
@@ -194,7 +192,7 @@ export default function IELTSModasaClient() {
           "@type": "Course",
           name: "IELTS Coaching in Modasa – Academic & General Training 2026 | ANU Education",
           description: "Live IELTS Academic and General Training coaching for students in Modasa and Sabarkantha district. Beginner and Advanced batches, 15 full-length mock tests, 300+ grammar videos, Saturday test analysis, Sunday doubt-solving, and FREE French 4-week course with Champion pack.",
-          provider: { "@type": "EducationalOrganization", name: "ANU Education", sameAs: "https://www.anuedu.in", telephone: "+917016497087", address: { "@type": "PostalAddress", addressLocality: "Modasa", addressRegion: "Gujarat", addressCountry: "IN" } },
+          provider: { "@type": "EducationalOrganization", name: "ANU Education", telephone: "+917016497087", address: { "@type": "PostalAddress", addressLocality: "Modasa", addressRegion: "Gujarat", addressCountry: "IN" } },
           educationalLevel: "Beginner to Advanced",
           inLanguage: "en",
           coursePrerequisites: "No prior preparation needed. Beginner batch starts from basics.",

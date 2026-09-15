@@ -17,22 +17,12 @@ export default function CanadaClient() {
             name: "ANU Education",
             url: "https://www.anuedu.in",
             logo: "https://www.anuedu.in/logo.png",
-            sameAs: [
-              "https://www.facebook.com/anueducation",
-              "https://www.instagram.com/anueducation",
-              "https://www.youtube.com/anueducation",
-            ],
             telephone: "+91 7016497087",
             address: {
               "@type": "PostalAddress",
               addressLocality: "Modasa",
               addressRegion: "Gujarat",
               addressCountry: "India",
-            },
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: "4.8",
-              reviewCount: "1500",
             },
           }),
         }}
@@ -52,7 +42,6 @@ export default function CanadaClient() {
             provider: {
               "@type": "Organization",
               name: "ANU Education",
-              sameAs: "https://www.anuedu.in",
             },
             offers: {
               "@type": "Offer",

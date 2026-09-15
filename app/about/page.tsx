@@ -114,13 +114,6 @@ export default function AboutPage() {
               postalCode: "383315",
               addressCountry: "IN",
             },
-            sameAs: ["https://www.anuedu.in"],
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: "4.8",
-              bestRating: "5",
-              reviewCount: "120",
-            },
           }),
         }}
       />
