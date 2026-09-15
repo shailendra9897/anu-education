@@ -31,7 +31,7 @@ export const metadata = {
     images: ["/images/german-ahmedabad.jpg"],
   },
   alternates: {
-    canonical: "https://www.anuedu.in/test-prep/german/online-german-classes-ahmedabad",
+    canonical: "https://www.anuedu.in/test-prep/german/ahmedabad",
   },
 };
 

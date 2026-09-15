@@ -32,7 +32,7 @@ export const metadata = {
     description: "Live online IELTS classes, speaking practice, AI mock tests. Free demo. Enroll now.",
   },
   alternates: {
-    canonical: "https://www.anuedu.in/test-prep/ielts-coaching-ahmedabad",
+    canonical: "https://www.anuedu.in/test-prep/ielts/ielts-coaching-ahmedabad",
   },
 };
 
