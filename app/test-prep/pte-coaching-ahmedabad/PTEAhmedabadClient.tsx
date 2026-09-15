@@ -49,67 +49,7 @@ export default function PTEAhmedabadClient() {
         }}
       />
 
-      {/* FAQ Schema */}
-      <Script
-        id="faq-schema-pte-ahmedabad"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "What is the minimum score required in PTE for study abroad?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Most universities require 50–65 score depending on country and course.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "How many attempts are allowed for PTE exam?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "There is no fixed limit. You can retake the exam after 5 days.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Can I prepare for PTE without coaching?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes, but expert guidance helps you improve faster and avoid mistakes.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "What is the validity of PTE score?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "PTE score is valid for 2 years from the exam date.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Do you provide flexible timings for working students?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes, we offer flexible batches suitable for students and working professionals.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Is PTE accepted in Canada and UK?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes, PTE is accepted by most universities in Canada, UK, and Australia.",
-                },
-              },
-            ],
-          }),
-        }}
-      />
+
 
       <style jsx>{`
         @keyframes fadeInUp {

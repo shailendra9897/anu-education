@@ -1,6 +1,8 @@
 // FILE: app/test-prep/pte-coaching-gandhinagar/page.tsx
 
 import PTEGandhinagarClient from "./PTEGandhinagarClient";
+import JsonLd from "@/components/JsonLd";
+import { faqs } from "@/lib/data/faq/pte-gandhinagar";
 
 export const metadata = {
   title: "PTE Classes in Gandhinagar 2026 – Online PTE Coaching | ANU Education",
@@ -31,5 +33,20 @@ export const metadata = {
 };
 
 export default function PTEGandhinagarPage() {
-  return <PTEGandhinagarClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <PTEGandhinagarClient />
+    </>
+  );
 }

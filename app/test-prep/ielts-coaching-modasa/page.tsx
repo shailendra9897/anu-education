@@ -1,6 +1,8 @@
 // FILE: app/test-prep/ielts-coaching-modasa/page.tsx
 
 import IELTSModasaClient from "./IELTSModasaClient";
+import JsonLd from "@/components/JsonLd";
+import { faqs } from "@/lib/data/faq/ielts-modasa";
 
 export const metadata = {
   title: "IELTS Coaching in Modasa 2026 – Best Institute, Live Classes & Mock Tests | ANU Education",
@@ -33,5 +35,20 @@ export const metadata = {
 };
 
 export default function IELTSModasaPage() {
-  return <IELTSModasaClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <IELTSModasaClient />
+    </>
+  );
 }

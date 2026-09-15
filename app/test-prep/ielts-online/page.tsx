@@ -1,6 +1,8 @@
 // FILE: app/test-prep/ielts-online/page.tsx
 
 import IELTSOnlineClient from "./IELTSOnlineClient";
+import JsonLd from "@/components/JsonLd";
+import { faqs } from "@/lib/data/faq/ielts-online";
 
 export const metadata = {
   title: "IELTS Online Coaching in India 2026 – Live Classes + Mock Tests | ANU Education",
@@ -33,5 +35,20 @@ export const metadata = {
 };
 
 export default function IELTSOnlinePage() {
-  return <IELTSOnlineClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <IELTSOnlineClient />
+    </>
+  );
 }

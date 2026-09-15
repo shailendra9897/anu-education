@@ -1,6 +1,8 @@
 // FILE: app/study-in/dubai/page.tsx
 
 import StudyInDubaiClient from "./StudyInDubaiClient";
+import JsonLd from "@/components/JsonLd";
+import { faqs } from "@/lib/data/faq/dubai";
 
 export const metadata = {
   title: "Study in Dubai 2026 – Top Universities, Fees, Visa & Scholarships for Indian Students | ANU Education",
@@ -33,5 +35,20 @@ export const metadata = {
 };
 
 export default function StudyInDubaiPage() {
-  return <StudyInDubaiClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <StudyInDubaiClient />
+    </>
+  );
 }

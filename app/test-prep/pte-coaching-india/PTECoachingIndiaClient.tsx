@@ -48,59 +48,7 @@ export default function PTECoachingPage() {
         }}
       />
 
-      {/* ================= FAQ SCHEMA ================= */}
-      <Script
-        id="faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "Which is the best PTE online coaching in India?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "The best coaching offers expert trainers, AI mock tests, and personalized feedback. Always check reviews and demo classes before joining."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "How long does it take to prepare for PTE?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Most students prepare in 2–4 weeks with proper PTE course online and daily practice."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Is PTE easier than IELTS?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "PTE is considered easier by many because of AI-based scoring, faster results, and predictable format."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Can I prepare for PTE at home?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Yes! With PTE academic online coaching, you can easily prepare from home with structured guidance."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "What score is required for PTE?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Generally: 50–58 for Diploma, 58–65 for Bachelor, 65+ for Master / PR applications."
-                }
-              }
-            ]
-          })
-        }}
-      />
+
 
       <style jsx>{`
         @keyframes fadeInUp {

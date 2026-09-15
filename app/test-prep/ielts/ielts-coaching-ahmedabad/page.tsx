@@ -1,6 +1,8 @@
 // FILE: app/test-prep/ielts-coaching-ahmedabad/page.tsx
 
 import IELTSAhmedabadClient from "./IELTSAhmedabadClient";
+import JsonLd from "@/components/JsonLd";
+import { FAQS } from "@/lib/data/faq/ielts-ahmedabad";
 
 export const metadata = {
   title: "Best IELTS Coaching in Ahmedabad (Free 4-Day Demo) | ANU Education",
@@ -36,5 +38,20 @@ export const metadata = {
 };
 
 export default function IELTSAhmedabadPage() {
-  return <IELTSAhmedabadClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <IELTSAhmedabadClient />
+    </>
+  );
 }

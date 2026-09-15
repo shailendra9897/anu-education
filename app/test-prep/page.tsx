@@ -1,4 +1,5 @@
 import TestPrepClient from './TestPrepClient';
+import JsonLd from "@/components/JsonLd";
 
 export const metadata = {
   metadataBase: new URL('https://www.anuedu.in'),
@@ -36,5 +37,41 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <TestPrepClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "Which test should I take for study abroad?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "It depends on your destination. IELTS/PTE for English proficiency, German for Germany, GRE/GMAT for graduate programs, SAT for undergraduate, TOEFL/Duolingo as alternatives.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Do you offer free demo classes?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, we offer a 3‑day free demo for most courses. Register on our website to book your slot.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What is the duration of your courses?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Courses range from 4 to 12 weeks depending on the exam and your target score.",
+              },
+            },
+          ],
+        }}
+      />
+      <TestPrepClient />
+    </>
+  );
 }

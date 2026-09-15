@@ -1,6 +1,8 @@
 // FILE: app/test-prep/gmat/page.tsx
 
 import GMATClient from "./GMATClient";
+import JsonLd from "@/components/JsonLd";
+import { FAQS } from "@/lib/data/faq/gmat";
 
 export const metadata = {
   title: "GMAT Coaching 2026 – Focus Edition Prep, Live Classes & Mock Tests | ANU Education",
@@ -31,5 +33,20 @@ export const metadata = {
 };
 
 export default function GMATPage() {
-  return <GMATClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <GMATClient />
+    </>
+  );
 }

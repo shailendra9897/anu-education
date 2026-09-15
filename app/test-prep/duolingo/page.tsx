@@ -1,6 +1,8 @@
 // FILE: app/test-prep/duolingo/page.tsx
 
 import DuolingoClient from "./DuolingoClient";
+import JsonLd from "@/components/JsonLd";
+import { FAQS } from "@/lib/data/faq/duolingo";
 
 export const metadata = {
   title: "Duolingo English Test Coaching Online India 2026 – Score 120+ | ANU Education",
@@ -31,5 +33,20 @@ export const metadata = {
 };
 
 export default function DuolingoPage() {
-  return <DuolingoClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <DuolingoClient />
+    </>
+  );
 }

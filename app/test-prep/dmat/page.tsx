@@ -1,6 +1,8 @@
 // FILE: app/test-prep/dmat/page.tsx
 
 import DMATClient from "./DMATClient";
+import JsonLd from "@/components/JsonLd";
+import { FAQS } from "@/lib/data/faq/dmat";
 
 export const metadata = {
   title: "dMAT Coaching 2026 – Digital Master Test for Germany | ANU Education",
@@ -31,5 +33,20 @@ export const metadata = {
 };
 
 export default function DMATPage() {
-  return <DMATClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <DMATClient />
+    </>
+  );
 }

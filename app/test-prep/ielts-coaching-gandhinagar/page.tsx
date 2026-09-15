@@ -1,4 +1,6 @@
 import IELTSGandhinagarClient from './IELTSGandhinagarClient';
+import JsonLd from '@/components/JsonLd';
+import { faqs } from '@/lib/data/faq/ielts-gandhinagar';
 
 export const metadata = {
   metadataBase: new URL('https://www.anuedu.in'),
@@ -36,5 +38,20 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <IELTSGandhinagarClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <IELTSGandhinagarClient />
+    </>
+  );
 }

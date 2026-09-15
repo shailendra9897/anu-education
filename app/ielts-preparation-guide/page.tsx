@@ -1,5 +1,5 @@
-import Script from "next/script";
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
 
 export const metadata = {
   title: "IELTS Preparation Guide 2026: Study Plan, Tips & Band 7+ Strategy",
@@ -40,112 +40,108 @@ export default function IELTSPreparationGuide() {
   return (
     <>
       {/* FAQ Schema */}
-      <Script
-        id="faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "What is the IELTS exam?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "IELTS (International English Language Testing System) is a global English proficiency test required for studying, working or immigrating to countries such as Canada, UK, Australia and Germany.",
-                },
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "What is the IELTS exam?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "IELTS (International English Language Testing System) is a global English proficiency test required for studying, working or immigrating to countries such as Canada, UK, Australia and Germany.",
               },
-              {
-                "@type": "Question",
-                name: "Is IELTS Academic harder than General Training?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "IELTS Academic focuses on university-level English including essays, reports and academic reading passages, while General Training tests everyday English used in workplaces and daily communication.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Is IELTS Academic harder than General Training?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "IELTS Academic focuses on university-level English including essays, reports and academic reading passages, while General Training tests everyday English used in workplaces and daily communication.",
               },
-              {
-                "@type": "Question",
-                name: "How many times can I take the IELTS exam?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "There is no limit. You can take IELTS as many times as you want after paying the exam fee.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "How many times can I take the IELTS exam?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "There is no limit. You can take IELTS as many times as you want after paying the exam fee.",
               },
-              {
-                "@type": "Question",
-                name: "Is 30 days enough to prepare for IELTS?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes, students with a good English base can prepare in 30 days with a proper study plan.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Is 30 days enough to prepare for IELTS?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, students with a good English base can prepare in 30 days with a proper study plan.",
               },
-              {
-                "@type": "Question",
-                name: "What is a good IELTS band score?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Band 6.5–7.5 is considered good for most universities and visa programs.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "What is a good IELTS band score?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Band 6.5–7.5 is considered good for most universities and visa programs.",
               },
-              {
-                "@type": "Question",
-                name: "How can I prepare for IELTS at home?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Use Cambridge books, online tests, vocabulary apps, and daily speaking practice.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "How can I prepare for IELTS at home?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Use Cambridge books, online tests, vocabulary apps, and daily speaking practice.",
               },
-              {
-                "@type": "Question",
-                name: "How many hours should I study daily for IELTS?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "2–3 focused hours daily is recommended.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "How many hours should I study daily for IELTS?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "2–3 focused hours daily is recommended.",
               },
-              {
-                "@type": "Question",
-                name: "What are common IELTS speaking topics?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Topics include hobbies, work, education, travel, and personal experiences.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "What are common IELTS speaking topics?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Topics include hobbies, work, education, travel, and personal experiences.",
               },
-              {
-                "@type": "Question",
-                name: "How is IELTS scored?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Each section is scored from Band 0–9, and the average becomes your final score.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "How is IELTS scored?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Each section is scored from Band 0–9, and the average becomes your final score.",
               },
-              {
-                "@type": "Question",
-                name: "Can I use American English in IELTS?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes, both British and American English are accepted.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Can I use American English in IELTS?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, both British and American English are accepted.",
               },
-              {
-                "@type": "Question",
-                name: "How long does it take to get IELTS results?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Paper-based: 13 days; Computer-based: 3–5 days.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "How long does it take to get IELTS results?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Paper-based: 13 days; Computer-based: 3–5 days.",
               },
-              {
-                "@type": "Question",
-                name: "Which is easier: IELTS or TOEFL?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "It depends on preference. Many students find IELTS easier due to face-to-face speaking.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Which is easier: IELTS or TOEFL?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "It depends on preference. Many students find IELTS easier due to face-to-face speaking.",
               },
-            ],
-          }),
+            },
+          ],
         }}
       />
 

@@ -1,4 +1,5 @@
 import IELTSBandCalculatorClient from './IELTSBandCalculatorClient';
+import JsonLd from "@/components/JsonLd";
 
 export const metadata = {
   title: "IELTS Band Score Calculator (Academic & General) | ANU Education",
@@ -34,5 +35,41 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <IELTSBandCalculatorClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "How is IELTS overall band calculated?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "The IELTS overall band score is calculated by averaging Listening, Reading, Writing, and Speaking scores and rounding to the nearest 0.5 or whole band.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Is Band 6 enough for UK study?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, many UK universities accept IELTS Band 6 or 6.5 depending on the course and university.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What IELTS score is required for Canada?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Most Canadian colleges and universities prefer IELTS scores between 6 and 7 bands.",
+              },
+            },
+          ],
+        }}
+      />
+      <IELTSBandCalculatorClient />
+    </>
+  );
 }

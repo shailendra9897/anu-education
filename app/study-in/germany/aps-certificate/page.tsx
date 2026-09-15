@@ -1,4 +1,6 @@
 import APSClient from './APSClient';
+import JsonLd from "@/components/JsonLd";
+import { faqs } from "@/lib/data/faq/aps";
 
 export const metadata = {
   metadataBase: new URL('https://www.anuedu.in'), // [!] Add this line
@@ -41,5 +43,20 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <APSClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <APSClient />
+    </>
+  );
 }

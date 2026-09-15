@@ -1,5 +1,6 @@
 import Script from "next/script";
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
 
 export const metadata = {
   title: "German A1 Course Duration, Fees & Syllabus in India | 2026 Updated Guide",
@@ -64,56 +65,52 @@ export default function GermanA1BlogPage() {
       />
 
       {/* FAQ Schema */}
-      <Script
-        id="faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "How long does it take to complete German A1?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "The German A1 course typically takes 4 to 6 weeks with regular classes. Intensive batches can be completed in 3‑4 weeks.",
-                },
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "How long does it take to complete German A1?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "The German A1 course typically takes 4 to 6 weeks with regular classes. Intensive batches can be completed in 3‑4 weeks.",
               },
-              {
-                "@type": "Question",
-                name: "What is the fee for a German A1 course in India?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Online course fees range from ₹8,000 to ₹15,000. Premium institutes with additional resources may charge up to ₹25,000.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "What is the fee for a German A1 course in India?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Online course fees range from ₹8,000 to ₹15,000. Premium institutes with additional resources may charge up to ₹25,000.",
               },
-              {
-                "@type": "Question",
-                name: "Is German A1 enough to go to Germany?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "A1 is the beginner level and is sufficient for certain visa categories (e.g., spouse visa). However, for study or work purposes, levels like B1 or B2 are typically required.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Is German A1 enough to go to Germany?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "A1 is the beginner level and is sufficient for certain visa categories (e.g., spouse visa). However, for study or work purposes, levels like B1 or B2 are typically required.",
               },
-              {
-                "@type": "Question",
-                name: "Can I learn German A1 without coaching?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes, self‑study is possible using apps and textbooks. However, structured coaching provides faster progress, accountability, speaking practice, and exam preparation support.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Can I learn German A1 without coaching?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, self‑study is possible using apps and textbooks. However, structured coaching provides faster progress, accountability, speaking practice, and exam preparation support.",
               },
-              {
-                "@type": "Question",
-                name: "Which is the best institute for German A1 in India?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "ANU Education is a trusted choice offering affordable, speaking‑focused German A1 classes with certified trainers and flexible online batches.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Which is the best institute for German A1 in India?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "ANU Education is a trusted choice offering affordable, speaking‑focused German A1 classes with certified trainers and flexible online batches.",
               },
-            ],
-          }),
+            },
+          ],
         }}
       />
 

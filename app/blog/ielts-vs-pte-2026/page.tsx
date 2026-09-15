@@ -1,5 +1,6 @@
 import Script from "next/script";
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
 
 export const metadata = {
   title: "IELTS vs PTE 2026: Which is Better for Indian Students? Fees, Format & One Skill Retake",
@@ -61,48 +62,44 @@ export default function BlogPage() {
       />
 
       {/* FAQ Schema with 2026 Updates */}
-      <Script
-        id="faq-schema-ielts-pte"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                "name": "How much does IELTS cost in India in 2026?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "As of March 2026, the fee is ₹18,000. However, it is set to increase to ₹19,000 effective April 1, 2026.",
-                },
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "How much does IELTS cost in India in 2026?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "As of March 2026, the fee is ₹18,000. However, it is set to increase to ₹19,000 effective April 1, 2026.",
               },
-              {
-                "@type": "Question",
-                "name": "Is PTE accepted for Canada SDS in 2026?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Yes, PTE Academic is fully accepted for the Canada Student Direct Stream (SDS) and by most Canadian universities.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Is PTE accepted for Canada SDS in 2026?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, PTE Academic is fully accepted for the Canada Student Direct Stream (SDS) and by most Canadian universities.",
               },
-              {
-                "@type": "Question",
-                "name": "What is the IELTS One Skill Retake?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "It allows students to retake only one module (Listening, Reading, Writing, or Speaking) if they didn't get the desired score, instead of retaking the whole exam.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "What is the IELTS One Skill Retake?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "It allows students to retake only one module (Listening, Reading, Writing, or Speaking) if they didn't get the desired score, instead of retaking the whole exam.",
               },
-              {
-                "@type": "Question",
-                "name": "Which test is easier for Indian students?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "It depends. IELTS suits those who prefer human interaction and need the One Skill Retake safety net. PTE suits those who want faster results, computer‑based scoring, and a shorter test.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Which test is easier for Indian students?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "It depends. IELTS suits those who prefer human interaction and need the One Skill Retake safety net. PTE suits those who want faster results, computer‑based scoring, and a shorter test.",
               },
-            ],
-          }),
+            },
+          ],
         }}
       />
 

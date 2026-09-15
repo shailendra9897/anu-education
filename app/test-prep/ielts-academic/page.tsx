@@ -1,5 +1,6 @@
 import Script from "next/script";
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
 import {
   websiteWhatsAppMessages,
   getWhatsAppLink,
@@ -72,56 +73,52 @@ export default function IELTSAcademicPage() {
       />
 
       {/* FAQ Schema */}
-      <Script
-        id="faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "What is IELTS Academic exam used for?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "It is used for university admissions and student visas in English-speaking countries like Canada, UK, Australia, and USA.",
-                },
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "What is IELTS Academic exam used for?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "It is used for university admissions and student visas in English-speaking countries like Canada, UK, Australia, and USA.",
               },
-              {
-                "@type": "Question",
-                name: "What is the total IELTS exam time?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "The total IELTS Academic exam time is around 2 hours 45 minutes (Listening: 30 min, Reading: 60 min, Writing: 60 min, Speaking: 11–14 min).",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "What is the total IELTS exam time?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "The total IELTS Academic exam time is around 2 hours 45 minutes (Listening: 30 min, Reading: 60 min, Writing: 60 min, Speaking: 11–14 min).",
               },
-              {
-                "@type": "Question",
-                name: "What is the syllabus of IELTS Academic?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "The syllabus includes Listening (4 recordings), Reading (3 academic passages), Writing (Task 1: graph/chart description, Task 2: essay), and Speaking (face‑to‑face interview).",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "What is the syllabus of IELTS Academic?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "The syllabus includes Listening (4 recordings), Reading (3 academic passages), Writing (Task 1: graph/chart description, Task 2: essay), and Speaking (face‑to‑face interview).",
               },
-              {
-                "@type": "Question",
-                name: "How much does IELTS exam cost in India?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "The IELTS Academic exam cost in India is approximately ₹16,250–₹16,500 (varies slightly by city).",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "How much does IELTS exam cost in India?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "The IELTS Academic exam cost in India is approximately ₹16,250–₹16,500 (varies slightly by city).",
               },
-              {
-                "@type": "Question",
-                name: "Is IELTS difficult?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "It depends on your preparation. With a structured plan, regular practice, and expert guidance, scoring 7+ band is achievable.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Is IELTS difficult?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "It depends on your preparation. With a structured plan, regular practice, and expert guidance, scoring 7+ band is achievable.",
               },
-            ],
-          }),
+            },
+          ],
         }}
       />
 

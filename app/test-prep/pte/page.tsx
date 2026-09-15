@@ -1,4 +1,5 @@
 import PTEClient from './PTEClient';
+import JsonLd from "@/components/JsonLd";
 
 export const metadata = {
   metadataBase: new URL('https://www.anuedu.in'), // 👈 Add this line
@@ -36,5 +37,49 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <PTEClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "What are the technical requirements for online classes?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "You need a stable internet connection, a laptop/desktop with microphone and speakers, and a browser (Chrome/Firefox).",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Can I access class recordings if I miss a session?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, all live sessions are recorded and available for 6 weeks. You can watch them anytime.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Do you provide AI-scored mock tests?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, our package includes 5 full AI-scored mock tests and 250+ practice questions with instant scoring and feedback.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What is your refund policy?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "We offer a transparent refund policy. Please refer to our Terms & Conditions page for full details.",
+              },
+            },
+          ],
+        }}
+      />
+      <PTEClient />
+    </>
+  );
 }

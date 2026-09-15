@@ -1,5 +1,6 @@
 import Script from "next/script";
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
 import {
   websiteWhatsAppMessages,
   getWhatsAppLink,
@@ -126,56 +127,52 @@ export default function PTEModasaPage() {
       />
 
       {/* Enhanced FAQ Schema */}
-      <Script
-        id="faq-schema-pte-modasa"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "Which is the best PTE coaching in Modasa?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "ANU Education provides expert PTE coaching in Modasa with AI-based practice, mock tests, and flexible online options for nearby towns.",
-                },
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "Which is the best PTE coaching in Modasa?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "ANU Education provides expert PTE coaching in Modasa with AI-based practice, mock tests, and flexible online options for nearby towns.",
               },
-              {
-                "@type": "Question",
-                name: "Is PTE easier than IELTS?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Many students find PTE easier due to its AI-based scoring, faster results, and predictable format.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Is PTE easier than IELTS?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Many students find PTE easier due to its AI-based scoring, faster results, and predictable format.",
               },
-              {
-                "@type": "Question",
-                name: "How long does it take to prepare for PTE?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Most students prepare in 2–4 weeks with proper guidance and daily practice.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "How long does it take to prepare for PTE?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Most students prepare in 2–4 weeks with proper guidance and daily practice.",
               },
-              {
-                "@type": "Question",
-                name: "Do you provide PTE mock tests?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes, we provide full-length PTE mock tests with performance analysis and personalized feedback.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Do you provide PTE mock tests?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, we provide full-length PTE mock tests with performance analysis and personalized feedback.",
               },
-              {
-                "@type": "Question",
-                name: "Do you offer online PTE coaching for students outside Modasa?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes, we offer live online PTE classes for students in Meghraj, Bayad, Dhansura, Malpur, and other nearby towns.",
-                },
+            },
+            {
+              "@type": "Question",
+              name: "Do you offer online PTE coaching for students outside Modasa?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, we offer live online PTE classes for students in Meghraj, Bayad, Dhansura, Malpur, and other nearby towns.",
               },
-            ],
-          }),
+            },
+          ],
         }}
       />
 

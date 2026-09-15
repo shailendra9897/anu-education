@@ -8,6 +8,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import GREClient from "./GREClient";
+import JsonLd from "@/components/JsonLd";
+import { FAQS } from "@/lib/data/faq/gre";
 
 export const metadata = {
   title: "GRE Coaching Online India 2026 – Score 320+ | ANU Education",
@@ -32,5 +34,20 @@ export const metadata = {
 };
 
 export default function GREPage() {
-  return <GREClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <GREClient />
+    </>
+  );
 }

@@ -1,6 +1,8 @@
 // FILE: app/study-in/uk/page.tsx
 
 import StudyInUKClient from "./StudyInUKClient";
+import JsonLd from "@/components/JsonLd";
+import { FAQS } from "@/lib/data/faq/uk";
 
 export const metadata = {
   title: "Study in UK 2026 for Indian Students | 1-Year Masters, Graduate Route Visa, B2 English | ANU Education",
@@ -37,5 +39,20 @@ export const metadata = {
 };
 
 export default function StudyInUKPage() {
-  return <StudyInUKClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <StudyInUKClient />
+    </>
+  );
 }

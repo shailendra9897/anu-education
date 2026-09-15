@@ -1,6 +1,8 @@
 // FILE: app/services/visa-assistance/page.tsx
 
 import VisaAssistanceClient from "./VisaAssistanceClient";
+import JsonLd from "@/components/JsonLd";
+import { FAQS } from "@/lib/data/faq/visa";
 
 export const metadata = {
   title: "Student Visa Assistance 2026 – Documentation, Mock Interview & Embassy Support | ANU Education",
@@ -31,5 +33,20 @@ export const metadata = {
 };
 
 export default function VisaAssistancePage() {
-  return <VisaAssistanceClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <VisaAssistanceClient />
+    </>
+  );
 }

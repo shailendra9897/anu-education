@@ -2,6 +2,8 @@
 // Save this as the server component (metadata + renders client)
 
 import FrenchClient from "./FrenchClient";
+import JsonLd from "@/components/JsonLd";
+import { faqs } from "@/lib/data/faq/french";
 
 export const metadata = {
   title: "French Language Course Online India 2026 – TEF, TCF, A1 to B2 | ANU Education",
@@ -29,5 +31,20 @@ export const metadata = {
 };
 
 export default function FrenchPage() {
-  return <FrenchClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <FrenchClient />
+    </>
+  );
 }

@@ -1,6 +1,8 @@
 // FILE: app/study-in/france/page.tsx
 
 import StudyInFranceClient from "./StudyInFranceClient";
+import JsonLd from "@/components/JsonLd";
+import { faqs } from "@/lib/data/faq/france";
 
 export const metadata = {
   title: "Study in France 2026 – France Study Abroad Consultant for Indian Students | ANU Education",
@@ -30,5 +32,20 @@ export const metadata = {
 };
 
 export default function StudyInFrancePage() {
-  return <StudyInFranceClient />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }}
+      />
+      <StudyInFranceClient />
+    </>
+  );
 }
