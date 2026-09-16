@@ -1,4 +1,4 @@
-import Script from "next/script";
+import JsonLd from "@/components/JsonLd";
 
 export const metadata = {
   title:
@@ -122,36 +122,31 @@ export default function StudyAbroadPrep2026() {
       </section>
 
       {/* BREADCRUMB SCHEMA */}
-      <Script
-        id="breadcrumb-study-abroad-prep"
-        type="application/ld+json"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-              {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Home",
-                "item": "https://www.anuedu.in/"
-              },
-              {
-                "@type": "ListItem",
-                "position": 2,
-                "name": "Blog",
-                "item": "https://www.anuedu.in/blog"
-              },
-              {
-                "@type": "ListItem",
-                "position": 3,
-                "name": "Study Abroad Prep 2026",
-                "item":
-                  "https://www.anuedu.in/blog/study-abroad-prep-2026"
-              }
-            ]
-          })
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.anuedu.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Blog",
+              "item": "https://www.anuedu.in/blog"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Study Abroad Prep 2026",
+              "item":
+                "https://www.anuedu.in/blog/study-abroad-prep-2026"
+            }
+          ]
         }}
       />
     </div>

@@ -1,4 +1,4 @@
-import Script from "next/script";
+import JsonLd from "@/components/JsonLd";
 export const metadata = {
   title:
     "Study in Germany Guide for Indian Students 2026 | APS, Blocked Account, PR – ANU Education",
@@ -186,38 +186,33 @@ export default function StudyInGermanyGuide() {
     </li>
   </ul>
 </section>
-{/* Breadcrumb Schema */}
-<Script
-  id="breadcrumb-schema-germany"
-  type="application/ld+json"
-  strategy="afterInteractive"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://www.anuedu.in/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Study in Germany",
-          "item": "https://www.anuedu.in/study-in/germany"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "Germany Study Guide",
-          "item": "https://www.anuedu.in/guides/study-in-germany"
-        }
-      ]
-    })
-  }}
-/>
+      {/* Breadcrumb Schema */}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.anuedu.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Study in Germany",
+              "item": "https://www.anuedu.in/study-in/germany"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Germany Study Guide",
+              "item": "https://www.anuedu.in/guides/study-in-germany"
+            }
+          ]
+        }}
+      />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import Script from "next/script";
+import JsonLd from "@/components/JsonLd";
 
 export const metadata = {
   title: "Best IELTS Online Coaching in India (2026 Guide) | ANU Education",
@@ -44,34 +45,30 @@ export default function BlogPage() {
       />
 
       {/* ================= BREADCRUMB SCHEMA ================= */}
-      <Script
-        id="breadcrumb-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: "Home",
-                item: "https://www.anuedu.in",
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: "Blog",
-                item: "https://www.anuedu.in/blog",
-              },
-              {
-                "@type": "ListItem",
-                position: 3,
-                name: "Best IELTS Online Coaching in India",
-                item: articleUrl,
-              },
-            ],
-          }),
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: "https://www.anuedu.in",
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Blog",
+              item: "https://www.anuedu.in/blog",
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: "Best IELTS Online Coaching in India",
+              item: articleUrl,
+            },
+          ],
         }}
       />
 

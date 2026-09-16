@@ -164,19 +164,14 @@ export default function AboutPage() {
       />
 
       {/* ══ BREADCRUMB SCHEMA ══ */}
-      <Script
-        id="breadcrumb-schema-about"
-        type="application/ld+json"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Home", item: "https://www.anuedu.in" },
-              { "@type": "ListItem", position: 2, name: "About", item: "https://www.anuedu.in/about" },
-            ],
-          }),
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://www.anuedu.in" },
+            { "@type": "ListItem", position: 2, name: "About", item: "https://www.anuedu.in/about" },
+          ],
         }}
       />
 
