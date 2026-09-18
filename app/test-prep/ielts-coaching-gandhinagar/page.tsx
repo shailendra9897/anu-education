@@ -51,6 +51,17 @@ export default function Page() {
           })),
         }}
       />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://www.anuedu.in" },
+            { "@type": "ListItem", position: 2, name: "Test Prep", item: "https://www.anuedu.in/test-prep" },
+            { "@type": "ListItem", position: 3, name: "IELTS Coaching Gandhinagar", item: "https://www.anuedu.in/test-prep/ielts-coaching-gandhinagar" },
+          ],
+        }}
+      />
       <IELTSGandhinagarClient />
     </>
   );

@@ -46,6 +46,17 @@ export default function GMATPage() {
           })),
         }}
       />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://www.anuedu.in" },
+            { "@type": "ListItem", position: 2, name: "Test Prep", item: "https://www.anuedu.in/test-prep" },
+            { "@type": "ListItem", position: 3, name: "GMAT Coaching", item: "https://www.anuedu.in/test-prep/gmat" },
+          ],
+        }}
+      />
       <GMATClient />
     </>
   );
