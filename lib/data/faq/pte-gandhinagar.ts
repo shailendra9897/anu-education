@@ -3,6 +3,25 @@
 // FAQ data for the /pte-gandhinagar route. Single source of truth —
 // consumed by the server-rendered FAQPage JSON-LD (page.tsx)
 // and the visible FAQ accordion (client component).
+//
+// PTE catalogue amounts are derived from lib/data/pte-pricing.ts so the
+// FAQ can never drift from the price master.
+
+import { PTE_VIEWS, formatPtePrice } from "@/lib/data/pte-pricing";
+
+function pteCataloguePrice(productId: string): string {
+  const view = PTE_VIEWS.find((v) => v.productId === productId);
+  if (!view) {
+    throw new Error(
+      `PTE price view is missing \`${productId}\`; it must derive from the price master.`,
+    );
+  }
+  return formatPtePrice(view.price);
+}
+
+const LIVE_CLASS_PRICE = pteCataloguePrice("pte-academic-live-class");
+const SELF_PREP_PRICE = pteCataloguePrice("pte-academic-self-prep");
+const CHAMPION_PRICE = pteCataloguePrice("pte-academic-champion");
 
 export const faqs: { q: string; a: string }[] = [
   {
@@ -11,7 +30,7 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "What are the PTE course fees at ANU Education?",
-    a: "ANU Education offers 4 PTE Academic course packs: Demo Pack — Free (3-day access, 1 mock test). Self Prep Pack — ₹1,875 (180 days, 14 mock tests, 180+ exercises, no live classes). Live Class Pack — ₹1,313 (90 days, 90 min/day live classes, 6-week curriculum, expert mentor results). Champion Pack — ₹3,000 (180 days, everything in Self Prep + Live Class together — 14 mock tests, 800+ practice questions, 90 min/day live classes). All prices exclude GST.",
+    a: `ANU Education offers 4 PTE Academic course packs: Demo Pack — Free (3-day access, 1 mock test). Self Prep Pack — ${SELF_PREP_PRICE} (180 days, 14 mock tests, 180+ exercises, no live classes). Live Class Pack — ${LIVE_CLASS_PRICE} (90 days, 90 min/day live classes, 6-week curriculum, expert mentor results). Champion Pack — ${CHAMPION_PRICE} (180 days, everything in Self Prep + Live Class together — 14 mock tests, 800+ practice questions, 90 min/day live classes). All prices exclude GST.`,
   },
   {
     q: "What is the PTE live class schedule for Gandhinagar students?",
@@ -31,7 +50,7 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "What is the PTE exam fee in India in 2026?",
-    a: "The PTE Academic exam fee in India is approximately ₹18,000. Results are available within 5 working days. The exam can be taken on over 360 days per year at 35+ test locations across India. The ANU Education course fee (₹1,313–₹3,000) is separate from the PTE exam registration fee, which is paid directly to Pearson through the myPTE account.",
+    a: `The PTE Academic exam fee in India is approximately ₹18,000. Results are available within 5 working days. The exam can be taken on over 360 days per year at 35+ test locations across India. The ANU Education course fee (${LIVE_CLASS_PRICE}–${CHAMPION_PRICE}) is separate from the PTE exam registration fee, which is paid directly to Pearson through the myPTE account.`,
   },
   {
     q: "Is PTE computer-based or paper-based?",
@@ -51,6 +70,6 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "What makes ANU Education's PTE coaching different in Gandhinagar?",
-    a: "ANU Education offers the most complete PTE coaching package available for Gandhinagar students: 4 course packs from free to ₹3,000 (GST extra), 14 full-length timed mock tests, 180+ practice exercises with 800+ questions, 300+ vocab and grammar videos, live Morning and Evening batches (90 min/day, Mon–Fri), Saturday doubt-solving sessions, AI-based scoring and feedback, free English Assessment Test, Eduvantage PTE platform with simulated test engine, concept builders, and mentor support, and free study abroad counselling. Skill India certified. 1,100+ students guided. 98% success rate.",
+    a: `ANU Education offers the most complete PTE coaching package available for Gandhinagar students: 4 course packs from free to ${CHAMPION_PRICE} (GST extra), 14 full-length timed mock tests, 180+ practice exercises with 800+ questions, 300+ vocab and grammar videos, live Morning and Evening batches (90 min/day, Mon–Fri), Saturday doubt-solving sessions, AI-based scoring and feedback, free English Assessment Test, Eduvantage PTE platform with simulated test engine, concept builders, and mentor support, and free study abroad counselling. Skill India certified. 1,100+ students guided. 98% success rate.`,
   },
 ];

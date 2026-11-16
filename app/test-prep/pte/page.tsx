@@ -1,5 +1,17 @@
 import PTEClient from './PTEClient';
 import JsonLd from "@/components/JsonLd";
+import { PTE_FROM_PRICE_DISPLAY } from "@/lib/data/pte-pricing";
+import {
+  PTE_ACADEMIC_CHAMPION_FLAGSHIP_OFFER,
+  formatPteOfferGstPrice,
+  getPteChampionOfferHeadline,
+} from "@/lib/data/offers/pte-academic-champion-flagship";
+
+const pteChampionOffer = PTE_ACADEMIC_CHAMPION_FLAGSHIP_OFFER;
+
+const pteCatalogueStart = `Enroll now from ${PTE_FROM_PRICE_DISPLAY} + GST.`;
+const pteChampionOfferLine =
+  `${getPteChampionOfferHeadline()} for ${formatPteOfferGstPrice(pteChampionOffer.promotionalPrice)} (regular reference fee ${formatPteOfferGstPrice(pteChampionOffer.regularPrice)}).`;
 
 export const metadata = {
   metadataBase: new URL('https://www.anuedu.in'), // 👈 Add this line
@@ -11,7 +23,7 @@ export const metadata = {
   openGraph: {
     title: "PTE Online Coaching – AI Mock Tests & 7‑Week Plan | ANU Education",
     description:
-      "Crack PTE in your first attempt with live classes, AI‑scored tests, and proven strategies. Enroll now for ₹7,999.",
+      `Crack PTE in your first attempt with live classes, AI‑scored tests, and proven strategies. ${pteCatalogueStart} ${pteChampionOfferLine} GST is charged extra.`,
     url: "https://www.anuedu.in/test-prep/pte",
     siteName: "ANU Education",
     images: [

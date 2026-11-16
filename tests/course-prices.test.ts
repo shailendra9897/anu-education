@@ -28,11 +28,11 @@ type SuppliedProgram = { program: string; price: number };
 
 const SUPPLIED: Record<string, SuppliedProgram[]> = {
   "IELTS Academic": [
-    { program: "Self Prep", price: 1875 },
-    { program: "Champion (Morning)", price: 5250 },
-    { program: "Champion (Afternoon)", price: 5250 },
-    { program: "Champion (Evening)", price: 5250 },
-    { program: "Champion (All Timings)", price: 6375 },
+    { program: "Self Prep", price: 1999 },
+    { program: "Champion (Morning)", price: 5499 },
+    { program: "Champion (Afternoon)", price: 5499 },
+    { program: "Champion (Evening)", price: 5499 },
+    { program: "Champion (All Timings)", price: 6499 },
     { program: "Reading Marathon", price: 3000 },
     { program: "Writing Marathon", price: 3000 },
     { program: "Speaking Marathon", price: 3000 },
@@ -51,7 +51,7 @@ const SUPPLIED: Record<string, SuppliedProgram[]> = {
     { program: "Champion", price: 3000 },
   ],
   "PTE Core": [{ program: "Mock Tests", price: 1875 }],
-  "Duolingo English Test": [{ program: "Champion", price: 1875 }],
+  "Duolingo English Test": [{ program: "Champion", price: 1999 }],
   "TOEFL iBT": [{ program: "Live Class", price: 1875 }],
   CELPIP: [
     { program: "Self Prep", price: 3000 },
@@ -117,11 +117,11 @@ test("IELTS Academic prices are correct", () => {
   const prices = getCoursePrices("IELTS Academic");
   assert.equal(prices.length, 8);
   const byProgram = new Map(prices.map((p) => [p.program, p.price]));
-  assert.equal(byProgram.get("Self Prep"), 1875);
-  assert.equal(byProgram.get("Champion (Morning)"), 5250);
-  assert.equal(byProgram.get("Champion (Afternoon)"), 5250);
-  assert.equal(byProgram.get("Champion (Evening)"), 5250);
-  assert.equal(byProgram.get("Champion (All Timings)"), 6375);
+  assert.equal(byProgram.get("Self Prep"), 1999);
+  assert.equal(byProgram.get("Champion (Morning)"), 5499);
+  assert.equal(byProgram.get("Champion (Afternoon)"), 5499);
+  assert.equal(byProgram.get("Champion (Evening)"), 5499);
+  assert.equal(byProgram.get("Champion (All Timings)"), 6499);
   assert.equal(byProgram.get("Reading Marathon"), 3000);
   assert.equal(byProgram.get("Writing Marathon"), 3000);
   assert.equal(byProgram.get("Speaking Marathon"), 3000);

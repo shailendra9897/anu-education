@@ -26,6 +26,8 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
+import { PTE_TOP_PRICE_DISPLAY } from "@/lib/data/pte-pricing";
+
 // ─── TYPES ───────────────────────────────────────────────────────
 type CourseKey =
   | "IELTS" | "PTE" | "GRE" | "GMAT" | "SAT" | "Duolingo"
@@ -60,7 +62,7 @@ const COURSES: {
     tagline: "Results in 48 hrs · Canada SDS accepted · AI scored",
     colour: "from-indigo-600 to-indigo-500", textColour: "text-indigo-700",
     benefits: [
-      "4 course packs from Free to ₹3,000 · 14 mock tests",
+      `4 course packs from Free to ${PTE_TOP_PRICE_DISPLAY} · 14 mock tests`,
       "180+ exercises · 800+ practice questions",
       "Live 90-min classes Mon–Fri (Morning & Evening)",
       "Saturday doubt session 10–11 AM",

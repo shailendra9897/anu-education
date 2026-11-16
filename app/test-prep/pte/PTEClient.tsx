@@ -7,6 +7,13 @@ import {
   websiteWhatsAppMessages,
   getWhatsAppLink,
 } from "@/lib/whatsappTemplates";
+import {
+  PTE_FROM_PRICE_DISPLAY,
+  PTE_VIEWS,
+  formatPtePrice,
+  getPteJsonLdOffers,
+} from "@/lib/data/pte-pricing";
+import PteAcademicChampionOfferCard from "@/components/offers/PteAcademicChampionOfferCard";
 
 export default function PTEClient() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -33,13 +40,10 @@ export default function PTEClient() {
               name: "ANU Education",
               sameAs: "https://www.anuedu.in",
             },
-            offers: {
-              "@type": "Offer",
-              price: "7999",
-              priceCurrency: "INR",
+            offers: getPteJsonLdOffers().map((offer) => ({
+              ...offer,
               availability: "https://schema.org/OnlineOnly",
-              validFrom: "2026-04-01",
-            },
+            })),
             hasCourseInstance: {
               "@type": "CourseInstance",
               courseMode: "Online",
@@ -211,12 +215,21 @@ export default function PTEClient() {
 
           {/* Pricing Plan */}
           <section className="text-center">
-            <h2 className="text-3xl font-bold mb-4">Our PTE 4‑Week Online Coaching Plan</h2>
+            <h2 className="text-3xl font-bold mb-4">Our PTE Course Packs</h2>
             <div className="inline-block price-card bg-white rounded-3xl shadow-2xl p-8 max-w-md mx-auto border-2 border-green-200">
-              <p className="text-xs font-bold uppercase tracking-wider text-green-700 bg-green-100 rounded-full px-3 py-1 inline-block">Limited-time offer</p>
-              <div className="text-4xl font-bold text-green-600 mt-3">₹ 7,999</div>
-              <p className="text-gray-500 line-through">Regular price ₹ 12,999</p>
-              <p className="text-sm text-gray-500 mt-1">(or adjust according to your pricing)</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-green-700 bg-green-100 rounded-full px-3 py-1 inline-block">Prices exclude GST</p>
+              <div className="text-4xl font-bold text-green-600 mt-3">From {PTE_FROM_PRICE_DISPLAY}</div>
+              <ul className="mt-4 space-y-2 text-left text-gray-700">
+                {PTE_VIEWS.map((view) => (
+                  <li key={view.productId} className="flex items-baseline justify-between gap-4">
+                    <span>
+                      <span className="font-semibold text-gray-800">{view.program}</span>
+                      <span className="block text-xs text-gray-500">{view.validity}</span>
+                    </span>
+                    <span className="font-bold text-gray-800">{formatPtePrice(view.price)}</span>
+                  </li>
+                ))}
+              </ul>
               <ul className="mt-6 space-y-2 text-left text-gray-700">
                 <li>✅ Structured 4‑Week Study Plan</li>
                 <li>✅ One‑to‑One Doubt‑Solving Support</li>
@@ -227,7 +240,12 @@ export default function PTEClient() {
               </ul>
               <a href="/free-demo" className="mt-8 inline-block bg-green-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-green-700 transition w-full">Enroll Now</a>
             </div>
-            <p className="text-sm text-gray-500 mt-4">*Limited seats per batch. Secure your spot today.</p>
+            <p className="text-sm text-gray-500 mt-4">*All prices exclude GST. Limited seats per batch. Secure your spot today.</p>
+          </section>
+
+          {/* PTE Academic Champion promotional offer */}
+          <section>
+            <PteAcademicChampionOfferCard />
           </section>
 
           {/* How It Works */}
@@ -363,7 +381,7 @@ export default function PTEClient() {
             <div className="max-w-3xl mx-auto">
               <div className="text-6xl mb-4 float">🚀</div>
               <h2 className="text-3xl font-bold mb-4">Ready to Start?</h2>
-              <p className="text-xl mb-6">PTE 4‑Week Online Coaching – ₹ 7,999 only</p>
+              <p className="text-xl mb-6">PTE Academic – packs from {PTE_FROM_PRICE_DISPLAY} + GST</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
   href={getWhatsAppLink(

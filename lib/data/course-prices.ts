@@ -5,8 +5,12 @@
 // knowledge base (knowledge/**, data/**) remains authoritative for
 // course details, batch timings, demo timings and curriculum/features.
 //
-// Prices are preserved EXACTLY as supplied. No discounts applied,
-// no prices invented. GST/other taxes are not applied here.
+// Prices here are the business-approved current prices and are the
+// single source of truth for every surface (pages, SEO/schema, FAQ,
+// AI knowledge). They are supplied values, never invented or
+// reverse-engineered by this code, and discounts/promotions must not be
+// silently derived unless explicitly supplied as a separate pack.
+// GST/other taxes are not applied here.
 
 export const CURRENCY = "INR";
 
@@ -27,15 +31,44 @@ export type CoursePrice = {
   validity: string;
   /** Price in INR, preserved exactly as supplied. */
   price: number;
+
+  // ── Additive registry fields (PRICING-ARCH-W1) ───────────────────
+  // Every field below is OPTIONAL for backward compatibility. An
+  // omitted field resolves to the explicit deterministic default
+  // exported next to the lookup helpers — never to an invented value,
+  // never to a GST rate, never to a date that was not supplied.
+  // Adding a value to a row is a business decision; leaving it out is
+  // always safe and is what all existing rows do.
+
+  /** ISO 4217 code. Omitted ⇒ `CURRENCY` ("INR"). */
+  currency?: string;
+  /**
+   * True only when `price` already includes GST. Omitted ⇒ `false`:
+   * this master never applies tax (see header) and no GST rate is
+   * configured anywhere in this repository.
+   */
+  gstIncluded?: boolean;
+  /** false retires the row without deleting it. Omitted ⇒ `true`. */
+  active?: boolean;
+  /** First day this price applies, `YYYY-MM-DD`. Absent ⇒ no lower bound. */
+  effectiveFrom?: string;
+  /** Last day this price applies, `YYYY-MM-DD`. Absent ⇒ no upper bound. */
+  effectiveUntil?: string;
+  /** Checkout key this pack is sold under, e.g. "PTE". Must match `CHECKOUT_ALLOW_LIST`. */
+  checkoutKey?: string;
+  /** Optional non-price metadata. Never read as a price. */
+  meta?: Readonly<Record<string, string>>;
 };
 
 export const COURSE_PRICES: CoursePrice[] = [
   // ── IELTS Academic ───────────────────────────────────────────────
-  { id: "ielts-academic-self-prep", course: "IELTS Academic", courseId: "ielts-academic", program: "Self Prep", programId: "self-prep", curriculum: null, validity: "180 Days", price: 1875 },
-  { id: "ielts-academic-champion-morning", course: "IELTS Academic", courseId: "ielts-academic", program: "Champion (Morning)", programId: "champion-morning", curriculum: null, validity: "8 Weeks / 180 Days", price: 5250 },
-  { id: "ielts-academic-champion-afternoon", course: "IELTS Academic", courseId: "ielts-academic", program: "Champion (Afternoon)", programId: "champion-afternoon", curriculum: null, validity: "8 Weeks / 180 Days", price: 5250 },
-  { id: "ielts-academic-champion-evening", course: "IELTS Academic", courseId: "ielts-academic", program: "Champion (Evening)", programId: "champion-evening", curriculum: null, validity: "8 Weeks / 180 Days", price: 5250 },
-  { id: "ielts-academic-champion-all-timings", course: "IELTS Academic", courseId: "ielts-academic", program: "Champion (All Timings)", programId: "champion-all-timings", curriculum: null, validity: "8 Weeks / 180 Days", price: 6375 },
+  // G1-14 approved commercial prices (GST-exclusive). The 18% GST rate
+  // lives in lib/pricing/gst.ts and is applied by the server checkout.
+  { id: "ielts-academic-self-prep", course: "IELTS Academic", courseId: "ielts-academic", program: "Self Prep", programId: "self-prep", curriculum: null, validity: "180 Days", price: 1999 },
+  { id: "ielts-academic-champion-morning", course: "IELTS Academic", courseId: "ielts-academic", program: "Champion (Morning)", programId: "champion-morning", curriculum: null, validity: "8 Weeks / 180 Days", price: 5499 },
+  { id: "ielts-academic-champion-afternoon", course: "IELTS Academic", courseId: "ielts-academic", program: "Champion (Afternoon)", programId: "champion-afternoon", curriculum: null, validity: "8 Weeks / 180 Days", price: 5499 },
+  { id: "ielts-academic-champion-evening", course: "IELTS Academic", courseId: "ielts-academic", program: "Champion (Evening)", programId: "champion-evening", curriculum: null, validity: "8 Weeks / 180 Days", price: 5499 },
+  { id: "ielts-academic-champion-all-timings", course: "IELTS Academic", courseId: "ielts-academic", program: "Champion (All Timings)", programId: "champion-all-timings", curriculum: null, validity: "8 Weeks / 180 Days", price: 6499 },
   { id: "ielts-academic-reading-marathon", course: "IELTS Academic", courseId: "ielts-academic", program: "Reading Marathon", programId: "reading-marathon", curriculum: null, validity: "4 Weeks / 45 Days", price: 3000 },
   { id: "ielts-academic-writing-marathon", course: "IELTS Academic", courseId: "ielts-academic", program: "Writing Marathon", programId: "writing-marathon", curriculum: null, validity: "4 Weeks / 45 Days", price: 3000 },
   { id: "ielts-academic-speaking-marathon", course: "IELTS Academic", courseId: "ielts-academic", program: "Speaking Marathon", programId: "speaking-marathon", curriculum: null, validity: "4 Weeks / 45 Days", price: 3000 },
@@ -59,7 +92,7 @@ export const COURSE_PRICES: CoursePrice[] = [
   { id: "pte-core-mock-tests", course: "PTE Core", courseId: "pte-core", program: "Mock Tests", programId: "mock-tests", curriculum: null, validity: "180 Days", price: 1875 },
 
   // ── Duolingo English Test ────────────────────────────────────────
-  { id: "duolingo-champion", course: "Duolingo English Test", courseId: "duolingo", program: "Champion", programId: "champion", curriculum: null, validity: "4 Weeks / 60 Days", price: 1875 },
+  { id: "duolingo-champion", course: "Duolingo English Test", courseId: "duolingo", program: "Champion", programId: "champion", curriculum: null, validity: "4 Weeks / 60 Days", price: 1999 },
 
   // ── TOEFL iBT ────────────────────────────────────────────────────
   { id: "toefl-live-class", course: "TOEFL iBT", courseId: "toefl", program: "Live Class", programId: "live-class", curriculum: null, validity: "12 Weeks / 180 Days", price: 1875 },
@@ -132,4 +165,45 @@ export function getCoursePriceGroups(): Record<string, CoursePrice[]> {
     (groups[entry.course] ??= []).push(entry);
   }
   return groups;
+}
+
+// ── Additive-field defaults and resolvers (PRICING-ARCH-W1) ───────
+//
+// These are the ONLY places the defaults for the optional registry
+// fields are defined. Read them instead of reaching for `?? value`
+// inline, so a future default change happens in exactly one place.
+
+/** Default currency for rows that omit `currency`. */
+export const DEFAULT_CURRENCY: string = CURRENCY;
+/** Default GST state: prices exclude tax (no GST rate exists in this repo). */
+export const DEFAULT_GST_INCLUDED = false;
+/** Default lifecycle state: rows are active unless explicitly retired. */
+export const DEFAULT_ACTIVE = true;
+
+/** Resolved currency for a row (`"INR"` unless explicitly overridden). */
+export function getProductCurrency(product: CoursePrice): string {
+  return product.currency ?? DEFAULT_CURRENCY;
+}
+
+/** Resolved GST state for a row (false unless explicitly set to true). */
+export function isGstIncluded(product: CoursePrice): boolean {
+  return product.gstIncluded ?? DEFAULT_GST_INCLUDED;
+}
+
+/**
+ * Is this row sellable on the given day?
+ *
+ * Deterministic: evaluates the optional `active` flag and the optional
+ * `effectiveFrom` / `effectiveUntil` window (compared as `YYYY-MM-DD`
+ * strings in UTC). Rows without a window are always in-window.
+ */
+export function isProductActive(
+  product: CoursePrice,
+  at: Date = new Date(),
+): boolean {
+  if ((product.active ?? DEFAULT_ACTIVE) === false) return false;
+  const day = at.toISOString().slice(0, 10);
+  if (product.effectiveFrom && day < product.effectiveFrom) return false;
+  if (product.effectiveUntil && day > product.effectiveUntil) return false;
+  return true;
 }

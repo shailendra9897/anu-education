@@ -4,6 +4,13 @@ import Script from "next/script";
 import Link from "next/link";
 import { useState } from "react";
 
+import {
+  GERMAN_BASIC_A1_PRICE_DISPLAY,
+  GERMAN_BASIC_A1_PRICE_PLAIN,
+  GERMAN_A2_PRICE_PLAIN,
+  GERMAN_BASIC_A1_A2_PRICE_DISPLAY,
+} from "@/lib/data/german-pricing";
+
 export default function OnlineGermanAhmedabadClient() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -34,13 +41,13 @@ export default function OnlineGermanAhmedabadClient() {
                 "@type": "CourseInstance",
                 courseMode: "Online",
                 courseWorkload: "PT90H",
-                offers: { "@type": "Offer", price: "7500", priceCurrency: "INR", name: "German A1" },
+                offers: { "@type": "Offer", price: GERMAN_BASIC_A1_PRICE_PLAIN, priceCurrency: "INR", name: "German A1" },
               },
               {
                 "@type": "CourseInstance",
                 courseMode: "Online",
                 courseWorkload: "PT90H",
-                offers: { "@type": "Offer", price: "9750", priceCurrency: "INR", name: "German A2" },
+                offers: { "@type": "Offer", price: GERMAN_A2_PRICE_PLAIN, priceCurrency: "INR", name: "German A2" },
               },
               {
                 "@type": "CourseInstance",
@@ -243,8 +250,8 @@ export default function OnlineGermanAhmedabadClient() {
               <div>
                 <h3 className="text-xl font-bold mb-3">🎯 Packages</h3>
                 <ul className="list-disc pl-5 space-y-1 text-gray-700">
-                  <li>German Basic + A1: ₹7,500</li>
-                  <li>German Basic + A1 + A2: ₹12,000</li>
+                  <li>German Basic + A1: {GERMAN_BASIC_A1_PRICE_DISPLAY}</li>
+                  <li>German Basic + A1 + A2: {GERMAN_BASIC_A1_A2_PRICE_DISPLAY}</li>
                 </ul>
                 <h3 className="text-xl font-bold mt-6 mb-3">🕒 Batch Timings</h3>
                 <ul className="list-disc pl-5 space-y-1 text-gray-700">

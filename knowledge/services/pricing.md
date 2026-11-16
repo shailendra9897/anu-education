@@ -17,11 +17,11 @@ last_reviewed: 2026-08-29
 
 | Pack | Pack ID | Price (INR) | Validity |
 |------|---------|-------------|----------|
-| Self Prep | ielts-academic-self-prep | 1,875 | 180 days |
-| Champion (Morning) | ielts-academic-champion-morning | 5,250 | 8 weeks / 180 days |
-| Champion (Afternoon) | ielts-academic-champion-afternoon | 5,250 | 8 weeks / 180 days |
-| Champion (Evening) | ielts-academic-champion-evening | 5,250 | 8 weeks / 180 days |
-| Champion (All Timings) | ielts-academic-champion-all-timings | 6,375 | 8 weeks / 180 days |
+| Self Prep | ielts-academic-self-prep | 1,999 | 180 days |
+| Champion (Morning) | ielts-academic-champion-morning | 5,499 | 8 weeks / 180 days |
+| Champion (Afternoon) | ielts-academic-champion-afternoon | 5,499 | 8 weeks / 180 days |
+| Champion (Evening) | ielts-academic-champion-evening | 5,499 | 8 weeks / 180 days |
+| Champion (All Timings) | ielts-academic-champion-all-timings | 6,499 | 8 weeks / 180 days |
 | Reading Marathon | ielts-academic-reading-marathon | 3,000 | 4 weeks / 45 days |
 | Writing Marathon | ielts-academic-writing-marathon | 3,000 | 4 weeks / 45 days |
 | Speaking Marathon | ielts-academic-speaking-marathon | 3,000 | 4 weeks / 45 days |
@@ -36,6 +36,18 @@ last_reviewed: 2026-08-29
 | Writing Marathon | ielts-general-writing-marathon | 3,000 | 4 weeks / 45 days |
 | Speaking Marathon | ielts-general-speaking-marathon | 3,000 | 4 weeks / 45 days |
 
+## IELTS Academic checkout and GST
+
+- The three IELTS Academic prices above are GST-exclusive: Self Prep 1,999, Champion One Batch 5,499, Champion All Timings 6,499.
+- GST is 18% of the taxable value at checkout.
+- Champion One Batch requires a Morning, Afternoon or Evening timing; the timing maps to the existing pack IDs above.
+- One coupon may be applied per order. Coupons never stack.
+- Checkout totals are calculated on the server. Never quote a browser-calculated amount.
+
+## Discontinued offer
+
+The former IELTS Academic Champion "Upcoming Batch" Rs 4,999 offer is discontinued and must not be quoted, displayed or sold. Its historical record remains in the repository for audit only and must never appear as a catalogue price or an active checkout amount.
+
 ## PTE Packs
 
 | Pack | Pack ID | Price (INR) | Validity |
@@ -49,7 +61,7 @@ last_reviewed: 2026-08-29
 
 | Pack | Pack ID | Price (INR) | Validity |
 |------|---------|-------------|----------|
-| Champion | duolingo-champion | 1,875 | 4 weeks / 60 days |
+| Champion | duolingo-champion | 1,999 | 4 weeks / 60 days |
 
 ## Shorter GRE
 
@@ -104,7 +116,8 @@ last_reviewed: 2026-08-29
 
 ## Important Notes
 
-- All prices above are the current ANU Education course prices. Confirm final invoice amount, GST, and batch availability with ANU Education before quoting to students.
+- Pack prices in the tables above are the current ANU Education course prices. Confirm final invoice amount, GST, and batch availability with ANU Education before quoting to students.
+- The discontinued IELTS Academic Champion "Upcoming Batch" offer must not be quoted or sold. Use only the current pack prices above plus applicable GST.
 
 ## Status
 

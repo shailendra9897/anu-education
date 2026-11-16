@@ -4,6 +4,12 @@ import Script from "next/script";
 import Link from "next/link";
 import { useState } from "react";
 
+import {
+  GERMAN_BASIC_A1_PRICE_DISPLAY,
+  GERMAN_BASIC_A1_PRICE_PLAIN,
+  GERMAN_BASIC_A1_A2_PRICE_DISPLAY,
+} from "@/lib/data/german-pricing";
+
 export default function GermanClient() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -31,7 +37,7 @@ export default function GermanClient() {
             },
             offers: {
               "@type": "Offer",
-              price: "7500",
+              price: GERMAN_BASIC_A1_PRICE_PLAIN,
               priceCurrency: "INR",
               availability: "https://schema.org/OnlineOnly",
               validFrom: "2026-04-01",
@@ -199,8 +205,8 @@ export default function GermanClient() {
               <div>
                 <h3 className="text-xl font-bold mb-3">🎯 Packages & Pricing</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li><strong>German Basic + A1:</strong> ₹7,500</li>
-                  <li><strong>German Basic + A1 + A2:</strong> ₹12,000</li>
+                  <li><strong>German Basic + A1:</strong> {GERMAN_BASIC_A1_PRICE_DISPLAY}</li>
+                  <li><strong>German Basic + A1 + A2:</strong> {GERMAN_BASIC_A1_A2_PRICE_DISPLAY}</li>
                 </ul>
                 <h3 className="text-xl font-bold mt-6 mb-3">🕒 Batch Timings</h3>
                 <ul className="space-y-1 text-gray-700">

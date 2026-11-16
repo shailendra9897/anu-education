@@ -3,6 +3,7 @@
 import PTEGandhinagarClient from "./PTEGandhinagarClient";
 import JsonLd from "@/components/JsonLd";
 import { faqs } from "@/lib/data/faq/pte-gandhinagar";
+import { PTE_FROM_PRICE_DISPLAY } from "@/lib/data/pte-pricing";
 
 export const metadata = {
   title: "PTE Classes in Gandhinagar 2026 – Online PTE Coaching | ANU Education",
@@ -23,7 +24,7 @@ export const metadata = {
   openGraph: {
     title: "PTE Classes in Gandhinagar 2026 – Online Coaching, 14 Mock Tests | ANU Education",
     description:
-      "Live online PTE classes for Gandhinagar students. 4 course packs from ₹1,313. 14 mock tests, 180+ exercises, AI scoring, Saturday doubt sessions. Free 3-day demo.",
+      `Live online PTE classes for Gandhinagar students. 4 course packs from ${PTE_FROM_PRICE_DISPLAY}. 14 mock tests, 180+ exercises, AI scoring, Saturday doubt sessions. Free 3-day demo.`,
     url: "https://www.anuedu.in/test-prep/pte-coaching-gandhinagar",
     type: "website",
   },

@@ -5,6 +5,7 @@ import {
   websiteWhatsAppMessages,
   getWhatsAppLink,
 } from "@/lib/whatsappTemplates";
+import { getPteJsonLdOffers } from "@/lib/data/pte-pricing";
 
 export const metadata = {
   title: "PTE Coaching in Modasa | Best PTE Classes Near You – ANU Education",
@@ -115,13 +116,10 @@ export default function PTEModasaPage() {
               "@type": "Organization",
               name: "ANU Education",
             },
-            offers: {
-              "@type": "Offer",
-              price: "0",
-              priceCurrency: "INR",
+            offers: getPteJsonLdOffers().map((offer) => ({
+              ...offer,
               availability: "https://schema.org/OnlineOnly",
-              validFrom: "2026-01-01",
-            },
+            })),
           }),
         }}
       />

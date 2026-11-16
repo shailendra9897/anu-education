@@ -4,6 +4,11 @@
 // consumed by the server-rendered FAQPage JSON-LD (page.tsx)
 // and the visible FAQ accordion (client component).
 
+import {
+  DUO_PRICE_DISPLAY,
+  DUO_LIST_PRICE_DISPLAY,
+} from "@/lib/data/duolingo-pricing";
+
 export const FAQS: { q: string; a: string }[] = [
   {
     q: "What is the Duolingo English Test (DET)?",
@@ -31,11 +36,11 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What is the Duolingo English Test fee in India?",
-    a: "The Duolingo English Test fee is approximately $70 USD, which is around ₹6,000 at current exchange rates. This fee includes unlimited free score reporting to any number of institutions — unlike IELTS which charges per additional score report. The test can be taken at home, saving travel and test centre costs. ANU Education's Duolingo coaching fee starts at ₹1,999 (limited time offer; regular price ₹5,000) — separate from the exam registration fee.",
+    a: `The Duolingo English Test fee is approximately $70 USD, which is around ₹6,000 at current exchange rates. This fee includes unlimited free score reporting to any number of institutions — unlike IELTS which charges per additional score report. The test can be taken at home, saving travel and test centre costs. ANU Education's Duolingo coaching fee starts at ${DUO_PRICE_DISPLAY} (limited time offer; regular price ${DUO_LIST_PRICE_DISPLAY}) — separate from the exam registration fee.`,
   },
   {
     q: "What does the ANU Education Duolingo coaching include?",
-    a: "ANU Education's Duolingo Champion Course (₹1,999 offer) includes: 60 min/day live classes Monday–Friday (7:00–8:00 PM IST), 4-week live curriculum cycle (20 total live learning hours), Saturday grammar batch (11:00 AM–12:00 PM IST), 12 full-length timed mock tests, 300+ grammar, vocabulary and spelling videos, grammar and vocabulary quizzes, 60-day login access, and recordings for missed lectures. A free 5-day demo pack (1 mock test, 5 live hours) is also available.",
+    a: `ANU Education's Duolingo Champion Course (${DUO_PRICE_DISPLAY} offer) includes: 60 min/day live classes Monday–Friday (7:00–8:00 PM IST), 4-week live curriculum cycle (20 total live learning hours), Saturday grammar batch (11:00 AM–12:00 PM IST), 12 full-length timed mock tests, 300+ grammar, vocabulary and spelling videos, grammar and vocabulary quizzes, 60-day login access, and recordings for missed lectures. A free 5-day demo pack (1 mock test, 5 live hours) is also available.`,
   },
   {
     q: "What batch timings are available for Duolingo coaching at ANU Education?",
@@ -51,6 +56,6 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Why choose ANU Education for Duolingo coaching?",
-    a: "ANU Education offers the most affordable comprehensive Duolingo coaching in India: ₹1,999 (offer price) vs ₹7,500–₹15,000 at major competitors. Includes 12 mock tests, 20 live hours, 300+ videos, and Saturday grammar sessions. Skill India certified counsellors provide free study abroad guidance alongside coaching. One-stop: Duolingo coaching + IELTS/PTE + French/German + study abroad consultancy under one roof. 1,100+ students guided. 98% success rate.",
+    a: `ANU Education offers the most affordable comprehensive Duolingo coaching in India: ${DUO_PRICE_DISPLAY} (offer price) vs ₹7,500–₹15,000 at major competitors. Includes 12 mock tests, 20 live hours, 300+ videos, and Saturday grammar sessions. Skill India certified counsellors provide free study abroad guidance alongside coaching. One-stop: Duolingo coaching + IELTS/PTE + French/German + study abroad consultancy under one roof. 1,100+ students guided. 98% success rate.`,
   },
 ];

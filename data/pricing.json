@@ -4,11 +4,11 @@
   "tax_note": "GST may apply where stated. Confirm final invoice amount with ANU Education.",
   "prices": {
     "ielts": [
-      {"pack_id": "ielts-academic-self-prep", "name": "IELTS Academic - Self Prep", "price": 1875, "original_price": null, "discount": null, "currency": "INR", "duration": "180 days"},
-      {"pack_id": "ielts-academic-champion-morning", "name": "IELTS Academic - Champion (Morning)", "price": 5250, "original_price": null, "discount": null, "currency": "INR", "duration": "8 weeks / 180 days"},
-      {"pack_id": "ielts-academic-champion-afternoon", "name": "IELTS Academic - Champion (Afternoon)", "price": 5250, "original_price": null, "discount": null, "currency": "INR", "duration": "8 weeks / 180 days"},
-      {"pack_id": "ielts-academic-champion-evening", "name": "IELTS Academic - Champion (Evening)", "price": 5250, "original_price": null, "discount": null, "currency": "INR", "duration": "8 weeks / 180 days"},
-      {"pack_id": "ielts-academic-champion-all-timings", "name": "IELTS Academic - Champion (All Timings)", "price": 6375, "original_price": null, "discount": null, "currency": "INR", "duration": "8 weeks / 180 days"},
+      {"pack_id": "ielts-academic-self-prep", "name": "IELTS Academic - Self Prep", "price": 1999, "original_price": null, "discount": null, "currency": "INR", "duration": "180 days"},
+      {"pack_id": "ielts-academic-champion-morning", "name": "IELTS Academic - Champion (Morning)", "price": 5499, "original_price": null, "discount": null, "currency": "INR", "duration": "8 weeks / 180 days"},
+      {"pack_id": "ielts-academic-champion-afternoon", "name": "IELTS Academic - Champion (Afternoon)", "price": 5499, "original_price": null, "discount": null, "currency": "INR", "duration": "8 weeks / 180 days"},
+      {"pack_id": "ielts-academic-champion-evening", "name": "IELTS Academic - Champion (Evening)", "price": 5499, "original_price": null, "discount": null, "currency": "INR", "duration": "8 weeks / 180 days"},
+      {"pack_id": "ielts-academic-champion-all-timings", "name": "IELTS Academic - Champion (All Timings)", "price": 6499, "original_price": null, "discount": null, "currency": "INR", "duration": "8 weeks / 180 days"},
       {"pack_id": "ielts-academic-reading-marathon", "name": "IELTS Academic - Reading Marathon", "price": 3000, "original_price": null, "discount": null, "currency": "INR", "duration": "4 weeks / 45 days"},
       {"pack_id": "ielts-academic-writing-marathon", "name": "IELTS Academic - Writing Marathon", "price": 3000, "original_price": null, "discount": null, "currency": "INR", "duration": "4 weeks / 45 days"},
       {"pack_id": "ielts-academic-speaking-marathon", "name": "IELTS Academic - Speaking Marathon", "price": 3000, "original_price": null, "discount": null, "currency": "INR", "duration": "4 weeks / 45 days"}
@@ -20,7 +20,7 @@
       {"pack_id": "pte-core-mock-tests", "name": "PTE Core - Mock Tests", "price": 1875, "original_price": null, "discount": null, "currency": "INR", "duration": "180 days"}
     ],
     "duolingo": [
-      {"pack_id": "duolingo-champion", "name": "Duolingo English Test - Champion", "price": 1875, "original_price": null, "discount": null, "currency": "INR", "duration": "4 weeks / 60 days"}
+      {"pack_id": "duolingo-champion", "name": "Duolingo English Test - Champion", "price": 1999, "original_price": null, "discount": null, "currency": "INR", "duration": "4 weeks / 60 days"}
     ],
     "gre": [
       {"pack_id": "shorter-gre-live-class-self-prep", "name": "Shorter GRE - Live Class / Self Prep", "price": 7500, "original_price": null, "discount": null, "currency": "INR", "duration": "12 weeks / 90 / 180 days"},
@@ -42,18 +42,13 @@
       {"pack_id": "german-basic-a1-a2", "name": "German - Basic, A1 & A2", "price": 12000, "original_price": null, "discount": null, "currency": "INR", "duration": "18 weeks / 210 days"},
       {"pack_id": "german-a2", "name": "German - A2", "price": 9750, "original_price": null, "discount": null, "currency": "INR", "duration": "7 weeks / 180 days"}
     ],
-    "toefl": [],
-    "gmat": [],
-    "sat": []
+    "toefl": [
+    ],
+    "gmat": [
+    ],
+    "sat": [
+    ]
   },
-  "sources": [
-    "FEES/IELTS_ACADEMIC_FEE.pdf",
-    "FEES/PTE_FEE.pdf",
-    "FEES/DUOLINGO_FEE.pdf",
-    "FEES/GRE_FEE.pdf",
-    "FEES/SPOKEN_ENGLISH_FEE.pdf",
-    "FEES/FRENCH_FEE.pdf",
-    "FEES/GERMAN_FEE.pdf"
-  ],
-  "last_reviewed": "2026-08-29"
+  "sources": ["FEES/IELTS_ACADEMIC_FEE.pdf", "FEES/PTE_FEE.pdf", "FEES/DUOLINGO_FEE.pdf", "FEES/GRE_FEE.pdf", "FEES/SPOKEN_ENGLISH_FEE.pdf", "FEES/FRENCH_FEE.pdf", "FEES/GERMAN_FEE.pdf"],
+  "last_reviewed": "2026-11-12"
 }

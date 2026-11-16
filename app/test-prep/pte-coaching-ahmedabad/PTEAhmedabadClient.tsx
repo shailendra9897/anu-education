@@ -7,6 +7,7 @@ import {
   websiteWhatsAppMessages,
   getWhatsAppLink,
 } from "@/lib/whatsappTemplates";
+import { getPteJsonLdOffers } from "@/lib/data/pte-pricing";
 export default function PTEAhmedabadClient() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -32,13 +33,10 @@ export default function PTEAhmedabadClient() {
               name: "ANU Education",
               sameAs: "https://www.anuedu.in",
             },
-            offers: {
-              "@type": "Offer",
-              price: "0",
-              priceCurrency: "INR",
+            offers: getPteJsonLdOffers().map((offer) => ({
+              ...offer,
               availability: "https://schema.org/OnlineOnly",
-              validFrom: "2026-04-01",
-            },
+            })),
             hasCourseInstance: {
               "@type": "CourseInstance",
               courseMode: "Online",

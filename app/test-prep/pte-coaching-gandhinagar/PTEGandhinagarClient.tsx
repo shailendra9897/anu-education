@@ -17,7 +17,7 @@
 //   ❌ No schema: Course, FAQ, Breadcrumb
 //   ❌ Only ~400 words — extremely thin
 //   ❌ FAQs have no content (collapsible but empty)
-//   ✅ Pricing aligned to master: Self Prep ₹1,875 / Live Class ₹1,313 / Champion ₹3,000
+//   ✅ Pricing derived from the PTE price master via lib/data/pte-pricing.ts
 //   ❌ No Eduvantage PTE features listed (concept builders, simulated engine, etc.)
 //
 // COMPETITOR GAPS vs E2Language / EEC / Vision Language Experts
@@ -48,6 +48,25 @@ import {
   websiteWhatsAppMessages,
   getWhatsAppLink,
 } from "@/lib/whatsappTemplates";
+import {
+  PTE_FROM_PRICE_DISPLAY,
+  PTE_VIEWS,
+  formatPtePrice,
+} from "@/lib/data/pte-pricing";
+
+function pteCataloguePrice(productId: string): number {
+  const view = PTE_VIEWS.find((v) => v.productId === productId);
+  if (!view) {
+    throw new Error(
+      `PTE price view is missing \`${productId}\`; it must derive from the price master.`,
+    );
+  }
+  return view.price;
+}
+
+const liveClassPrice = pteCataloguePrice("pte-academic-live-class");
+const selfPrepPrice = pteCataloguePrice("pte-academic-self-prep");
+const championPrice = pteCataloguePrice("pte-academic-champion");
 
 // ── COURSE PACKS from brochure screenshot ────────────────────────
 const packs = [
@@ -70,7 +89,7 @@ const packs = [
   {
     id: "selfprep", name: "Self Prep Pack", tag: "Best for Self-Starters",
     badge: "bg-blue-700", border: "border-blue-200", highlight: false,
-    price: "₹1,875", validity: "180 Days",
+    price: formatPtePrice(selfPrepPrice), validity: "180 Days",
     rows: [
       ["English Assessment Test", "✅"],
       ["Vocab, Grammar Videos", "300+"],
@@ -80,13 +99,13 @@ const packs = [
       ["Practice Exercises", "180+ (800+ Questions)"],
       ["Results by Expert Mentors", "✅"],
       ["Login Validity", "180 Days"],
-      ["Price (GST extra)", "₹1,875"],
+      ["Price (GST extra)", formatPtePrice(selfPrepPrice)],
     ],
   },
   {
     id: "liveclass", name: "Live Class Pack", tag: "Live Classes + Mentors",
     badge: "bg-indigo-700", border: "border-indigo-200", highlight: false,
-    price: "₹1,313", validity: "90 Days",
+    price: formatPtePrice(liveClassPrice), validity: "90 Days",
     rows: [
       ["English Assessment Test", "✅"],
       ["Vocab, Grammar Videos", "300+"],
@@ -96,13 +115,13 @@ const packs = [
       ["Practice Exercises", "❌"],
       ["Results by Expert Mentors", "✅"],
       ["Login Validity", "90 Days"],
-      ["Price (GST extra)", "₹1,313"],
+      ["Price (GST extra)", formatPtePrice(liveClassPrice)],
     ],
   },
   {
     id: "champion", name: "Champion Pack", tag: "Everything Included",
     badge: "bg-green-700", border: "border-green-300", highlight: true,
-    price: "₹3,000", validity: "180 Days",
+    price: formatPtePrice(championPrice), validity: "180 Days",
     rows: [
       ["English Assessment Test", "✅"],
       ["Vocab, Grammar Videos", "300+"],
@@ -112,7 +131,7 @@ const packs = [
       ["Practice Exercises", "180+ (800+ Questions)"],
       ["Results by Expert Mentors", "✅"],
       ["Login Validity", "180 Days"],
-      ["Price (GST extra)", "₹3,000"],
+      ["Price (GST extra)", formatPtePrice(championPrice)],
     ],
   },
 ];
@@ -138,9 +157,9 @@ export default function PTEGandhinagarClient() {
         coursePrerequisites: "Basic English. No prior PTE experience needed.",
         offers: [
           { "@type": "Offer", name: "Demo Pack", priceCurrency: "INR", price: "0", description: "3-day free trial, 1 mock test" },
-          { "@type": "Offer", name: "Self Prep Pack", priceCurrency: "INR", price: "1875", description: "180 days, 14 mock tests, 800+ questions" },
-          { "@type": "Offer", name: "Live Class Pack", priceCurrency: "INR", price: "1313", description: "90 days, live 90 min/day classes" },
-          { "@type": "Offer", name: "Champion Pack", priceCurrency: "INR", price: "3000", description: "180 days, live classes + 14 mocks + 800+ exercises" },
+          { "@type": "Offer", name: "Self Prep Pack", priceCurrency: "INR", price: String(selfPrepPrice), description: "180 days, 14 mock tests, 800+ questions" },
+          { "@type": "Offer", name: "Live Class Pack", priceCurrency: "INR", price: String(liveClassPrice), description: "90 days, live 90 min/day classes" },
+          { "@type": "Offer", name: "Champion Pack", priceCurrency: "INR", price: String(championPrice), description: "180 days, live classes + 14 mocks + 800+ exercises" },
         ],
         hasCourseInstance: { "@type": "CourseInstance", courseMode: "Online", courseWorkload: "PT1H30M", startDate: "2026-06-01", location: { "@type": "VirtualLocation", url: "https://www.anuedu.in/test-prep/pte-coaching-gandhinagar" } },
         about: { "@type": "Thing", name: "Pearson Test of English Academic", sameAs: "https://en.wikipedia.org/wiki/Pearson_Test_of_English" },
@@ -173,7 +192,7 @@ export default function PTEGandhinagarClient() {
             </nav>
             <div className="text-center">
               <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold mb-5 float">
-                🎯 100% Online · 4 Course Packs · Free Demo · From ₹1,313
+                🎯 100% Online · 4 Course Packs · Free Demo · From {PTE_FROM_PRICE_DISPLAY}
               </div>
               <h1 className="anim d1 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5">
                 PTE Classes in Gandhinagar
@@ -183,7 +202,7 @@ export default function PTEGandhinagarClient() {
                 </span>
               </h1>
               <p className="anim d2 text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed mb-8">
-                ANU Education offers the most complete <strong className="text-white">online PTE classes</strong> for Gandhinagar students — 4 course packs from free to ₹3,000, <strong className="text-white">14 full-length mock tests</strong>, 800+ practice questions, live Morning &amp; Evening batches, Saturday doubt sessions, and AI-based scoring. Join from Kudasan, Sector 21, Infocity, Sargasan, or anywhere in Gandhinagar.
+                ANU Education offers the most complete <strong className="text-white">online PTE classes</strong> for Gandhinagar students — 4 course packs from free to {formatPtePrice(championPrice)}, <strong className="text-white">14 full-length mock tests</strong>, 800+ practice questions, live Morning &amp; Evening batches, Saturday doubt sessions, and AI-based scoring. Join from Kudasan, Sector 21, Infocity, Sargasan, or anywhere in Gandhinagar.
               </p>
               <div className="anim d3 flex flex-col sm:flex-row justify-center gap-4 mb-8">
                 <a href="https://study.anuedu.in/register" target="_blank" rel="noopener noreferrer"
@@ -216,7 +235,7 @@ export default function PTEGandhinagarClient() {
               { stat: "14", label: "Full-length timed mock tests" },
               { stat: "800+", label: "Practice questions (Champion)" },
               { stat: "300+", label: "Vocab & grammar videos" },
-              { stat: "₹1,313", label: "Live Class Pack starting price" },
+              { stat: PTE_FROM_PRICE_DISPLAY, label: "Live Class Pack starting price" },
             ].map((s, i) => (
               <div key={i} className="bg-blue-50 border border-blue-100 rounded-2xl p-5 text-center">
                 <div className="text-2xl font-black text-blue-700 mb-1">{s.stat}</div>
@@ -324,9 +343,9 @@ export default function PTEGandhinagarClient() {
                   <tr>
                     <th className="text-left px-3 py-3">Feature</th>
                     <th className="text-center px-3 py-3">Demo</th>
-                    <th className="text-center px-3 py-3">Self Prep<br/>₹1,875</th>
-                    <th className="text-center px-3 py-3">Live Class<br/>₹1,313</th>
-                    <th className="text-center px-3 py-3 bg-green-700">Champion ⭐<br/>₹3,000</th>
+                    <th className="text-center px-3 py-3">Self Prep<br/>{formatPtePrice(selfPrepPrice)}</th>
+                    <th className="text-center px-3 py-3">Live Class<br/>{formatPtePrice(liveClassPrice)}</th>
+                    <th className="text-center px-3 py-3 bg-green-700">Champion ⭐<br/>{formatPtePrice(championPrice)}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">

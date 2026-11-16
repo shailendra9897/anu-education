@@ -19,7 +19,7 @@
 //   ✅ Testimonials (6+ student quotes)
 //
 // ANU ADVANTAGES vs Edwise:
-//   ✅ PRICE: ₹1,999 (Edwise charges ₹7,500–₹15,000) — biggest differentiator
+//   ✅ PRICE: the master price, far below Edwise's ₹7,500–₹15,000 — biggest differentiator
 //   ✅ OFFER: Champion pack: 12 mock tests, 20 live hrs, 60-day access
 //   ✅ TIMING: Mon–Fri 7–8 PM + Saturday grammar 11 AM–12 PM (from brochure)
 //   ✅ OFFER PRICE schema — enables rich result with strikethrough pricing
@@ -30,7 +30,7 @@
 //   ✅ All brochure data: 2 packs, batch timings, 13 question types
 //   ✅ DET exam format table (3-section overview + question types)
 //   ✅ DET score table by country (5,500+ universities)
-//   ✅ ₹1,999 price prominently featured + strikethrough ₹5,000
+//   ✅ Offer price prominently featured + strikethrough list price
 //   ✅ 12 LLM-citation-ready FAQs (old: zero)
 //   ✅ 3 testimonials
 //   ✅ Word count ~2,400 (old: ~40)
@@ -71,6 +71,14 @@ const SKILL_COLOURS: Record<string, string> = {
 };
 
 import { FAQS } from "@/lib/data/faq/duolingo";
+import {
+  DUO_GST_LABEL,
+  DUO_PRICE_DISPLAY,
+  DUO_LIST_PRICE_DISPLAY,
+  DUO_SAVINGS_BADGE,
+  DUO_SAVINGS_PERCENT,
+  getDuoJsonLdOffers,
+} from "@/lib/data/duolingo-pricing";
 
 // ── TESTIMONIALS ─────────────────────────────────────────────────
 const TESTIMONIALS = [
@@ -110,8 +118,8 @@ export default function DuolingoClient() {
       badge: "bg-green-700",
       border: "border-green-300",
       highlight: true,
-      price: "₹1,999",
-      priceOld: "₹5,000",
+      price: DUO_PRICE_DISPLAY,
+      priceOld: DUO_LIST_PRICE_DISPLAY,
       rows: [
         ["Grammar, Vocab & Spelling Videos", "300+"],
         ["Grammar & Vocabulary Quizzes", "✅"],
@@ -133,14 +141,11 @@ export default function DuolingoClient() {
           "@context": "https://schema.org",
           "@type": "Course",
           name: "Duolingo English Test (DET) Coaching Online India 2026 | ANU Education",
-          description: "Live online Duolingo English Test coaching at ₹1,999 (offer price). 4-week curriculum, 12 mock tests, 300+ grammar videos, Mon–Fri live classes 7–8 PM IST, Saturday grammar sessions. Skill India certified.",
+          description: `Live online Duolingo English Test coaching at ${DUO_PRICE_DISPLAY} (offer price). 4-week curriculum, 12 mock tests, 300+ grammar videos, Mon–Fri live classes 7–8 PM IST, Saturday grammar sessions. Skill India certified.`,
           provider: { "@type": "EducationalOrganization", name: "ANU Education", sameAs: "https://www.anuedu.in", telephone: "+917016497087" },
           educationalLevel: "Intermediate to Advanced",
           inLanguage: "en",
-          offers: [
-            { "@type": "Offer", name: "Free Demo Pack", price: "0", priceCurrency: "INR", availability: "https://schema.org/OnlineOnly", validFrom: "2026-01-01" },
-            { "@type": "Offer", name: "Champion Course", price: "1999", priceCurrency: "INR", availability: "https://schema.org/OnlineOnly", validFrom: "2026-01-01", description: "Limited offer. Regular price ₹5,000." },
-          ],
+          offers: getDuoJsonLdOffers(),
           hasCourseInstance: { "@type": "CourseInstance", courseMode: "Online", courseWorkload: "PT1H", location: { "@type": "VirtualLocation", url: "https://www.anuedu.in/test-prep/duolingo" } },
           about: { "@type": "Thing", name: "Duolingo English Test", sameAs: "https://englishtest.duolingo.com" },
         })}}
@@ -191,18 +196,18 @@ export default function DuolingoClient() {
                 <div className="text-left">
                   <div className="text-xs text-green-200 font-medium uppercase tracking-wider">Limited offer price</div>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-black text-white">₹1,999</span>
-                    <span className="text-white/50 text-sm line-through">₹5,000</span>
-                    <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full">60% OFF</span>
+                    <span className="text-3xl font-black text-white">{DUO_PRICE_DISPLAY}</span>
+                    <span className="text-white/50 text-sm line-through">{DUO_LIST_PRICE_DISPLAY}</span>
+                    <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full">{DUO_SAVINGS_BADGE}</span>
                   </div>
-                  <div className="text-xs text-green-200 mt-0.5">+ GST · 60-day access · 12 mock tests</div>
+                  <div className="text-xs text-green-200 mt-0.5">{DUO_GST_LABEL} · 60-day access · 12 mock tests</div>
                 </div>
               </div>
 
               <div className="anim d3 flex flex-col sm:flex-row justify-center gap-4 mb-8">
                 <a href="https://study.anuedu.in/register" target="_blank" rel="noopener noreferrer"
                   className="group bg-white text-green-700 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all hover:scale-105 inline-flex items-center justify-center gap-2 pulse">
-                  🔥 Enrol at ₹1,999 Now
+                  🔥 Enrol at {DUO_PRICE_DISPLAY} Now
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </a>
                 <a href={getWhatsAppLink(websiteWhatsAppMessages.home)} target="_blank" rel="noopener noreferrer"
@@ -227,7 +232,7 @@ export default function DuolingoClient() {
           {/* ══ STATS ══ */}
           <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { stat: "₹1,999", label: "Champion course (offer price)" },
+              { stat: DUO_PRICE_DISPLAY, label: "Champion course (offer price)" },
               { stat: "12", label: "Full-length timed mock tests" },
               { stat: "300+", label: "Grammar & vocabulary videos" },
               { stat: "48 hrs", label: "Duolingo results turnaround" },
@@ -373,7 +378,7 @@ export default function DuolingoClient() {
           <section>
             <h2 className="text-3xl font-bold text-center mb-3 ua">Duolingo Course Packs — ANU Education</h2>
             <p className="text-center text-gray-500 text-sm mb-8 mt-4">
-              Start free · Limited time offer ₹1,999 · 60-day access · Mon–Fri live classes + Saturday grammar
+              Start free · Limited time offer {DUO_PRICE_DISPLAY} · 60-day access · Mon–Fri live classes + Saturday grammar
             </p>
 
             <div className="flex gap-3 justify-center mb-6">
@@ -393,7 +398,7 @@ export default function DuolingoClient() {
             <div className={`bg-white rounded-2xl border-2 ${packs[activePack].border} shadow-sm overflow-hidden ${packs[activePack].highlight ? "ring-2 ring-green-400" : ""}`}>
               {packs[activePack].highlight && (
                 <div className="bg-green-700 text-white text-center py-2 text-sm font-bold">
-                  ⭐ Limited Time Offer · ₹1,999 only (Regular ₹5,000) · 60% Saving
+                  ⭐ Limited Time Offer · {DUO_PRICE_DISPLAY} only (Regular {DUO_LIST_PRICE_DISPLAY}) · {DUO_SAVINGS_PERCENT}% Saving
                 </div>
               )}
               <div className="p-6">
@@ -406,10 +411,10 @@ export default function DuolingoClient() {
                       {packs[activePack].priceOld && (
                         <>
                           <span className="text-gray-400 text-sm line-through">{packs[activePack].priceOld}</span>
-                          <span className="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded-full">60% OFF</span>
+                          <span className="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded-full">{DUO_SAVINGS_BADGE}</span>
                         </>
                       )}
-                      {packs[activePack].price !== "Free" && <span className="text-xs text-gray-400">+ GST</span>}
+                      {packs[activePack].price !== "Free" && <span className="text-xs text-gray-400">{DUO_GST_LABEL}</span>}
                     </div>
                     <div className="space-y-1.5">
                       {packs[activePack].rows.map(([feat, val], i) => (
@@ -423,7 +428,7 @@ export default function DuolingoClient() {
                   <div className="min-w-fit flex flex-col gap-3 md:pt-10">
                     <a href="https://study.anuedu.in/register" target="_blank" rel="noopener noreferrer"
                       className={`text-white px-6 py-3 rounded-xl font-bold hover:opacity-90 transition-all text-center pulse ${packs[activePack].highlight ? "bg-green-700" : "bg-gray-600"}`}>
-                      {packs[activePack].price === "Free" ? "Start Free Demo →" : "Enrol at ₹1,999 →"}
+                      {packs[activePack].price === "Free" ? "Start Free Demo →" : `Enrol at ${DUO_PRICE_DISPLAY} →`}
                     </a>
                     <a href={getWhatsAppLink(websiteWhatsAppMessages.home)} target="_blank" rel="noopener noreferrer"
                       className="border border-gray-300 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors text-center text-sm">
@@ -510,14 +515,14 @@ export default function DuolingoClient() {
               Live Mon–Fri classes · 12 mock tests · 300+ videos · Saturday grammar · Free demo class.
             </p>
             <div className="inline-flex items-baseline gap-2 bg-white/15 border border-white/30 px-5 py-2.5 rounded-xl mb-7">
-              <span className="text-2xl font-black text-white">₹1,999</span>
-              <span className="text-white/50 text-sm line-through">₹5,000</span>
-              <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full">60% OFF</span>
+              <span className="text-2xl font-black text-white">{DUO_PRICE_DISPLAY}</span>
+              <span className="text-white/50 text-sm line-through">{DUO_LIST_PRICE_DISPLAY}</span>
+              <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full">{DUO_SAVINGS_BADGE}</span>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
               <a href="https://study.anuedu.in/register" target="_blank" rel="noopener noreferrer"
                 className="bg-white text-green-700 px-8 py-4 rounded-xl font-bold hover:shadow-xl transition-all hover:scale-105">
-                🔥 Enrol at ₹1,999
+                🔥 Enrol at {DUO_PRICE_DISPLAY}
               </a>
               <a href="tel:+917016497087" aria-label="Call ANU Education"
                 className="border-2 border-white/70 px-8 py-4 rounded-xl font-bold hover:bg-white/10 transition-colors">

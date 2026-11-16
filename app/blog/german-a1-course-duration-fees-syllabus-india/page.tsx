@@ -1,6 +1,7 @@
 import Script from "next/script";
 import Link from "next/link";
 import JsonLd from "@/components/JsonLd";
+import { GERMAN_FROM_PRICE_DISPLAY } from "@/lib/data/german-pricing";
 
 export const metadata = {
   title: "German A1 Course Duration, Fees & Syllabus in India | 2026 Updated Guide",
@@ -186,7 +187,7 @@ export default function GermanA1BlogPage() {
             </table>
           </div>
           <p className="text-gray-700">
-            At <strong>ANU Education</strong>, you can enrol in a structured German A1 course starting from <strong>₹7,500</strong> – inclusive of study materials, speaking practice sessions, and post‑class support.
+            At <strong>ANU Education</strong>, you can enrol in a structured German A1 course starting from <strong>{GERMAN_FROM_PRICE_DISPLAY}</strong> – inclusive of study materials, speaking practice sessions, and post‑class support.
           </p>
 
           {/* Syllabus */}
