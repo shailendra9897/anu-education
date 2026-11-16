@@ -38,7 +38,6 @@
 //   Course + FAQPage + BreadcrumbList + EducationalOrganization
 // ─────────────────────────────────────────────────────────────────
 
-import Script from "next/script";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -50,31 +49,78 @@ const waLink = (msg: string) =>
 const LAST_MODIFIED = "30 June 2026";
 
 import { FAQS } from "@/lib/data/faq/ielts-ahmedabad";
+import IELTSPricingCards from "@/components/courses/IELTSPricingCards";
+import IELTSStudentStories from "@/components/testimonials/IELTSStudentStories";
+import { IELTS_GST_LABEL } from "@/lib/data/ielts-pricing";
+import {
+  IELTS_PACKAGES,
+  withIeltsPackageCta,
+} from "@/lib/data/ielts-packages";
+
+// Marketing package cards. Prices, features and badges come from the
+// centralized IELTS package module; only the page-owned CTAs live here.
+// Self Prep, Champion — One Batch and Champion — All Timings are each sold
+// through their own fixed PayU payment link. The retired on-page checkout is
+// never used.
+const IELTS_SELF_PREP_PAYU_URL = "https://u.payu.in/PAYUMN/uIqbwdNTKrTp";
+const IELTS_CHAMPION_ONE_BATCH_PAYU_URL =
+  "https://u.payu.in/PAYUMN/BIInlBUFpA9I";
+const IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL =
+  "https://u.payu.in/PAYUMN/wIuPM83kT5li";
+
+const IELTS_AHMEDABAD_PRICING_PACKAGES = IELTS_PACKAGES.map((pkg) => ({
+  ...withIeltsPackageCta(
+    pkg,
+    pkg.packageId === "ielts-self-prep"
+      ? {
+          label: "Buy Now",
+          href: IELTS_SELF_PREP_PAYU_URL,
+          ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+        }
+      : pkg.packageId === "ielts-champion-one-batch"
+        ? {
+            label: "Buy Now",
+            href: IELTS_CHAMPION_ONE_BATCH_PAYU_URL,
+            ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+          }
+        : {
+            label: "Buy Now",
+            href: IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL,
+            ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+          },
+    {
+      label: "Book Free Demo",
+      href: "/free-demo",
+      ariaLabel: `Book a free demo for ${pkg.title}`,
+    },
+  ),
+  gstLabel: IELTS_GST_LABEL,
+}));
 
 const WHO_SHOULD_JOIN = [
   { icon: "🎓", title: "Students Planning to Study Abroad", desc: "University admissions for Canada, UK, Australia, Germany, and more — IELTS Academic is your gateway." },
   { icon: "💼", title: "Working Professionals", desc: "Flexible morning, evening, and weekend batches designed around full-time work schedules." },
   { icon: "🇨🇦", title: "Canada PR Applicants", desc: "IELTS General Training for Express Entry — we coach specifically for CLB score targets, not just generic bands." },
   { icon: "🏥", title: "Nurses & Healthcare Professionals", desc: "Specific guidance for IELTS expectations used in healthcare registration abroad." },
-  { icon: "🎯", title: "Students Aiming for Band 7+", desc: "Advanced strategy sessions, intensive speaking practice, and detailed writing feedback for high-band targets." },
+  { icon: "🎯", title: "Students Targeting a Higher Band", desc: "Advanced strategy sessions, intensive speaking practice, and detailed writing feedback for higher-band targets." },
 ];
 
 const PROCESS_STEPS = [
   { step: "01", title: "Book Free Demo", desc: "No payment, no commitment — just register and join." },
-  { step: "02", title: "Attend 4-Day Live Classes", desc: "Experience real teaching quality before deciding anything." },
+  { step: "02", title: "Attend 5-Day Live Classes", desc: "Experience real teaching quality before deciding anything." },
   { step: "03", title: "Take Mock Test", desc: "Get a genuine diagnostic of your current band level." },
   { step: "04", title: "Get Band Analysis", desc: "Detailed section-wise feedback on your strengths and gaps." },
   { step: "05", title: "Enroll", desc: "Choose the course pack that matches your goal and timeline." },
-  { step: "06", title: "Achieve Your Target Score", desc: "Structured practice until you hit your Band 7+ goal." },
+  { step: "06", title: "Prepare for Exam Day", desc: "Structured practice towards the band score your destination requires." },
 ];
 
 const COMPARISON_ROWS = [
   ["Learn from home", "Daily travel required"],
-  ["Flexible batches", "Fixed schedule only"],
-  ["Recorded classes for revision", "Usually unavailable"],
-  ["AI-assisted mock tests with instant scoring", "Limited, manual practice tests"],
-  ["Daily speaking practice with feedback", "Often weekly or occasional"],
-  ["Same quality for all Ahmedabad areas", "Limited by physical location"],
+  ["Flexible morning, evening and weekend batches", "Fixed schedule only"],
+  ["Recorded classes for revision", "Varies by institute"],
+  ["Full-length mock tests with section analysis", "Varies by institute"],
+  ["Speaking practice built into the timetable", "Varies by institute"],
+  ["Same course access across Ahmedabad", "Limited by physical location"],
 ];
 
 const BATCH_TIMINGS = [
@@ -88,93 +134,6 @@ export default function IELTSAhmedabadClient() {
 
   return (
     <>
-      <Script
-        id="course-schema-ielts-ahmedabad"
-        type="application/ld+json"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Course",
-            name: "IELTS Coaching in Ahmedabad – Online Classes with Free 4-Day Demo | ANU Education",
-            description:
-              "Live online IELTS coaching for Ahmedabad students. Daily speaking practice, AI-assisted mock tests, flexible batch timings, and a free 4-day demo. Covers IELTS Academic and IELTS General Training.",
-            provider: {
-              "@type": "EducationalOrganization",
-              name: "ANU Education",
-              url: "https://www.anuedu.in",
-              telephone: "+917016497087",
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: "Modasa",
-                addressRegion: "Gujarat",
-                addressCountry: "IN",
-              },
-            },
-            educationalLevel: "Beginner to Advanced",
-            inLanguage: "en",
-            coursePrerequisites:
-              "No prior IELTS experience needed. Free demo includes diagnostic assessment.",
-            offers: {
-              "@type": "Offer",
-              priceCurrency: "INR",
-              availability: "https://schema.org/OnlineOnly",
-              validFrom: "2026-01-01",
-              description:
-                "Free 4-day demo. Course fees discussed after diagnostic assessment.",
-            },
-            hasCourseInstance: {
-              "@type": "CourseInstance",
-              courseMode: "Online",
-              location: {
-                "@type": "VirtualLocation",
-                url: "https://www.anuedu.in/test-prep/ielts-coaching-ahmedabad",
-              },
-            },
-            areaServed: {
-              "@type": "City",
-              name: "Ahmedabad",
-            },
-            dateModified: `${LAST_MODIFIED}`,
-          })
-        }}
-      />
-
-      <Script
-        id="organization-schema-ielts-ahmedabad"
-        type="application/ld+json"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "EducationalOrganization",
-            name: "ANU Education – IELTS Coaching Ahmedabad",
-            url: "https://www.anuedu.in/test-prep/ielts-coaching-ahmedabad",
-            telephone: "+917016497087",
-            email: "info@anuedu.in",
-            description:
-              "Online IELTS coaching serving all of Ahmedabad — live classes, speaking practice, AI mock tests, and free 4-day demo.",
-            areaServed: [
-              "Satellite",
-              "Maninagar",
-              "Navrangpura",
-              "Chandkheda",
-              "Nikol",
-              "South Bopal",
-              "Gota",
-              "Vastrapur",
-              "Science City",
-              "SG Highway",
-              "Naroda",
-              "Prahlad Nagar",
-              "Ambawadi",
-            ],
-            dateModified: `${LAST_MODIFIED}`,
-          })
-        }}
-      />
-
-
       <style jsx>{`
         @keyframes fadeInUp {
           from {
@@ -267,21 +226,21 @@ export default function IELTSAhmedabadClient() {
 
             <div className="text-center">
               <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold mb-5 float">
-                🎯 Online | Free 4-Day Demo | Speaking Practice | AI Mock Tests
+                🎯 Online | Free 5-Day Demo | Speaking Practice | AI Mock Tests
               </div>
 
               <h1 className="anim d1 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5">
-                Best IELTS Coaching in Ahmedabad
+                IELTS Coaching in Ahmedabad
                 <br />
                 <span className="bg-gradient-to-r from-yellow-300 to-green-300 bg-clip-text text-transparent">
-                  Online Classes · Free 4-Day Demo
+                  Online Classes · Free 5-Day Demo
                 </span>
               </h1>
 
               <p className="anim d2 text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed mb-3">
-                Looking for the best IELTS coaching in Ahmedabad? ANU Education
-                offers expert-led online IELTS classes designed for students who
-                want to prepare from home — with live lessons, daily speaking
+                Looking for IELTS coaching in Ahmedabad? ANU Education offers
+                expert-led online IELTS classes designed for students who want
+                to prepare from home — with live lessons, daily speaking
                 practice, and real exam strategy.
               </p>
 
@@ -295,9 +254,8 @@ export default function IELTSAhmedabadClient() {
               </p>
 
               <div className="anim d2 flex flex-col items-center gap-1 text-sm text-yellow-200 font-medium mb-7">
-                <span>⭐ Rated by students across Ahmedabad for live IELTS coaching</span>
-                <span className="text-white/80">
-                  🎯 Free 4-Day Demo | Speaking Practice | AI Mock Tests | Study
+                <span>
+                  🎯 Free 5-Day Demo | Speaking Practice | AI Mock Tests | Study
                   Abroad Support
                 </span>
               </div>
@@ -309,7 +267,7 @@ export default function IELTSAhmedabadClient() {
                   rel="noopener noreferrer"
                   className="group bg-white text-blue-700 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all hover:scale-105 inline-flex items-center justify-center gap-2 pulse"
                 >
-                  🔥 Start Free 4-Day Classes
+                  🔥 Start Free 5-Day Classes
                   <span className="group-hover:translate-x-1 transition-transform">
                     →
                   </span>
@@ -327,10 +285,10 @@ export default function IELTSAhmedabadClient() {
               </div>
 
               <div className="anim d4 flex flex-wrap justify-center gap-6 text-sm text-white/90">
-                <span>✅ 1,100+ Students Guided</span>
-                <span>✅ 98% Success Rate</span>
+                <span>✅ Live online classes</span>
+                <span>✅ Daily speaking practice</span>
                 <span>✅ Free Mock Test + Band Score</span>
-                <span>✅ Skill India Certified</span>
+                <span>✅ Study abroad support</span>
               </div>
             </div>
           </div>
@@ -357,12 +315,20 @@ export default function IELTSAhmedabadClient() {
             </p>
           </section>
 
+          {/* ══ IELTS COURSE PRICING ══ */}
+          <IELTSPricingCards
+            packages={IELTS_AHMEDABAD_PRICING_PACKAGES}
+            heading="IELTS Course Packages in Ahmedabad"
+            intro="Choose the package that matches your schedule and goals. All packages include 6-month access and a free demo class."
+            footnote="Prices include GST · 18% GST included. Course activation and portal access are completed manually after payment verification."
+          />
+
           <section>
             <h2 className="text-3xl font-bold text-center mb-3 ua">
-              Why ANU Education is Best for IELTS Coaching in Ahmedabad?
+              IELTS Coaching in Ahmedabad — Why Students Choose ANU Education
             </h2>
             <p className="text-center text-gray-500 text-sm mb-8 mt-4">
-              Built for Ahmedabad students who want results without the commute
+              Built for Ahmedabad students who want to prepare without the commute
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {[
@@ -389,11 +355,11 @@ export default function IELTSAhmedabadClient() {
                 {
                   icon: "🎯",
                   title: "Band score improvement",
-                  desc: "Proven strategies to achieve 6.5–7.5+ bands.",
+                  desc: "Strategy-led practice focused on the band you need for your destination.",
                 },
                 {
                   icon: "🔥",
-                  title: "Free 4-Day Demo",
+                  title: "Free 5-Day Demo",
                   desc: "Experience our classes risk-free before enrolling.",
                 },
               ].map((item, i) => (
@@ -418,7 +384,7 @@ export default function IELTSAhmedabadClient() {
               Who Should Join Our IELTS Coaching?
             </h2>
             <p className="text-center text-gray-600 text-sm mb-7">
-              Different goals, same proven structure — tailored to your specific
+              Different goals, one structured course — tailored to your specific
               path
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -441,10 +407,10 @@ export default function IELTSAhmedabadClient() {
 
           <section>
             <h2 className="text-3xl font-bold text-center mb-3 ua">
-              Your Path to Band 7+
+              Your IELTS Preparation Path
             </h2>
             <p className="text-center text-gray-500 text-sm mb-10 mt-4">
-              A simple, proven process from first demo to your target score
+              A step-by-step process from your first demo to exam day
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {PROCESS_STEPS.map((s, i) => (
@@ -493,19 +459,10 @@ export default function IELTSAhmedabadClient() {
             </div>
           </section>
 
-          <section className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-            <h2 className="text-2xl font-bold text-center mb-5">
-              Student Testimonial
-            </h2>
-            <blockquote className="text-gray-700 italic text-center leading-relaxed max-w-3xl mx-auto">
-              “I joined ANU Education&apos;s online IELTS coaching from
-              Satellite, Ahmedabad and achieved Band 7 in my first attempt. The
-              speaking feedback was the most valuable part.”
-            </blockquote>
-            <p className="text-center mt-4 text-sm font-semibold text-gray-600">
-              – Suhani Patel
-            </p>
-          </section>
+          <IELTSStudentStories
+            heading="Student Experiences"
+            intro="Approved student stories are published here once consent and score evidence are on file."
+          />
 
           <section className="bg-gray-50 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
@@ -569,7 +526,7 @@ export default function IELTSAhmedabadClient() {
 
           <section className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-2xl p-8 text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              Start your FREE 4-Day IELTS Demo today
+              Start your FREE 5-Day IELTS Demo today
             </h2>
             <p className="text-blue-700 font-medium mb-2 max-w-xl mx-auto">
               Experience live classes before making any payment.
@@ -594,84 +551,53 @@ export default function IELTSAhmedabadClient() {
             </a>
           </section>
 
-          <section>
-            <h2 className="text-3xl font-bold text-center mb-3 ua">
-              How ANU Education Compares with Others
-            </h2>
-            <p className="text-center text-gray-500 text-sm mb-8 mt-4">
-              A transparent, honest comparison
-            </p>
-            <div className="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm">
-              <table className="w-full text-sm">
-                <thead className="bg-blue-700 text-white">
-                  <tr>
-                    <th className="text-left px-4 py-3 font-semibold">Feature</th>
-                    <th className="text-left px-4 py-3 font-semibold">
-                      ANU Education (Ahmedabad)
-                    </th>
-                    <th className="text-left px-4 py-3 font-semibold">
-                      Typical Others
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {[
-                    ["Free demo", "4 full days live", "1 session or none"],
-                    ["Class format", "Live online Zoom", "Recorded / offline"],
-                    ["Speaking practice", "Daily with feedback", "Occasional"],
-                    ["Mock tests", "Unlimited + band analysis", "1–2 fixed tests"],
-                    ["Batch timings", "Morning, evening, weekend", "Fixed only"],
-                    ["Study abroad support", "Visa, SOP, university selection", "Limited or extra cost"],
-                  ].map(([feat, anu, others], i) => (
-                    <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                      <td className="px-4 py-3 font-medium text-gray-700">{feat}</td>
-                      <td className="px-4 py-3 text-blue-700 font-medium bg-blue-50/30">
-                        {anu}
-                      </td>
-                      <td className="px-4 py-3 text-gray-500">{others}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
           <section className="bg-blue-50 border border-blue-100 rounded-2xl p-6 text-center">
             <h3 className="font-bold text-gray-800 text-sm mb-3">
-              📍 IELTS Coaching in Nearby Cities (Gujarat)
+              📍 IELTS Coaching for Gujarat Students
             </h3>
             <p className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-sm">
               <Link
                 href="/test-prep/ielts-coaching-gandhinagar"
                 className="text-blue-600 hover:underline"
               >
-                Gandhinagar
+                Students in Gandhinagar
               </Link>
               <span>•</span>
               <Link
-                href="/test-prep/ielts-coaching-vadodara"
+                href="/test-prep/ielts-coaching-modasa"
                 className="text-blue-600 hover:underline"
               >
-                Vadodara
+                Students in Modasa
               </Link>
               <span>•</span>
               <Link
-                href="/test-prep/ielts-coaching-surat"
+                href="/test-prep/ielts-online"
                 className="text-blue-600 hover:underline"
               >
-                Surat
+                Live online batches across India
               </Link>
               <span>•</span>
               <Link
-                href="/test-prep/ielts-coaching-rajkot"
+                href="/test-prep/ielts-coaching-india"
                 className="text-blue-600 hover:underline"
               >
-                Rajkot
+                Compare all course options
               </Link>
             </p>
             <p className="text-xs text-gray-500 mt-2">
-              Fully online — same quality for all Gujarat students.
+              Fully online — students across Gujarat and India join the same live
+              classes.
             </p>
+            <div className="mt-4 text-xs text-gray-600 max-w-2xl mx-auto">
+              <p className="font-semibold text-gray-700 mb-1">
+                Choosing an IELTS test centre in Ahmedabad
+              </p>
+              <p>
+                IELTS is delivered by IDP and the British Council. Test dates,
+                formats and centre availability change, so confirm current details
+                with the official booking provider before planning your exam date.
+              </p>
+            </div>
           </section>
 
           <section>
@@ -736,19 +662,16 @@ export default function IELTSAhmedabadClient() {
 
           <section className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-100 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-              Why Trust ANU Education?
+              About ANU Education
             </h2>
             <p className="text-gray-700 text-sm leading-relaxed max-w-3xl mx-auto text-center">
-              ANU Education is a <strong>Skill India certified</strong> study
-              abroad and language coaching institute that has guided{" "}
-              <strong>1,100+ students</strong> for IELTS, PTE, French, German,
-              and study abroad guidance since 2018. We focus on practical
-              learning, personalised feedback, and end-to-end guidance — from
-              language preparation all the way through to university admission
-              and visa support. For Ahmedabad students specifically, that means
-              the same depth of expertise as a metro-city institute, delivered
-              without the commute, the inflated fees, or the one-size-fits-all
-              batch structure.
+              ANU Education is a study abroad and language coaching institute
+              offering IELTS, PTE, French, German and study abroad guidance. We
+              focus on practical learning, personalised feedback, and end-to-end
+              support — from language preparation through to university
+              application and visa guidance. For Ahmedabad students, that means
+              the same course and trainers delivered online, without the daily
+              commute.
             </p>
           </section>
 
@@ -756,7 +679,7 @@ export default function IELTSAhmedabadClient() {
             <p className="mb-1 font-medium text-gray-600">Related pages:</p>
             <p className="flex flex-wrap justify-center gap-x-3 gap-y-1">
               <Link href="/test-prep/ielts-online" className="text-blue-600 hover:underline">
-                IELTS Online Coaching
+                Live online IELTS classes
               </Link>
               <span>·</span>
               <Link href="/test-prep/ielts-academic" className="text-blue-600 hover:underline">
@@ -796,13 +719,14 @@ export default function IELTSAhmedabadClient() {
           <section className="bg-gradient-to-br from-blue-800 via-blue-700 to-green-700 text-white rounded-3xl p-12 text-center">
             <div className="text-5xl mb-4 float">🎯</div>
             <h2 className="text-3xl font-bold mb-3">
-              Start your FREE 4-Day IELTS Demo today
+              Book Your Free 5-Day IELTS Demo
             </h2>
             <p className="text-blue-100 mb-2 max-w-xl mx-auto">
               Experience live classes before making any payment.
             </p>
             <p className="text-yellow-300 font-semibold mb-8 text-sm">
-              Improve your IELTS band score faster from Ahmedabad — limited seats.
+              Live classes, speaking practice and mock tests — all online from
+              Ahmedabad.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
               <a
@@ -831,8 +755,7 @@ export default function IELTSAhmedabadClient() {
               </a>
             </div>
             <p className="text-xs text-white/50">
-              Skill India Certified · 1,100+ Students · 98% Success Rate ·
-              info@anuedu.in
+              Prices include GST · info@anuedu.in
             </p>
           </section>
         </div>

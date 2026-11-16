@@ -19,7 +19,7 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "What is the IELTS exam fee in India in 2026?",
-    a: "The IELTS Academic exam fee in India is approximately ₹18,000 for both paper-based and computer-delivered formats. The exam is conducted by IDP India and British Council. Computer-delivered IELTS gives results in 3–5 days and has more test date options than paper-based. The coaching fee at ANU Education is separate from and in addition to the exam registration fee. Contact us for current coaching fee details.",
+    a: "The IELTS Academic exam fee in India is approximately ₹18,000 for both paper-based and computer-delivered formats. The exam is conducted by IDP India and British Council. Computer-delivered IELTS gives results in 3–5 days and has more test date options than paper-based. The coaching fee at ANU Education is separate from and in addition to the exam registration fee. Current coaching prices are published on this page and include GST.",
   },
   {
     q: "What courses does ANU Education offer for IELTS Academic?",
@@ -27,7 +27,7 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "What is the 'Weekend Bonanza' in ANU Education's IELTS coaching?",
-    a: "Weekend Bonanza is a special Saturday–Sunday feature available with both ANU Education IELTS courses: Saturday Practice Test Analysis (7:30–9:30 AM or 2:00–4:00 PM) — expert review of your latest practice test with section-wise strategy. Saturday Mock Test Analysis (7:30–9:30 AM or 2:00–4:00 PM) — deep analysis of your full-length mock test performance. Sunday Doubt Solving Session (9:00–10:00 AM) — dedicated 1-hour live session to clear any doubts from the week's study. This is one of ANU Education's strongest features vs self-paced competitors who offer no live review.",
+    a: "Weekend Bonanza is a special Saturday–Sunday feature available with both ANU Education IELTS courses: Saturday Practice Test Analysis (7:30–9:30 AM or 2:00–4:00 PM) — expert review of your latest practice test with section-wise strategy. Saturday Mock Test Analysis (7:30–9:30 AM or 2:00–4:00 PM) — deep analysis of your full-length mock test performance. Sunday Doubt Solving Session (9:00–10:00 AM) — dedicated 1-hour live session to clear any doubts from the week's study. These live review sessions are included with both the Self Preparation and Champion packs.",
   },
   {
     q: "What is the difference between the Self Prep Course and Champion Course?",
@@ -43,11 +43,11 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "How long does IELTS Academic preparation take?",
-    a: "Preparation time depends on your starting level and target band: Band 5.0 → 6.5 target: 4–6 weeks of focused preparation. Band 5.5 → 7.0 target: 6–8 weeks. Band 6.0 → 7.5+ target: 8–12 weeks. ANU Education's Beginner batch runs a 4-week content cycle; Advanced batch runs an 8-week cycle. Both start with a free English Assessment Test to place you in the right batch. The Champion Course's structured 8-week cycle is designed to take a student from their current band to their target band in one cycle.",
+    a: "Preparation time depends on your starting level and target band: Band 5.0 → 6.5 target: 4–6 weeks of focused preparation. Band 5.5 → 7.0 target: 6–8 weeks. Band 6.0 → 7.5+ target: 8–12 weeks. ANU Education's Beginner batch runs a 4-week content cycle; Advanced batch runs an 8-week cycle. Both start with a free English Assessment Test to place you in the right batch. The Champion Course follows a structured 8-week live content cycle.",
   },
   {
     q: "Can I prepare for IELTS Academic online from anywhere in India?",
-    a: "Yes. ANU Education's IELTS Academic online coaching is available to students across all of India. We have students from Gujarat (Ahmedabad, Surat, Vadodara, Rajkot, Modasa, Gandhinagar, Mehsana, Bhavnagar, Jamnagar, Anand, Vapi, Bharuch), and from cities across Maharashtra, Karnataka, Delhi, Punjab, Rajasthan, and beyond. All live classes, mock tests, and doubt sessions are conducted online via live video platform.",
+    a: "Yes. ANU Education's IELTS Academic online coaching is available to students across India. All live classes, mock tests, and doubt sessions are conducted online via a live video platform, so your location does not limit access to the course.",
   },
   {
     q: "What is included in the Daily Video Library?",
@@ -55,6 +55,6 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Does the Champion Course include French language classes?",
-    a: "Yes — the ANU Education IELTS Academic Champion Course includes a FREE 4-week live French Language course. This is unique: no other IELTS coaching platform in India bundles a free French course with IELTS preparation. This is especially valuable for students planning to study in France or Canada — where French proficiency adds up to 50 CRS points for Express Entry. French classes run in a dedicated batch alongside your IELTS coaching.",
+    a: "Yes — the ANU Education IELTS Academic Champion Course includes a FREE 4-week live French Language course. This is especially valuable for students planning to study in France or Canada — where French proficiency can add CRS points for Express Entry. French classes run in a dedicated batch alongside your IELTS coaching.",
   },
 ];

@@ -1,8 +1,6 @@
 'use client';
 
-import Script from "next/script";
 import Link from "next/link";
-import { useState } from "react";
 import {
   websiteWhatsAppMessages,
   getWhatsAppLink,
@@ -28,61 +26,56 @@ import {
    ─────────────────────────────────────────────────────────────── */
 
 import { faqs } from "@/lib/data/faq/ielts-gandhinagar";
+import IELTSPricingCards from "@/components/courses/IELTSPricingCards";
+import { IELTS_GST_LABEL } from "@/lib/data/ielts-pricing";
+import {
+  IELTS_PACKAGES,
+  withIeltsPackageCta,
+} from "@/lib/data/ielts-packages";
+
+// Marketing package cards. Prices, features and badges come from the
+// centralized IELTS package module; only the page-owned CTAs live here.
+// Self Prep, Champion — One Batch and Champion — All Timings are each sold
+// through their own fixed PayU payment link. The retired on-page checkout is
+// never used.
+const IELTS_SELF_PREP_PAYU_URL = "https://u.payu.in/PAYUMN/uIqbwdNTKrTp";
+const IELTS_CHAMPION_ONE_BATCH_PAYU_URL =
+  "https://u.payu.in/PAYUMN/BIInlBUFpA9I";
+const IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL =
+  "https://u.payu.in/PAYUMN/wIuPM83kT5li";
+
+const IELTS_GANDHINAGAR_PRICING_PACKAGES = IELTS_PACKAGES.map((pkg) => ({
+  ...withIeltsPackageCta(
+    pkg,
+    pkg.packageId === "ielts-self-prep"
+      ? {
+          label: "Buy Now",
+          href: IELTS_SELF_PREP_PAYU_URL,
+          ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+        }
+      : pkg.packageId === "ielts-champion-one-batch"
+        ? {
+            label: "Buy Now",
+            href: IELTS_CHAMPION_ONE_BATCH_PAYU_URL,
+            ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+          }
+        : {
+            label: "Buy Now",
+            href: IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL,
+            ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+          },
+    {
+      label: "Book Free Demo",
+      href: "/free-demo",
+      ariaLabel: `Book a free demo for ${pkg.title}`,
+    },
+  ),
+  gstLabel: IELTS_GST_LABEL,
+}));
 
 export default function IELTSGandhinagarClient() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const toggleFaq = (i: number) => setOpenFaq(openFaq === i ? null : i);
-
   return (
     <>
-      {/* ── Course Schema ── */}
-      <Script
-        id="course-schema-ielts-gandhinagar"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Course",
-            name: "IELTS Coaching in Gandhinagar – Academic & General Training 2026",
-            description:
-              "Live online IELTS coaching for Gandhinagar students. Covers all four sections — Listening, Reading, Writing, Speaking — with full-length mock tests, AI scoring, personalised feedback, and free study abroad counselling.",
-            provider: {
-              "@type": "EducationalOrganization",
-              name: "ANU Education",
-              sameAs: "https://www.anuedu.in",
-              telephone: "+917016497087",
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: "Modasa",
-                addressRegion: "Gujarat",
-                addressCountry: "IN",
-              },
-            },
-            educationalLevel: "All levels — Band 4.0 to 8.5+",
-            inLanguage: "en",
-            coursePrerequisites: "Basic English proficiency",
-            offers: {
-              "@type": "Offer",
-              priceCurrency: "INR",
-              availability: "https://schema.org/OnlineOnly",
-              validFrom: "2026-01-01",
-              description: "Free 3-day demo available. Contact for full course fee.",
-            },
-            hasCourseInstance: {
-              "@type": "CourseInstance",
-              courseMode: "Online",
-              courseWorkload: "PT4H",
-              startDate: "2026-06-01",
-              location: {
-                "@type": "VirtualLocation",
-                url: "https://www.anuedu.in/test-prep/ielts-coaching-gandhinagar",
-              },
-            },
-          }),
-        }}
-      />
-
-
       <style jsx>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(24px); }
@@ -137,19 +130,19 @@ export default function IELTSGandhinagarClient() {
 
             <div className="text-center">
               <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold mb-5 float">
-                🎓 Academic & General Training · Online · Free 3-Day Demo · 2026
+                🎓 Academic & General Training · Online · Free 5-Day Demo · 2026
               </div>
 
               <h1 className="animate-up s1 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5">
-                Best IELTS Coaching in Gandhinagar
+                IELTS Coaching in Gandhinagar
                 <br />
                 <span className="bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
-                  Online Classes · Band 6.5, 7.0 & 8+ Guaranteed
+                  Online Classes · Academic &amp; General Training
                 </span>
               </h1>
 
               <p className="animate-up s2 text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed mb-8">
-                Students across Gandhinagar — from <strong className="text-white">Kudasan, Sargasan, Infocity, Sector 6, Sector 21, and Adalaj</strong> — prepare for IELTS Academic and General Training with ANU Education. Expert live online coaching, full-length mock tests, personalised band score strategies, and free study abroad counselling — all from home.
+                Students across Gandhinagar — from <strong className="text-white">Kudasan, Sargasan, Infocity, Sector 6, Sector 21, and Adalaj</strong> — prepare for IELTS Academic and General Training with ANU Education. Live online coaching, full-length mock tests, personalised feedback, and study abroad counselling — all from home.
               </p>
 
               <div className="animate-up s3 flex flex-col sm:flex-row justify-center gap-4 mb-8">
@@ -159,7 +152,7 @@ export default function IELTSGandhinagarClient() {
                   rel="noopener noreferrer"
                   className="group bg-white text-blue-700 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all hover:scale-105 inline-flex items-center justify-center gap-2 pulse"
                 >
-                  🔥 Start Free 3-Day Demo
+                  🔥 Start Free 5-Day Demo
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </a>
                 <a
@@ -174,16 +167,24 @@ export default function IELTSGandhinagarClient() {
               </div>
 
               <div className="animate-up s4 flex flex-wrap justify-center gap-6 text-sm text-white/90">
-                <span>✅ 1,100+ Students Guided</span>
-                <span>✅ 98% Success Rate</span>
+                <span>✅ 15 full-length mock tests</span>
+                <span>✅ 60 sectional practice tests</span>
                 <span>✅ Free Mock Test + Band Score Report</span>
-                <span>✅ Skill India Certified Counsellor</span>
+                <span>✅ Study abroad counselling</span>
               </div>
             </div>
           </div>
         </section>
 
         <div className="max-w-6xl mx-auto px-4 py-14 space-y-16">
+
+          {/* ── IELTS COURSE PRICING ── */}
+          <IELTSPricingCards
+            packages={IELTS_GANDHINAGAR_PRICING_PACKAGES}
+            heading="IELTS Course Packages in Gandhinagar"
+            intro="Choose the package that matches your schedule and goals. All packages include 6-month access and a free demo class."
+            footnote="Prices include GST · 18% GST included. Course activation and portal access are completed manually after payment verification."
+          />
 
           {/* ── IELTS BAND SCORE TABLE ── */}
           <section>
@@ -278,16 +279,16 @@ export default function IELTSGandhinagarClient() {
               Why Gandhinagar Students Choose ANU Education for IELTS
             </h2>
             <p className="text-center text-gray-500 text-sm mt-4 mb-8 max-w-2xl mx-auto">
-              Skill India certified institute · 1,100+ students guided · Gujarat's trusted online IELTS coaching
+              Live online IELTS preparation for students across Gandhinagar and Gujarat
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {[
-                { icon: "👨‍🏫", title: "Expert trainers, proven results", desc: "Our trainers specialise in IELTS Academic and General Training — not just general English. Real exam strategies, not textbook teaching." },
+                { icon: "👨‍🏫", title: "IELTS-specialist trainers", desc: "Our trainers specialise in IELTS Academic and General Training — not just general English. Real exam strategies, not textbook teaching." },
                 { icon: "📝", title: "Full-length mock tests weekly", desc: "Timed, exam-condition mocks for all four sections with section-wise analysis and a personalised improvement plan after each test." },
                 { icon: "🗣️", title: "Daily speaking practice", desc: "Speaking is where most Gujarati students lose marks. We run dedicated daily sessions with individual cue card, part 2, and part 3 practice." },
                 { icon: "🎯", title: "Personalised study plan", desc: "Every student starts with a free diagnostic test. Your study plan is built around your current band and target score — not a generic syllabus." },
                 { icon: "⏰", title: "Flexible morning, evening & weekend batches", desc: "Classes designed for college students and working professionals in Gandhinagar who can't attend regular daytime sessions." },
-                { icon: "🎓", title: "Free study abroad counselling", desc: "Skill India certified counsellor helps you choose the right university, destination, and visa pathway — no extra charge." },
+                { icon: "🎓", title: "Free study abroad counselling", desc: "Our counsellors help you choose the right university, destination, and visa pathway — no extra charge." },
               ].map((item, idx) => (
                 <div
                   key={idx}
@@ -409,7 +410,7 @@ export default function IELTSGandhinagarClient() {
           {/* ── FREE DEMO ── */}
           <section className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 rounded-2xl p-8 text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              🔥 Try Free for 3 Days — No Commitment
+              🔥 Try Free for 5 Days — No Commitment
             </h2>
             <p className="text-gray-600 mb-6 max-w-xl mx-auto">
               Join a live class, experience mock test feedback, and get your diagnostic band score — completely free. Available for all Gandhinagar students online.
@@ -425,7 +426,7 @@ export default function IELTSGandhinagarClient() {
               rel="noopener noreferrer"
               className="inline-block bg-green-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-green-700 transition-colors pulse"
             >
-              👉 Book Your Free 3-Day Demo
+              👉 Book Your Free 5-Day Demo
             </a>
           </section>
 
@@ -435,11 +436,20 @@ export default function IELTSGandhinagarClient() {
               📍 Serving All Areas of Gandhinagar — Online
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              Gandhinagar, Gujarat's capital city, is a growing hub for students planning to study abroad or migrate to English-speaking countries. With top institutions like <strong>Dhirubhai Ambani Institute (DA-IICT), Institute of Infrastructure Technology (IITRAM), Nirma University</strong>, and several government colleges in and around the city, thousands of Gandhinagar students prepare for IELTS every year.
+              Gandhinagar, Gujarat's capital city, is a growing hub for students planning to study abroad or migrate to English-speaking countries. The city and its surrounding region are home to institutions such as <strong>DA-IICT</strong> and several universities and colleges, and thousands of Gandhinagar students prepare for IELTS every year.
             </p>
-            <p className="text-gray-700 leading-relaxed">
-              ANU Education's fully online classes reach students across every part of Gandhinagar including <strong>Kudasan, Sargasan, Infocity, Sector 1, Sector 6, Sector 21, Adalaj, Pethapur, and Chandkheda</strong> — no travel required. Morning, evening, and weekend batches mean you can prepare without disrupting college or work schedules.
+            <p className="text-gray-700 leading-relaxed mb-4">
+              ANU Education's fully online classes reach students across every part of Gandhinagar including <strong>Kudasan, Sargasan, Infocity, Sector 1, Sector 6, Sector 21, Adalaj and Pethapur</strong>, as well as nearby areas such as Chandkheda — no travel required. Morning, afternoon and evening batches, plus weekend test-analysis and doubt-solving sessions, mean you can prepare without disrupting college or work schedules.
             </p>
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-gray-700">
+              <p className="font-semibold text-gray-800 mb-1">Batch timings and test centres</p>
+              <p>
+                Champion live batches run in morning, afternoon and evening slots.
+                IELTS is delivered by IDP and the British Council; confirm current
+                test dates and centre availability with the official booking
+                provider before planning your exam date.
+              </p>
+            </div>
           </section>
 
           {/* ── STUDY ABROAD SUPPORT ── */}
@@ -479,16 +489,22 @@ export default function IELTSGandhinagarClient() {
             <p className="text-gray-600 mb-4 text-sm">Online coaching available across Gujarat — join from anywhere.</p>
             <div className="flex flex-wrap justify-center gap-3">
               <Link href="/test-prep/ielts-online" className="bg-white text-blue-700 border border-blue-200 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:text-white transition-colors">
-                IELTS Online Coaching →
+                Join live from anywhere in India →
               </Link>
-              <Link href="/test-prep/ielts-coaching-ahmedabad" className="bg-white text-blue-700 border border-blue-200 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:text-white transition-colors">
-                IELTS Coaching Ahmedabad →
+              <Link href="/test-prep/ielts-coaching-india" className="bg-white text-blue-700 border border-blue-200 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:text-white transition-colors">
+                Compare course options across India →
+              </Link>
+              <Link href="/test-prep/ielts/ielts-coaching-ahmedabad" className="bg-white text-blue-700 border border-blue-200 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:text-white transition-colors">
+                Students in Ahmedabad →
+              </Link>
+              <Link href="/test-prep/ielts-coaching-modasa" className="bg-white text-blue-700 border border-blue-200 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:text-white transition-colors">
+                Students in Modasa and Aravalli district →
               </Link>
               <Link href="/test-prep/pte-coaching-gandhinagar" className="bg-white text-blue-700 border border-blue-200 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:text-white transition-colors">
                 PTE Coaching Gandhinagar →
               </Link>
-              <Link href="/study-abroad" className="bg-white text-blue-700 border border-blue-200 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:text-white transition-colors">
-                Study Abroad Consultancy →
+              <Link href="/services/visa-assistance" className="bg-white text-blue-700 border border-blue-200 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:text-white transition-colors">
+                Visa Assistance →
               </Link>
             </div>
           </section>
@@ -500,23 +516,20 @@ export default function IELTSGandhinagarClient() {
             </h2>
             <div className="max-w-3xl mx-auto space-y-3 mt-4">
               {faqs.map((faq, idx) => (
-                <div key={idx} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                  <button
-                    onClick={() => toggleFaq(idx)}
-                    className="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors"
-                    aria-expanded={openFaq === idx}
-                  >
+                <details
+                  key={idx}
+                  className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+                >
+                  <summary className="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors cursor-pointer list-none">
                     <span className="font-semibold text-gray-800 pr-4 text-sm md:text-base">{faq.q}</span>
                     <span className="text-blue-600 text-xl font-light flex-shrink-0" aria-hidden="true">
-                      {openFaq === idx ? "−" : "+"}
+                      +
                     </span>
-                  </button>
-                  {openFaq === idx && (
-                    <div className="px-6 pb-5 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-3">
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
+                  </summary>
+                  <div className="px-6 pb-5 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-3">
+                    {faq.a}
+                  </div>
+                </details>
               ))}
             </div>
           </section>
@@ -537,7 +550,7 @@ export default function IELTSGandhinagarClient() {
                 rel="noopener noreferrer"
                 className="bg-white text-blue-700 px-8 py-4 rounded-xl font-bold hover:shadow-xl transition-all hover:scale-105"
               >
-                👉 Book Free 3-Day Demo
+                👉 Book Free 5-Day Demo
               </a>
               <a
                 href="tel:+917016497087"
@@ -556,22 +569,24 @@ export default function IELTSGandhinagarClient() {
                 💬 WhatsApp Us
               </a>
             </div>
-            <p className="text-xs text-white/60">Limited seats per batch — enrol early to secure your preferred timing.</p>
+            <p className="text-xs text-white/60">Prices include GST. Course activation and portal access are completed manually after payment verification.</p>
           </section>
 
           {/* ── FOOTER INTERNAL LINKS ── */}
           <div className="text-center text-sm text-gray-500 border-t border-gray-100 pt-8">
             <p className="mb-1 font-medium text-gray-600">Related pages:</p>
             <p className="flex flex-wrap justify-center gap-x-3 gap-y-1">
-              <Link href="/test-prep/ielts-online" className="text-blue-600 hover:underline">IELTS Online Coaching</Link>
+              <Link href="/test-prep/ielts-online" className="text-blue-600 hover:underline">Live online batches</Link>
               <span aria-hidden="true">·</span>
-              <Link href="/test-prep/ielts-coaching-ahmedabad" className="text-blue-600 hover:underline">IELTS Coaching Ahmedabad</Link>
+              <Link href="/test-prep/ielts-coaching-india" className="text-blue-600 hover:underline">Compare course options</Link>
+              <span aria-hidden="true">·</span>
+              <Link href="/test-prep/ielts/ielts-coaching-ahmedabad" className="text-blue-600 hover:underline">Ahmedabad students</Link>
               <span aria-hidden="true">·</span>
               <Link href="/test-prep/pte-coaching-gandhinagar" className="text-blue-600 hover:underline">PTE Coaching Gandhinagar</Link>
               <span aria-hidden="true">·</span>
               <Link href="/test-prep/pte-coaching-ahmedabad" className="text-blue-600 hover:underline">PTE Coaching Ahmedabad</Link>
               <span aria-hidden="true">·</span>
-              <Link href="/study-abroad" className="text-blue-600 hover:underline">Study Abroad</Link>
+              <Link href="/services/visa-assistance" className="text-blue-600 hover:underline">Visa Assistance</Link>
               <span aria-hidden="true">·</span>
               <Link href="/study-in/canada" className="text-blue-600 hover:underline">Study in Canada</Link>
               <span aria-hidden="true">·</span>

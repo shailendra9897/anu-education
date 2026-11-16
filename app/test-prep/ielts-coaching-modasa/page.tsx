@@ -2,63 +2,47 @@
 
 import IELTSModasaClient from "./IELTSModasaClient";
 import JsonLd from "@/components/JsonLd";
-import { faqs } from "@/lib/data/faq/ielts-modasa";
+import { buildIeltsSchemaForPage } from "@/lib/seo/ielts-page-config";
+
+const PAGE_NAME =
+  "IELTS Coaching in Modasa – Online Live Batches & Mock Tests | ANU Education";
+const PAGE_DESCRIPTION =
+  "Online IELTS Academic and General Training coaching for students in Modasa and across Aravalli and nearby districts: live batches, 15 full-length mock tests, sectional practice, weekend analysis and a 5-day free trial.";
+const CANONICAL = "https://www.anuedu.in/test-prep/ielts-coaching-modasa";
 
 export const metadata = {
-  title: "IELTS Coaching in Modasa 2026 – Best Institute, Live Classes & Mock Tests | ANU Education",
-  description:
-    "Best IELTS coaching in Modasa, Gujarat. ANU Education offers live IELTS Academic & General Training classes, 15 full-length mock tests, speaking practice, Saturday analysis, Sunday doubt sessions, and free demo. Trusted by students from Modasa, Himmatnagar, Idar, Shamlaji & Bayad.",
+  title: PAGE_NAME,
+  description: PAGE_DESCRIPTION,
   keywords: [
     "IELTS coaching in Modasa",
     "IELTS coaching Modasa Gujarat",
-    "best IELTS institute Modasa",
     "IELTS classes Modasa",
     "IELTS coaching near me Modasa",
-    "IELTS training Modasa",
     "IELTS online coaching Modasa",
     "IELTS coaching Himmatnagar",
     "IELTS coaching Idar",
     "IELTS Academic coaching Modasa",
     "ANU Education Modasa",
-    "IELTS band 7 Modasa",
   ],
   openGraph: {
-    title: "IELTS Coaching in Modasa 2026 – Live Classes, Mock Tests & Free Demo | ANU Education",
+    title: "IELTS Coaching in Modasa – Online Live Batches & Mock Tests",
     description:
-      "ANU Education Modasa: Expert IELTS coaching, live batches, 15 mock tests, speaking practice, Saturday test analysis, Sunday doubt sessions. Free 5-day trial.",
-    url: "https://www.anuedu.in/test-prep/ielts-coaching-modasa",
+      "Online IELTS coaching for Modasa and Aravalli district students: live batches, 15 mock tests, weekend analysis and a 5-day free trial. Prices include GST.",
+    url: CANONICAL,
+    siteName: "ANU Education",
     type: "website",
   },
   alternates: {
-    canonical: "https://www.anuedu.in/test-prep/ielts-coaching-modasa",
+    canonical: CANONICAL,
   },
 };
 
 export default function IELTSModasaPage() {
+  const graph = buildIeltsSchemaForPage("modasa", PAGE_NAME, PAGE_DESCRIPTION);
+
   return (
     <>
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: faqs.map((f) => ({
-            "@type": "Question",
-            name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
-          })),
-        }}
-      />
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://www.anuedu.in" },
-            { "@type": "ListItem", position: 2, name: "Test Prep", item: "https://www.anuedu.in/test-prep" },
-            { "@type": "ListItem", position: 3, name: "IELTS Coaching Modasa", item: "https://www.anuedu.in/test-prep/ielts-coaching-modasa" },
-          ],
-        }}
-      />
+      <JsonLd data={graph} />
       <IELTSModasaClient />
     </>
   );

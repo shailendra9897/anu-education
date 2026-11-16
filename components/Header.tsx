@@ -51,6 +51,7 @@ import {
 const ORG_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "EducationalOrganization",
+  "@id": "https://www.anuedu.in/#organization",
   name: "ANU Education",
   url: "https://www.anuedu.in",
   logo: "https://www.anuedu.in/logo.png",
@@ -67,12 +68,17 @@ const ORG_SCHEMA = {
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Courses and Services",
+    // Catalogue entries are Services, not Courses. Every one of these
+    // destinations publishes its own page-level Course entity with offers
+    // and instances; duplicating them here created redundant Course nodes
+    // on every route. Service keeps the catalogue signal without a second
+    // Course entity.
     itemListElement: [
-      { "@type": "Course", name: "IELTS Academic Coaching", url: "https://www.anuedu.in/test-prep/ielts-online" },
-      { "@type": "Course", name: "PTE Academic Coaching", url: "https://www.anuedu.in/test-prep/pte" },
-      { "@type": "Course", name: "GRE Coaching", url: "https://www.anuedu.in/test-prep/gre" },
-      { "@type": "Course", name: "French Language Course", url: "https://www.anuedu.in/languages/french" },
-      { "@type": "Course", name: "German Language Course", url: "https://www.anuedu.in/test-prep/german" },
+      { "@type": "Service", serviceType: "Course", name: "IELTS Academic Coaching", url: "https://www.anuedu.in/test-prep/ielts-online" },
+      { "@type": "Service", serviceType: "Course", name: "PTE Academic Coaching", url: "https://www.anuedu.in/test-prep/pte" },
+      { "@type": "Service", serviceType: "Course", name: "GRE Coaching", url: "https://www.anuedu.in/test-prep/gre" },
+      { "@type": "Service", serviceType: "Course", name: "French Language Course", url: "https://www.anuedu.in/languages/french" },
+      { "@type": "Service", serviceType: "Course", name: "German Language Course", url: "https://www.anuedu.in/test-prep/german" },
     ],
   },
 };

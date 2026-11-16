@@ -4,6 +4,11 @@
 // consumed by the server-rendered FAQPage JSON-LD (page.tsx)
 // and the visible FAQ accordion (client component).
 
+import {
+  IELTS_ACADEMIC_SELF_PREP_PRICE_DISPLAY,
+  IELTS_ACADEMIC_CHAMPION_FROM_PRICE_DISPLAY,
+} from "@/lib/data/ielts-pricing";
+
 export const faqs: { q: string; a: string }[] = [
   {
     q: "Where is ANU Education located in Modasa?",
@@ -11,7 +16,7 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "What IELTS courses are available at ANU Education Modasa?",
-    a: "ANU Education Modasa offers two IELTS Academic online courses: (1) Self Preparation Course (starting ₹1,875 + GST) — 60 practice tests, 15 full-length timed mock tests, 300+ grammar/vocabulary/spelling videos, 20 hours of foundation video lectures, expert mentor feedback, bonus Saturday test analysis and Sunday doubt-solving sessions, 6-month login access, 5-day free trial. (2) Champion Course (from ₹5,250 + GST) — everything in Self Prep PLUS daily live classes in Morning, Afternoon, and Evening batches, separate Beginner (40 hrs) and Advanced (60 hrs) batches, 8-week structured content cycle, Saturday grammar sessions, and FREE 4-week French Language live course. Both courses also cover IELTS General Training preparation on request.",
+    a: `ANU Education Modasa offers two IELTS Academic online courses: (1) Self Preparation Course (starting ${IELTS_ACADEMIC_SELF_PREP_PRICE_DISPLAY}, GST included) — 60 practice tests, 15 full-length timed mock tests, 300+ grammar/vocabulary/spelling videos, 20 hours of foundation video lectures, expert mentor feedback, bonus Saturday test analysis and Sunday doubt-solving sessions, 6-month login access, 5-day free trial. (2) Champion Course (from ${IELTS_ACADEMIC_CHAMPION_FROM_PRICE_DISPLAY}, GST included) — everything in Self Prep PLUS daily live classes in Morning, Afternoon, and Evening batches, separate Beginner (40 hrs) and Advanced (60 hrs) batches, 8-week structured content cycle, Saturday grammar sessions, and FREE 4-week French Language live course. Both courses also cover IELTS General Training preparation on request.`,
   },
   {
     q: "What batch timings are available for IELTS coaching in Modasa?",
@@ -39,15 +44,15 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Does ANU Education Modasa offer study abroad counselling with IELTS coaching?",
-    a: "Yes. ANU Education is a Skill India certified study abroad consultancy — not just an IELTS coaching centre. Every student enrolled in IELTS coaching at our Modasa institute gets access to free study abroad counselling including university shortlisting for 8+ countries (Canada, UK, Germany, Australia, USA, France, Ireland, UAE), SOP writing support, visa documentation guidance, and pre-departure orientation.",
+    a: "Yes. ANU Education provides study abroad counselling alongside IELTS coaching. Every student enrolled in IELTS coaching at our Modasa centre gets access to free study abroad counselling including university shortlisting for 8+ countries (Canada, UK, Germany, Australia, USA, France, Ireland, UAE), SOP writing support, visa documentation guidance, and pre-departure orientation.",
   },
   {
     q: "Is the IELTS Champion Course available online for Modasa students?",
     a: "Yes. The Champion Course is fully online — live classes streamed via video platform — so Modasa students can attend from home if they prefer. This is ideal for students from towns like Bhiloda, Malpur, Meghraj, Talod, and other areas more than 20 km from Modasa. The same live batches, mock tests, Saturday analysis, and Sunday doubt sessions are available online as in any other location.",
   },
   {
-    q: "What makes ANU Education different from other IELTS institutes in Modasa?",
-    a: "ANU Education Modasa is the only IELTS coaching institute in the Sabarkantha region that combines: Skill India certified career counselling, IELTS + French language coaching under one roof, FREE French 4-week live course with the Champion pack, free study abroad consultancy for 8+ countries, a complete digital platform with 300+ videos, 15 mock tests, and a performance tracker, and Saturday test analysis + Sunday doubt-solving sessions. No other local institute offers this complete package.",
+    q: "What does the ANU Education IELTS programme include in Modasa?",
+    a: "The programme combines IELTS preparation with optional study abroad support: a digital platform with 300+ grammar, vocabulary and spelling videos, 15 full-length mock tests, 60 sectional practice tests, a performance tracker, Saturday test analysis and Sunday doubt-solving sessions, and a free 4-week French language course with the Champion pack. Study abroad counselling is available alongside the IELTS course.",
   },
   {
     q: "Can I join IELTS coaching at any time in Modasa?",

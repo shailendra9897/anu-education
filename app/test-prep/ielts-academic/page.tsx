@@ -63,10 +63,9 @@ export default function IELTSAcademicPage() {
             },
             offers: {
               "@type": "Offer",
-              price: "0",
               priceCurrency: "INR",
               availability: "https://schema.org/OnlineOnly",
-              validFrom: "2026-01-01",
+              description: "Free IELTS Academic exam guide. Coaching fees available on request.",
             },
           }),
         }}

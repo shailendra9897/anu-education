@@ -47,7 +47,6 @@
 //   ✅ Word count ~2,200 (from ~300)
 // ─────────────────────────────────────────────────────────────────
 
-import Script from "next/script";
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -56,11 +55,53 @@ import {
 } from "@/lib/whatsappTemplates";
 
 import { faqs } from "@/lib/data/faq/ielts-online";
+import IELTSPricingCards from "@/components/courses/IELTSPricingCards";
+import { IELTS_GST_LABEL } from "@/lib/data/ielts-pricing";
+import {
+  IELTS_PACKAGES,
+  withIeltsPackageCta,
+} from "@/lib/data/ielts-packages";
+
+// Self Prep, Champion — One Batch and Champion — All Timings are each sold
+// through their own fixed PayU payment link. The retired on-page checkout is
+// never used.
+const IELTS_SELF_PREP_PAYU_URL = "https://u.payu.in/PAYUMN/uIqbwdNTKrTp";
+const IELTS_CHAMPION_ONE_BATCH_PAYU_URL =
+  "https://u.payu.in/PAYUMN/BIInlBUFpA9I";
+const IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL =
+  "https://u.payu.in/PAYUMN/wIuPM83kT5li";
+
+const IELTS_ONLINE_PRICING_PACKAGES = IELTS_PACKAGES.map((pkg) => ({
+  ...withIeltsPackageCta(
+    pkg,
+    pkg.packageId === "ielts-self-prep"
+      ? {
+          label: "Buy Now",
+          href: IELTS_SELF_PREP_PAYU_URL,
+          ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+        }
+      : pkg.packageId === "ielts-champion-one-batch"
+        ? {
+            label: "Buy Now",
+            href: IELTS_CHAMPION_ONE_BATCH_PAYU_URL,
+            ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+          }
+        : {
+            label: "Buy Now",
+            href: IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL,
+            ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+          },
+    {
+      label: "Book Free Demo",
+      href: "/free-demo",
+      ariaLabel: `Book a free demo for ${pkg.title}`,
+    },
+  ),
+  gstLabel: IELTS_GST_LABEL,
+}));
 
 export default function IELTSOnlineClient() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [activePack, setActivePack] = useState<0 | 1>(0);
-  const toggleFaq = (i: number) => setOpenFaq(openFaq === i ? null : i);
 
   const packs = [
     {
@@ -113,25 +154,6 @@ export default function IELTSOnlineClient() {
 
   return (
     <>
-      {/* ══ COURSE SCHEMA ══ */}
-      <Script id="course-schema-ielts" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Course",
-        name: "IELTS Academic Online Coaching 2026 – Band 7+ | ANU Education",
-        description: "Live online IELTS Academic coaching with Beginner and Advanced batches, 15 full-length mock tests, 60 practice tests, 300+ grammar videos, Saturday test analysis, Sunday doubt-solving, and FREE French 4-week course. Skill India certified institute.",
-        provider: { "@type": "EducationalOrganization", name: "ANU Education", sameAs: "https://www.anuedu.in", telephone: "+917016497087", address: { "@type": "PostalAddress", addressLocality: "Modasa", addressRegion: "Gujarat", addressCountry: "IN" } },
-        educationalLevel: "Beginner to Advanced",
-        inLanguage: "en",
-        coursePrerequisites: "Basic English literacy. Beginner batch available for absolute starters.",
-        offers: { "@type": "Offer", priceCurrency: "INR", availability: "https://schema.org/OnlineOnly", validFrom: "2026-01-01", description: "5-day free trial. Contact for course fee. IELTS exam registration (₹18,000) is separate." },
-        hasCourseInstance: [
-          { "@type": "CourseInstance", name: "Beginner's Batch", courseMode: "Online", courseWorkload: "PT2H", location: { "@type": "VirtualLocation", url: "https://www.anuedu.in/test-prep/ielts-online" } },
-          { "@type": "CourseInstance", name: "Advanced Batch", courseMode: "Online", courseWorkload: "PT3H", location: { "@type": "VirtualLocation", url: "https://www.anuedu.in/test-prep/ielts-online" } },
-        ],
-        about: { "@type": "Thing", name: "International English Language Testing System", sameAs: "https://en.wikipedia.org/wiki/IELTS" },
-      })}} />
-
-
       <style jsx>{`
         @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
         @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-7px); } }
@@ -158,13 +180,13 @@ export default function IELTSOnlineClient() {
             </nav>
             <div className="text-center">
               <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold mb-5 float">
-                🎯 Academic & General · Live Classes · 5-Day Free Trial · Skill India Certified
+                🎯 Academic &amp; General · Live Classes · 5-Day Free Trial
               </div>
               <h1 className="anim d1 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5">
-                IELTS Online Coaching in India | Live Classes + Mock Tests
+                Online IELTS Coaching in India
                 <br />
                 <span className="bg-gradient-to-r from-yellow-300 to-green-300 bg-clip-text text-transparent">
-                  Achieve Your Target Band Score in 2026
+                  Live Classes · Mock Tests · Flexible Batches
                 </span>
               </h1>
               <p className="anim d2 text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed mb-8">
@@ -183,11 +205,10 @@ export default function IELTSOnlineClient() {
                 </a>
               </div>
               <div className="anim d4 flex flex-wrap justify-center gap-6 text-sm text-white/90">
-                <span>✅ 1,100+ Students Guided</span>
-                <span>✅ 98% Success Rate</span>
+                <span>✅ 15 full-length mock tests</span>
+                <span>✅ 60 sectional practice tests</span>
                 <span>✅ Free Mock Test Included</span>
                 <span>✅ Beginner &amp; Advanced Batches</span>
-                <span>✅ Skill India Certified</span>
               </div>
             </div>
           </div>
@@ -209,6 +230,14 @@ export default function IELTSOnlineClient() {
               </div>
             ))}
           </section>
+
+          {/* ══ COURSE PRICING ══ */}
+          <IELTSPricingCards
+            packages={IELTS_ONLINE_PRICING_PACKAGES}
+            heading="IELTS Online Course Packages"
+            intro="Choose the package that matches your schedule and goals. All packages include 6-month access and a 5-day free trial."
+            footnote="Prices include GST · 18% GST included. Course activation and portal access are completed manually after payment verification."
+          />
 
           {/* ══ ACADEMIC vs GENERAL ══ */}
           <section className="bg-blue-50 border border-blue-100 rounded-2xl p-8">
@@ -303,7 +332,7 @@ export default function IELTSOnlineClient() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 { icon: "🎥", title: "Live Classes & Mock Tests", desc: "Real-time interaction with experienced instructors and realistic test simulation across Morning, Afternoon, and Evening slots." },
-                { icon: "📊", title: "Beginner & Advanced Batches", desc: "Tailored content for all levels. Beginner batch (40 hrs) builds foundation; Advanced batch (60 hrs) targets Band 7+." },
+                { icon: "📊", title: "Beginner & Advanced Batches", desc: "Tailored content for all levels. The Beginner batch (40 hrs) builds the foundation; the Advanced batch (60 hrs) builds on an existing band with exam-level strategy." },
                 { icon: "📅", title: "No Fixed Start Dates", desc: "Enrol anytime. Each session is structured to help you catch up seamlessly — no waiting for a new batch cycle." },
                 { icon: "⭐", title: "Weekend Bonanza", desc: "Saturday test analysis (7:30 AM & 2:00 PM) + Sunday doubt-solving (9:00 AM). Dedicated live review every weekend." },
                 { icon: "📝", title: "Simulated Mock Tests", desc: "15 full-length timed mock tests + 60 sectional practice tests. Expert feedback in text and audio format." },
@@ -366,7 +395,7 @@ export default function IELTSOnlineClient() {
                     </a>
                     <a href={getWhatsAppLink(websiteWhatsAppMessages.home)} target="_blank" rel="noopener noreferrer"
                       className="border border-gray-300 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors text-center text-sm">
-                      💬 Ask About Fees
+                      💬 Ask a Question on WhatsApp
                     </a>
                   </div>
                 </div>
@@ -459,7 +488,7 @@ export default function IELTSOnlineClient() {
           {/* ══ LOCATIONS ══ */}
           <section className="bg-gray-50 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">IELTS Academic Online Coaching Available Across India</h2>
-            <p className="text-center text-gray-600 text-sm mb-5">All online — join from any city. Gujarati-friendly teaching style.</p>
+            <p className="text-center text-gray-600 text-sm mb-5">All classes are online — join from any city in India.</p>
             <div className="flex flex-wrap justify-center gap-2">
               {["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Modasa", "Gandhinagar", "Bhavnagar", "Jamnagar", "Anand", "Mehsana", "Vapi", "Bharuch", "Navsari", "Morbi", "Mumbai", "Pune", "Delhi", "Bangalore", "Hyderabad", "Chennai"].map(city => (
                 <span key={city} className="bg-white border border-gray-200 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-700 shadow-sm">
@@ -467,15 +496,18 @@ export default function IELTSOnlineClient() {
                 </span>
               ))}
             </div>
-            <div className="mt-6 grid sm:grid-cols-3 gap-4 text-center text-sm">
-              <Link href="/test-prep/ielts-coaching-ahmedabad" className="bg-white rounded-xl p-4 border border-blue-100 text-blue-700 font-semibold hover:bg-blue-50 transition-colors shadow-sm">
-                IELTS Coaching Ahmedabad →
+            <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center text-sm">
+              <Link href="/test-prep/ielts/ielts-coaching-ahmedabad" className="bg-white rounded-xl p-4 border border-blue-100 text-blue-700 font-semibold hover:bg-blue-50 transition-colors shadow-sm">
+                IELTS preparation for Ahmedabad students →
               </Link>
               <Link href="/test-prep/ielts-coaching-gandhinagar" className="bg-white rounded-xl p-4 border border-blue-100 text-blue-700 font-semibold hover:bg-blue-50 transition-colors shadow-sm">
-                IELTS Coaching Gandhinagar →
+                IELTS coaching for Gandhinagar students →
               </Link>
               <Link href="/test-prep/ielts-coaching-modasa" className="bg-white rounded-xl p-4 border border-blue-100 text-blue-700 font-semibold hover:bg-blue-50 transition-colors shadow-sm">
-                IELTS Coaching Modasa →
+                IELTS coaching in Modasa and nearby districts →
+              </Link>
+              <Link href="/test-prep/ielts-coaching-india" className="bg-white rounded-xl p-4 border border-blue-100 text-blue-700 font-semibold hover:bg-blue-50 transition-colors shadow-sm">
+                Compare all course packs →
               </Link>
             </div>
           </section>
@@ -485,16 +517,13 @@ export default function IELTSOnlineClient() {
             <h2 className="text-3xl font-bold text-center mb-8 ua">Frequently Asked Questions — IELTS Academic 2026</h2>
             <div className="max-w-3xl mx-auto space-y-3 mt-4">
               {faqs.map((faq, idx) => (
-                <div key={idx} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                  <button onClick={() => toggleFaq(idx)} aria-expanded={openFaq === idx}
-                    className="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                <details key={idx} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <summary className="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors cursor-pointer list-none">
                     <span className="font-semibold text-gray-800 pr-4 text-sm md:text-base">{faq.q}</span>
-                    <span className="text-blue-600 text-xl font-light flex-shrink-0">{openFaq === idx ? "−" : "+"}</span>
-                  </button>
-                  {openFaq === idx && (
-                    <div className="px-6 pb-5 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-3">{faq.a}</div>
-                  )}
-                </div>
+                    <span className="text-blue-600 text-xl font-light flex-shrink-0" aria-hidden="true">+</span>
+                  </summary>
+                  <div className="px-6 pb-5 text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-3">{faq.a}</div>
+                </details>
               ))}
             </div>
           </section>
@@ -523,28 +552,30 @@ export default function IELTSOnlineClient() {
                 💬 WhatsApp Us
               </a>
             </div>
-            <p className="text-xs text-white/50">Skill India Certified · Modasa, Gujarat · info@anuedu.in</p>
+            <p className="text-xs text-white/50">Modasa, Gujarat · info@anuedu.in</p>
           </section>
 
           {/* ══ INTERNAL LINKS ══ */}
           <div className="text-center text-sm text-gray-500 border-t border-gray-100 pt-8">
             <p className="mb-1 font-medium text-gray-600">Related pages:</p>
             <p className="flex flex-wrap justify-center gap-x-3 gap-y-1">
-              <Link href="/test-prep/ielts-coaching-ahmedabad" className="text-blue-600 hover:underline">IELTS Coaching Ahmedabad</Link>
+              <Link href="/test-prep/ielts/ielts-coaching-ahmedabad" className="text-blue-600 hover:underline">Ahmedabad students</Link>
               <span>·</span>
-              <Link href="/test-prep/ielts-coaching-gandhinagar" className="text-blue-600 hover:underline">IELTS Coaching Gandhinagar</Link>
+              <Link href="/test-prep/ielts-coaching-gandhinagar" className="text-blue-600 hover:underline">Gandhinagar students</Link>
+              <span>·</span>
+              <Link href="/test-prep/ielts-coaching-india" className="text-blue-600 hover:underline">Compare course options</Link>
               <span>·</span>
               <Link href="/test-prep/pte" className="text-blue-600 hover:underline">PTE Coaching</Link>
               <span>·</span>
               <Link href="/test-prep/toefl" className="text-blue-600 hover:underline">TOEFL Coaching</Link>
               <span>·</span>
-              <Link href="/language/french" className="text-blue-600 hover:underline">French Language Course</Link>
+              <Link href="/languages/french" className="text-blue-600 hover:underline">French Language Course</Link>
               <span>·</span>
               <Link href="/study-in/canada" className="text-blue-600 hover:underline">Study in Canada</Link>
               <span>·</span>
               <Link href="/study-in/uk" className="text-blue-600 hover:underline">Study in UK</Link>
               <span>·</span>
-              <Link href="/study-abroad" className="text-blue-600 hover:underline">Study Abroad</Link>
+              <Link href="/services/visa-assistance" className="text-blue-600 hover:underline">Visa Assistance</Link>
               <span>·</span>
               <Link href="/contact" className="text-blue-600 hover:underline">Contact ANU Education</Link>
             </p>

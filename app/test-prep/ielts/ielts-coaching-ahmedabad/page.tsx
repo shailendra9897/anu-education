@@ -1,16 +1,22 @@
-// FILE: app/test-prep/ielts-coaching-ahmedabad/page.tsx
+// FILE: app/test-prep/ielts/ielts-coaching-ahmedabad/page.tsx
 
 import IELTSAhmedabadClient from "./IELTSAhmedabadClient";
 import JsonLd from "@/components/JsonLd";
-import { FAQS } from "@/lib/data/faq/ielts-ahmedabad";
+import { buildIeltsSchemaForPage } from "@/lib/seo/ielts-page-config";
+
+const PAGE_NAME =
+  "IELTS Coaching in Ahmedabad – Online Classes & Free Demo | ANU Education";
+const PAGE_DESCRIPTION =
+  "Online IELTS coaching for Ahmedabad students with live classes, daily speaking practice, mock tests and a free 5-day demo. Covers IELTS Academic and General Training.";
+const CANONICAL =
+  "https://www.anuedu.in/test-prep/ielts/ielts-coaching-ahmedabad";
 
 export const metadata = {
-  title: "Best IELTS Coaching in Ahmedabad (Free 4-Day Demo) | ANU Education",
-  description:
-    "Best online IELTS coaching in Ahmedabad. Live classes, daily speaking practice, AI mock tests, free 4-day demo. Students from Satellite, Maninagar, Navrangpura, Bopal, Gota & all Ahmedabad areas. Band 7+ training. Skill India certified.",
+  title: PAGE_NAME,
+  description: PAGE_DESCRIPTION,
   keywords: [
     "IELTS coaching Ahmedabad",
-    "best IELTS classes Ahmedabad",
+    "IELTS classes Ahmedabad",
     "online IELTS preparation Ahmedabad",
     "IELTS mock tests Ahmedabad",
     "IELTS coaching Satellite Ahmedabad",
@@ -21,62 +27,34 @@ export const metadata = {
     "IELTS coaching for nurses Ahmedabad",
   ],
   openGraph: {
-    title: "Best IELTS Coaching in Ahmedabad – Online Classes with Free 4-Day Demo",
+    title: "IELTS Coaching in Ahmedabad – Online Classes & Free Demo",
     description:
-      "Expert online IELTS training for Ahmedabad students. Live classes, speaking practice, AI mock tests, free 4-day demo. Achieve Band 7+.",
-    url: "https://www.anuedu.in/test-prep/ielts-coaching-ahmedabad",
+      "Expert online IELTS training for Ahmedabad students. Live classes, speaking practice, mock tests and a free 5-day demo.",
+    url: CANONICAL,
+    siteName: "ANU Education",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "IELTS Coaching in Ahmedabad – Free 4-Day Demo",
-    description: "Live online IELTS classes, speaking practice, AI mock tests. Free demo. Enroll now.",
+    title: "IELTS Coaching in Ahmedabad – Online Classes & Free Demo",
+    description:
+      "Live online IELTS classes, speaking practice and mock tests. Free demo available.",
   },
   alternates: {
-    canonical: "https://www.anuedu.in/test-prep/ielts/ielts-coaching-ahmedabad",
+    canonical: CANONICAL,
   },
 };
 
 export default function IELTSAhmedabadPage() {
+  const graph = buildIeltsSchemaForPage(
+    "ahmedabad",
+    PAGE_NAME,
+    PAGE_DESCRIPTION,
+  );
+
   return (
     <>
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: FAQS.map((f) => ({
-            "@type": "Question",
-            name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
-          })),
-        }}
-      />
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            {
-              "@type": "ListItem",
-              position: 1,
-              name: "Home",
-              item: "https://www.anuedu.in",
-            },
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "Test Prep",
-              item: "https://www.anuedu.in/test-prep",
-            },
-            {
-              "@type": "ListItem",
-              position: 3,
-              name: "IELTS Coaching Ahmedabad",
-              item: "https://www.anuedu.in/test-prep/ielts-coaching-ahmedabad",
-            },
-          ],
-        }}
-      />
+      <JsonLd data={graph} />
       <IELTSAhmedabadClient />
     </>
   );

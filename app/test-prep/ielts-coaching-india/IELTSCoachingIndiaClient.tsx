@@ -1,7 +1,21 @@
 'use client';
 
-import Script from "next/script";
 import Link from "next/link";
+import {
+  IELTS_ACADEMIC_SELF_PREP_PRICE_DISPLAY,
+  IELTS_ACADEMIC_CHAMPION_FROM_PRICE_DISPLAY,
+  IELTS_GST_LABEL,
+} from "@/lib/data/ielts-pricing";
+import { faqs } from "@/lib/data/faq/ielts-india";
+import IELTSStudentStories from "@/components/testimonials/IELTSStudentStories";
+
+// The India page's Champion card uses the fixed Champion — One Batch PayU
+// link; its Self Preparation CTA uses the fixed Champion — All Timings PayU
+// link. The retired on-page checkout is never used.
+const IELTS_CHAMPION_ONE_BATCH_PAYU_URL =
+  "https://u.payu.in/PAYUMN/BIInlBUFpA9I";
+const IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL =
+  "https://u.payu.in/PAYUMN/wIuPM83kT5li";
 
 export default function IELTSCoachingPage() {
   return (
@@ -137,40 +151,6 @@ export default function IELTSCoachingPage() {
         }
       `}</style>
 
-      {/* ================= SCHEMA ================= */}
-      <Script
-        id="course-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Course",
-            name: "IELTS Online Coaching in India",
-            description: "Daily live classes, mock test portal, doubt clearing sessions, and free study abroad counseling",
-            provider: {
-              "@type": "Organization",
-              name: "ANU Education",
-              url: "https://www.anuedu.in",
-            },
-            offers: {
-              "@type": "Offer",
-              price: "0",
-              priceCurrency: "INR",
-              availability: "https://schema.org/OnlineOnly",
-              validFrom: "2026-01-01",
-            },
-            hasCourseInstance: {
-              "@type": "CourseInstance",
-              courseMode: "Online",
-              courseWorkload: "PT8H",
-              startDate: "2026-03-25",
-            },
-          }),
-        }}
-      />
-
-
-
       <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
         
         {/* ================= HERO SECTION ================= */}
@@ -178,25 +158,26 @@ export default function IELTSCoachingPage() {
           <div className="max-w-6xl mx-auto px-4 py-16 md:py-20">
             <div className="text-center">
               <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-sm font-semibold mb-4 float">
-                ⭐ India's #1 Online IELTS Coaching
+                🎓 Online IELTS Preparation Across India
               </div>
               <h1 className="animate-up stagger-1 text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                Best IELTS Coaching in India
+                IELTS Coaching in India
                 <br />
                 <span className="bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
                   Online | Live Classes | Mock Tests
                 </span>
               </h1>
               <p className="animate-up stagger-2 text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-                Join ANU Education for expert IELTS coaching with daily live classes, 
-                advanced mock test portal, doubt clearing sessions, and FREE study abroad counseling.
+                Compare ANU Education&apos;s IELTS preparation options: a self-paced
+                study pack or live online Champion batches, both with mock tests,
+                mentor feedback and study abroad counselling.
               </p>
               <div className="animate-up stagger-3 flex flex-col sm:flex-row justify-center gap-4 mt-8">
                 <a
                   href="/free-demo"
                   className="group bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all hover:scale-105 inline-flex items-center justify-center gap-2 pulse"
                 >
-                  <span>🎓</span> Start Free Demo (3 Days)
+                  <span>🎓</span> Start Free Demo (5 Days)
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </a>
                 <a
@@ -207,9 +188,9 @@ export default function IELTSCoachingPage() {
                 </a>
               </div>
               <div className="animate-up stagger-4 flex flex-wrap justify-center gap-4 mt-8 text-sm">
-                <span className="flex items-center gap-2">🎯 98% Success Rate</span>
-                <span className="flex items-center gap-2">📅 1100+ Students Trained</span>
-                <span className="flex items-center gap-2">⭐ 4.8 ★ (Google Reviews)</span>
+                <span className="flex items-center gap-2">🎯 15 full-length mock tests</span>
+                <span className="flex items-center gap-2">📚 60 sectional practice tests</span>
+                <span className="flex items-center gap-2">🗓️ 6-month access</span>
               </div>
             </div>
           </div>
@@ -220,7 +201,7 @@ export default function IELTSCoachingPage() {
           {/* ================= KEY FEATURES ================= */}
           <section>
             <h2 className="animate-left stagger-1 text-3xl font-bold text-center mb-12 section-title">
-              What Makes ANU Education the Best Choice?
+              What the IELTS Programme Includes
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
               {[
@@ -278,10 +259,10 @@ export default function IELTSCoachingPage() {
           {/* ================= STATS SECTION ================= */}
           <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { icon: "🎯", value: "98%", label: "Success Rate", color: "from-blue-500 to-cyan-500" },
-              { icon: "👥", value: "1100+", label: "Students Trained", color: "from-green-500 to-emerald-500" },
-              { icon: "📚", value: "15+", label: "Mock Tests", color: "from-purple-500 to-pink-500" },
-              { icon: "⭐", value: "4.8", label: "Rating (Google Reviews)", color: "from-orange-500 to-red-500" }
+              { icon: "📚", value: "15", label: "Full-length mock tests", color: "from-blue-500 to-cyan-500" },
+              { icon: "📝", value: "60", label: "Sectional practice tests", color: "from-green-500 to-emerald-500" },
+              { icon: "🎥", value: "300+", label: "Grammar & vocabulary videos", color: "from-purple-500 to-pink-500" },
+              { icon: "🗓️", value: "6", label: "Months of access", color: "from-orange-500 to-red-500" }
             ].map((stat, index) => (
               <div
                 key={index}
@@ -378,15 +359,22 @@ export default function IELTSCoachingPage() {
 
           {/* ================= PRICING PLANS ================= */}
           <section>
-            <h2 className="animate-left stagger-1 text-3xl font-bold text-center mb-12 section-title">
-              Choose Your IELTS Batch
+            <h2 className="animate-left stagger-1 text-3xl font-bold text-center mb-3 section-title">
+              Compare IELTS Course Packages
             </h2>
+            <p className="text-center text-sm text-gray-600 mb-2 max-w-2xl mx-auto">
+              Compare the self-paced and live-class options, then choose the
+              learning format that suits your schedule.
+            </p>
+            <p className="text-center text-sm text-gray-600 mb-10">
+              {`${IELTS_GST_LABEL}. Course activation and portal access are completed manually after payment verification.`}
+            </p>
             <div className="grid md:grid-cols-3 gap-6">
               {[
                 {
                   name: "FREE Demo",
                   price: "₹0",
-                  duration: "3 Days",
+                  duration: "5 Days",
                   features: [
                     "3 Live Classes",
                     "1 Mock Test",
@@ -398,7 +386,7 @@ export default function IELTSCoachingPage() {
                 },
                 {
                   name: "Self Preparation",
-                  price: "₹1,875",
+                  price: IELTS_ACADEMIC_SELF_PREP_PRICE_DISPLAY,
                   duration: "180 Days",
                   features: [
                     "60 Practice Tests",
@@ -413,7 +401,7 @@ export default function IELTSCoachingPage() {
                 },
                 {
                   name: "Champion",
-                  price: "₹5,250",
+                  price: IELTS_ACADEMIC_CHAMPION_FROM_PRICE_DISPLAY,
                   duration: "8 Weeks",
                   features: [
                     "Everything in Self Prep",
@@ -449,60 +437,134 @@ export default function IELTSCoachingPage() {
                         </li>
                       ))}
                     </ul>
-                    <a
-                      href="/free-demo"
-                      className={`block text-center py-3 rounded-xl font-bold transition-all ${plan.popular ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                    >
-                      {plan.name === "FREE Demo" ? "Start Free Demo" : "Enroll Now"}
-                    </a>
+                    {plan.name === "Champion" ? (
+                      <a
+                        href={IELTS_CHAMPION_ONE_BATCH_PAYU_URL}
+                        aria-label={`Buy ${plan.name} — open the secure PayU payment page`}
+                        className="block text-center py-3 rounded-xl font-bold transition-all bg-purple-600 text-white hover:bg-purple-700"
+                      >
+                        Buy Now
+                      </a>
+                    ) : plan.name === "Self Preparation" ? (
+                      <a
+                        href={IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL}
+                        aria-label={`Buy ${plan.name} — open the secure PayU payment page`}
+                        className="inline-flex w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-bold transition-colors bg-blue-700 text-white hover:bg-blue-800"
+                      >
+                        Buy Now
+                      </a>
+                    ) : (
+                      <a
+                        href="/free-demo"
+                        className="block text-center py-3 rounded-xl font-bold transition-all bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      >
+                        Start Free Demo
+                      </a>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
           </section>
 
-          {/* ================= TESTIMONIALS ================= */}
+          {/* ================= SELF PREP VS CHAMPION ================= */}
           <section>
-            <h2 className="animate-left stagger-1 text-3xl font-bold text-center mb-12 section-title">
-              ⭐ Success Stories
+            <h2 className="animate-left stagger-1 text-3xl font-bold text-center mb-3 section-title">
+              Self Preparation vs Champion
             </h2>
-            <div className="grid md:grid-cols-3 gap-6">
+            <p className="text-center text-sm text-gray-600 mb-10 max-w-2xl mx-auto">
+              Both packs cover the same IELTS Academic syllabus. The difference
+              is how much live teaching you want.
+            </p>
+            <div className="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm">
+              <table className="w-full text-sm">
+                <thead className="bg-blue-700 text-white">
+                  <tr>
+                    <th className="text-left px-4 py-3 font-semibold">What you get</th>
+                    <th className="text-left px-4 py-3 font-semibold">Self Preparation</th>
+                    <th className="text-left px-4 py-3 font-semibold">Champion</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 bg-white">
+                  {[
+                    ["Learning format", "Self-paced videos, practice tests and mock tests", "Daily live classes plus everything in Self Preparation"],
+                    ["Live classes", "Not included", "Morning, afternoon or evening batch"],
+                    ["Batch levels", "—", "Beginner (40 hrs) and Advanced (60 hrs)"],
+                    ["Mock tests", "15 full-length + 60 sectional", "15 full-length + 60 sectional"],
+                    ["Weekend support", "Saturday analysis and Sunday doubt-solving", "Saturday analysis and Sunday doubt-solving"],
+                    ["French course", "Not included", "Free 4-week live French course"],
+                    ["Login access", "6 months", "6 months"],
+                    ["Price", `${IELTS_ACADEMIC_SELF_PREP_PRICE_DISPLAY} (GST included)`, `from ${IELTS_ACADEMIC_CHAMPION_FROM_PRICE_DISPLAY} (GST included)`],
+                  ].map(([label, selfPrep, champion], i) => (
+                    <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                      <td className="px-4 py-3 font-medium text-gray-800">{label}</td>
+                      <td className="px-4 py-3 text-gray-600">{selfPrep}</td>
+                      <td className="px-4 py-3 text-gray-600">{champion}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-center text-xs text-gray-500 mt-4">
+              Prices include GST. Course activation and portal access are completed
+              manually after payment verification.
+            </p>
+          </section>
+
+          {/* ================= HOW ENROLLMENT WORKS ================= */}
+          <section>
+            <h2 className="animate-left stagger-1 text-3xl font-bold text-center mb-3 section-title">
+              How Enrollment Works
+            </h2>
+            <p className="text-center text-sm text-gray-600 mb-10 max-w-2xl mx-auto">
+              Four steps from your first class to full course access.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                {
-                  name: "Priya Sharma",
-                  score: "Band 8.0",
-                  text: "ANU Education's mock test portal was a game-changer. The daily doubt clearing sessions helped me improve quickly.",
-                  country: "Canada"
-                },
-                {
-                  name: "Rahul Mehta",
-                  score: "Band 7.5",
-                  text: "Best IELTS coaching online! The live classes and study abroad counseling helped me get admission in Germany.",
-                  country: "Germany"
-                },
-                {
-                  name: "Anjali Patel",
-                  score: "Band 8.5",
-                  text: "The writing evaluation and speaking practice sessions were exceptional. Highly recommended!",
-                  country: "UK"
-                }
-              ].map((testimonial, index) => (
-                <div key={index} className={`animate-up stagger-${index + 1} testimonial-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100`}>
-                  <div className="flex items-center gap-2 mb-3">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="text-yellow-400">★</span>
-                    ))}
-                  </div>
-                  <p className="text-gray-600 mb-4 italic">"{testimonial.text}"</p>
-                  <div className="border-t pt-3">
-                    <p className="font-bold text-gray-800">{testimonial.name}</p>
-                    <p className="text-sm text-green-600">IELTS {testimonial.score}</p>
-                    <p className="text-xs text-gray-500">Studying in {testimonial.country}</p>
-                  </div>
+                { step: "01", title: "Book a free demo", desc: "Register for the 5-day free demo through the free demo page." },
+                { step: "02", title: "Try the classes", desc: "Attend live classes, take a mock test and see how the course fits your schedule." },
+                { step: "03", title: "Choose your pack", desc: "Pick Self Preparation for self-paced study or Champion for daily live classes." },
+                { step: "04", title: "Pay and get access", desc: "Use the Buy Now link for your pack. Course activation and portal access are completed manually after payment verification." },
+              ].map((item, i) => (
+                <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                  <div className="text-blue-600 font-bold text-sm mb-2">{item.step}</div>
+                  <h3 className="font-bold text-gray-900 mb-1 text-base">{item.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
           </section>
+
+          {/* ================= CHOOSE BY CITY ================= */}
+          <section className="bg-blue-50 border border-blue-100 rounded-2xl p-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3 text-center">
+              Choose by City
+            </h2>
+            <p className="text-center text-sm text-gray-600 mb-6 max-w-2xl mx-auto">
+              The course is delivered online across India. These pages cover the
+              city-specific questions students ask most often.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <Link href="/test-prep/ielts-online" className="bg-white rounded-xl p-4 border border-blue-100 text-blue-700 font-semibold hover:bg-blue-100 transition-colors text-sm">
+                Live online batches across India →
+              </Link>
+              <Link href="/test-prep/ielts/ielts-coaching-ahmedabad" className="bg-white rounded-xl p-4 border border-blue-100 text-blue-700 font-semibold hover:bg-blue-100 transition-colors text-sm">
+                IELTS preparation for Ahmedabad students →
+              </Link>
+              <Link href="/test-prep/ielts-coaching-gandhinagar" className="bg-white rounded-xl p-4 border border-blue-100 text-blue-700 font-semibold hover:bg-blue-100 transition-colors text-sm">
+                IELTS coaching for Gandhinagar students →
+              </Link>
+              <Link href="/test-prep/ielts-coaching-modasa" className="bg-white rounded-xl p-4 border border-blue-100 text-blue-700 font-semibold hover:bg-blue-100 transition-colors text-sm">
+                IELTS coaching in Modasa and nearby districts →
+              </Link>
+            </div>
+          </section>
+
+          {/* ================= TESTIMONIALS ================= */}
+          <IELTSStudentStories
+            heading="Student Experiences"
+            intro="Approved student stories are published here once consent and score evidence are on file."
+          />
 
           {/* ================= FAQ SECTION ================= */}
           <section>
@@ -510,28 +572,7 @@ export default function IELTSCoachingPage() {
               ❓ Frequently Asked Questions
             </h2>
             <div className="space-y-4 max-w-3xl mx-auto">
-              {[
-                {
-                  q: "Do you provide online IELTS coaching with live classes?",
-                  a: "Yes! We offer daily live online classes with expert trainers. All sessions are recorded for revision."
-                },
-                {
-                  q: "How many mock tests are included?",
-                  a: "All our IELTS batches (Self Preparation and Champion) include 15+ full-length mock tests with detailed performance analysis."
-                },
-                {
-                  q: "Is there any doubt clearing support?",
-                  a: "Absolutely! We have daily doubt clearing sessions and one-on-one support for every student."
-                },
-                {
-                  q: "Do you provide free study abroad counseling?",
-                  a: "Yes! All our IELTS students get FREE counseling for study abroad destinations including Germany, UK, Canada, Australia, and more."
-                },
-                {
-                  q: "Can I get a free demo before enrolling?",
-                  a: "Yes! We offer 3 days of free demo classes including mock test access. Book your free demo now!"
-                }
-              ].map((faq, index) => (
+              {faqs.map((faq, index) => (
                 <div key={index} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all">
                   <h3 className="font-bold text-lg mb-2 text-gray-800">{faq.q}</h3>
                   <p className="text-gray-600">{faq.a}</p>
@@ -543,24 +584,33 @@ export default function IELTSCoachingPage() {
           {/* ================= FINAL CTA ================= */}
           <section className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-3xl p-12 text-center">
             <div className="text-6xl mb-4 float">🚀</div>
-            <h2 className="text-3xl font-bold mb-4">Start Your IELTS Journey Today</h2>
-            <p className="text-xl mb-8 text-white/90">Join 10,000+ successful students who achieved their dream band score</p>
+            <h2 className="text-3xl font-bold mb-4">Start Your IELTS Preparation</h2>
+            <p className="text-xl mb-4 text-white/90 max-w-2xl mx-auto">
+              Compare the self-paced and live-class options, check the GST-inclusive
+              price, and book a free demo before you enrol.
+            </p>
+            <p className="mb-8 text-sm text-white/80">
+              Looking for daily live classes?{" "}
+              <a href="/test-prep/ielts-online" className="underline font-semibold">
+                See the online IELTS coaching page
+              </a>
+              .
+            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="/free-demo"
                 className="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all hover:scale-105 inline-flex items-center justify-center gap-2 pulse"
               >
-                Claim 3-Day Free Demo
+                Book 5-Day Free Demo
                 <span>→</span>
               </a>
               <a
                 href="https://wa.me/919428186817"
                 className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-all"
               >
-                Talk to Expert Counselor
+                Talk to a Counsellor
               </a>
             </div>
-            <p className="mt-6 text-sm text-white/80">Limited seats available for March 2026 batch</p>
           </section>
         </div>
       </main>

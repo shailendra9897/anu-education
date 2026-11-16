@@ -7,11 +7,11 @@
 export const FAQS: { q: string; a: string }[] = [
   {
     q: "Is IELTS coaching in Ahmedabad available fully online?",
-    a: "Yes. ANU Education's IELTS coaching for Ahmedabad students is 100% online — live classes, speaking practice, and mock tests are all delivered via video platform. Students from Satellite, Maninagar, Navrangpura, Chandkheda, Nikol, South Bopal, Gota, Vastrapur, Science City, SG Highway, Naroda, and every other part of Ahmedabad can join without travelling, and get the exact same quality of instruction as an in-person classroom.",
+    a: "Yes. ANU Education's IELTS coaching for Ahmedabad students is fully online — live classes, speaking practice, and mock tests are all delivered via video platform. Students from Satellite, Maninagar, Navrangpura, Chandkheda, Nikol, South Bopal, Gota, Vastrapur, Science City, SG Highway, Naroda, and every other part of Ahmedabad can join without travelling.",
   },
   {
     q: "How long does IELTS preparation take in Ahmedabad?",
-    a: "Most students need 4 to 8 weeks of focused preparation depending on their starting level and target band. Our free 4-day demo gives you a real diagnostic of your current level before you commit, so your trainer can give you a realistic, honest timeline rather than a generic estimate.",
+    a: "Most students need 4 to 8 weeks of focused preparation depending on their starting level and target band. Our free 5-day demo gives you a real diagnostic of your current level before you commit, so your trainer can give you a realistic, honest timeline rather than a generic estimate.",
   },
   {
     q: "Can I get Band 7 in one month?",
@@ -19,7 +19,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Is online IELTS coaching as effective as classroom coaching?",
-    a: "Yes — in many ways online coaching is more effective for IELTS specifically. The exam itself (Listening, Reading) is computer-based for most test-takers now, so practicing on a screen mirrors real exam conditions. Online coaching also allows daily 1-on-1 speaking practice, recorded sessions you can revisit, and AI-assisted mock tests with instant scoring — advantages that are harder to deliver consistently in a traditional classroom with 20+ students.",
+    a: "The format suits IELTS preparation well. Listening and Reading are computer-delivered for most test-takers, so practising on a screen mirrors real exam conditions. Online coaching also allows recorded sessions you can revisit, and mock tests with detailed section-wise analysis. Whether it works better for you depends on how consistently you attend and practise.",
   },
   {
     q: "Which IELTS module is the most difficult?",
@@ -27,7 +27,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What band score can I achieve with IELTS coaching in Ahmedabad?",
-    a: "With consistent practice and our structured coaching, most Ahmedabad students achieve Band 6.5 to 7.5+, depending on their starting level and study consistency. We track your progress through regular mock tests and band predictions, so you always know exactly where you stand relative to your target score.",
+    a: "The band you reach depends on your starting level, your target, and how consistently you practise. We track your progress through regular mock tests and band predictions, so you can see where you stand relative to your target score as the course progresses.",
   },
   {
     q: "Do you provide speaking practice for IELTS in Ahmedabad?",
@@ -39,7 +39,7 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Do you offer free IELTS trial classes in Ahmedabad?",
-    a: "Yes. We offer a free 4-day live demo for Ahmedabad students — no payment required upfront. You get to experience real live classes, try speaking practice with feedback, and take a free mock test before deciding to enrol in the full course.",
+    a: "Yes. We offer a free 5-day live demo for Ahmedabad students — no payment required upfront. You get to experience real live classes, try speaking practice with feedback, and take a free mock test before deciding to enrol in the full course.",
   },
   {
     q: "Which areas in Ahmedabad do you cover for online IELTS coaching?",
@@ -47,11 +47,11 @@ export const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "What are the IELTS coaching fees in Ahmedabad (online)?",
-    a: "Course fees vary based on the pack you choose (Self Preparation vs Champion live-class pack). We keep pricing transparent and discuss exact fees during your free 4-day demo, once we understand your starting level and target band — so you only pay for what you actually need.",
+    a: "Course fees depend on the pack you choose (Self Preparation or Champion live-class pack). Current prices are published on this page and include GST. The free 5-day demo includes a diagnostic so you can see which pack matches your starting level and target band before enrolling.",
   },
   {
     q: "How do I join IELTS online classes from Ahmedabad?",
-    a: "Simply book your free 4-day demo through our website or WhatsApp. You'll get live class access, a diagnostic assessment, and a clear recommendation on the right course pack for your goals — no commitment required until you decide to enrol.",
+    a: "Simply book your free 5-day demo through our website or WhatsApp. You'll get live class access, a diagnostic assessment, and a clear recommendation on the right course pack for your goals — no commitment required until you decide to enrol.",
   },
   {
     q: "Do you provide mock tests and score analysis for IELTS in Ahmedabad?",

@@ -23,7 +23,7 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Do you offer online IELTS coaching for Gandhinagar students?",
-    a: "Yes. Our live online classes are available to all Gandhinagar students — including those in Kudasan, Sargasan, Infocity, Sector 6, and Sector 21. You get the same expert trainers, mock tests, and study abroad counselling as in-person students, with the flexibility of choosing your batch timing.",
+    a: "Yes. Our live online classes are available to all Gandhinagar students — including those in Kudasan, Sargasan, Infocity, Sector 6, and Sector 21. You get the same trainers, mock tests, and study abroad counselling as students in any other city, with the flexibility of choosing your batch timing.",
   },
   {
     q: "How many mock tests are included in the course?",
@@ -31,7 +31,7 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: "How much does IELTS exam registration cost in India?",
-    a: "The IELTS exam fee in India is ₹17,000 for both Academic and General Training (paper-based and computer-delivered formats). The exam is conducted by IDP and British Council. Contact us for guidance on registration and test centre selection.",
+    a: "The IELTS exam fee in India is approximately ₹18,000 for both Academic and General Training (paper-based and computer-delivered formats). The exam is conducted by IDP and British Council. Contact us for guidance on registration and test centre selection.",
   },
   {
     q: "What is the validity of an IELTS score?",

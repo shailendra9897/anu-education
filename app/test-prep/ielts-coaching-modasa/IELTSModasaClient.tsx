@@ -4,7 +4,7 @@
 //
 // AUDIT FIXES APPLIED (June 2026):
 //   ✅ Champion Course is now DEFAULT tab (was Self Prep)
-//   ✅ Course fees shown: "Starting ₹1,875 · Champion from ₹5,250" (aligned to price master)
+//   ✅ Course fees derived from the price master (lib/data/ielts-pricing.ts)
 //   ✅ 3 student testimonials added with band score + city
 //   ✅ Google Review CTA added near stats bar
 //   ✅ IELTS vs PTE comparison section added (new traffic keyword)
@@ -15,7 +15,6 @@
 //   ✅ Script strategy="beforeInteractive" for schemas
 //   ✅ WhatsApp number kept as-is via getWhatsAppLink (your existing lib)
 
-import Script from "next/script";
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -23,35 +22,59 @@ import {
   getWhatsAppLink,
 } from "@/lib/whatsappTemplates";
 
-// ── TESTIMONIALS ─────────────────────────────────────────────────
-const testimonials = [
-  {
-    name: "Ravi Patel",
-    city: "Modasa",
-    course: "IELTS Academic",
-    score: "Band 7.0",
-    dest: "Canada",
-    text: "Scored 7.0 in my first attempt after just 6 weeks with ANU Education. The Saturday mock analysis sessions and Sunday doubt-solving made the real difference. Now studying at University of Saskatchewan.",
-  },
-  {
-    name: "Hetal Solanki",
-    city: "Himmatnagar",
-    course: "IELTS Academic",
-    score: "Band 7.5",
-    dest: "UK",
-    text: "I was at Band 5.5 when I joined the Advanced batch. Reached 7.5 in 8 weeks. The speaking practice recordings and trainer feedback completely transformed my speaking score.",
-  },
-  {
-    name: "Jayesh Thakor",
-    city: "Idar",
-    course: "IELTS General",
-    score: "Band 6.5",
-    dest: "Australia PR",
-    text: "Online classes from Idar — no need to travel to Ahmedabad. ANU Education's counsellors also helped me understand the Australia immigration process step by step. Got my PR invitation.",
-  },
-];
-
 import { faqs } from "@/lib/data/faq/ielts-modasa";
+import {
+  IELTS_ACADEMIC_SELF_PREP_PRICE_DISPLAY,
+  IELTS_ACADEMIC_CHAMPION_FROM_PRICE_DISPLAY,
+  IELTS_GST_LABEL,
+} from "@/lib/data/ielts-pricing";
+import { PTE_FROM_PRICE_DISPLAY } from "@/lib/data/pte-pricing";
+import IELTSPricingCards from "@/components/courses/IELTSPricingCards";
+import IELTSStudentStories from "@/components/testimonials/IELTSStudentStories";
+import {
+  IELTS_PACKAGES,
+  withIeltsPackageCta,
+} from "@/lib/data/ielts-packages";
+
+// Marketing package cards. Prices, features and badges come from the
+// centralized IELTS package module; only the page-owned CTAs live here.
+// Self Prep, Champion — One Batch and Champion — All Timings are each sold
+// through their own fixed PayU payment link. The retired on-page checkout is
+// never used.
+const IELTS_SELF_PREP_PAYU_URL = "https://u.payu.in/PAYUMN/uIqbwdNTKrTp";
+const IELTS_CHAMPION_ONE_BATCH_PAYU_URL =
+  "https://u.payu.in/PAYUMN/BIInlBUFpA9I";
+const IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL =
+  "https://u.payu.in/PAYUMN/wIuPM83kT5li";
+
+const IELTS_MODASA_PRICING_PACKAGES = IELTS_PACKAGES.map((pkg) => ({
+  ...withIeltsPackageCta(
+    pkg,
+    pkg.packageId === "ielts-self-prep"
+      ? {
+          label: "Buy Now",
+          href: IELTS_SELF_PREP_PAYU_URL,
+          ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+        }
+      : pkg.packageId === "ielts-champion-one-batch"
+        ? {
+            label: "Buy Now",
+            href: IELTS_CHAMPION_ONE_BATCH_PAYU_URL,
+            ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+          }
+        : {
+            label: "Buy Now",
+            href: IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL,
+            ariaLabel: `Buy ${pkg.title} — open the secure PayU payment page`,
+          },
+    {
+      label: "Book Free Demo",
+      href: "/free-demo",
+      ariaLabel: `Book a free demo for ${pkg.title}`,
+    },
+  ),
+  gstLabel: IELTS_GST_LABEL,
+}));
 
 export default function IELTSModasaClient() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -63,7 +86,7 @@ export default function IELTSModasaClient() {
     {
       id: 1, name: "Self Preparation Course",
       tag: "Self-Paced + Bonus Live Sessions",
-      price: "Starting ₹1,875 + GST",
+      price: `Starting ${IELTS_ACADEMIC_SELF_PREP_PRICE_DISPLAY} · GST included`,
       badge: "bg-blue-700", border: "border-blue-200", highlight: false,
       rows: [
         ["English Assessment Test", "✅"],
@@ -84,7 +107,7 @@ export default function IELTSModasaClient() {
     {
       id: 2, name: "Champion Course",
       tag: "Live Classes · Best Value · FREE French Course",
-      price: "From ₹5,250 + GST",
+      price: `From ${IELTS_ACADEMIC_CHAMPION_FROM_PRICE_DISPLAY} · GST included`,
       badge: "bg-green-700", border: "border-green-300", highlight: true,
       rows: [
         ["English Assessment Test", "✅"],
@@ -106,58 +129,6 @@ export default function IELTSModasaClient() {
 
   return (
     <>
-      {/* ══ SCHEMA: strategy beforeInteractive ensures Googlebot sees it ══ */}
-      <Script
-        id="lb-schema-modasa"
-        type="application/ld+json"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": ["EducationalOrganization", "LocalBusiness"],
-          name: "ANU Education – IELTS Coaching Modasa",
-          image: "https://www.anuedu.in/logo.png",
-          url: "https://www.anuedu.in/test-prep/ielts-coaching-modasa",
-          telephone: "+917016497087",
-          email: "info@anuedu.in",
-          description: "ANU Education is Modasa's leading IELTS coaching institute offering live Academic and General Training batches, 15 full-length mock tests, speaking practice, Saturday test analysis, Sunday doubt-solving, and free study abroad counselling. Skill India certified.",
-          address: { "@type": "PostalAddress", streetAddress: "Krishna 137, Dwarkapuri Bunglows, Gitanjali Society", addressLocality: "Modasa", addressRegion: "Gujarat", postalCode: "383315", addressCountry: "IN" },
-          geo: { "@type": "GeoCoordinates", latitude: 23.4675584, longitude: 73.3084437 },
-          openingHours: "Mo-Sa 09:00-19:00",
-          hasMap: "https://www.google.com/maps?q=23.4675584,73.3084437",
-          makesOffer: [
-            { "@type": "Offer", itemOffered: { "@type": "Service", name: "IELTS Academic Online Coaching – Self Preparation Course" } },
-            { "@type": "Offer", itemOffered: { "@type": "Service", name: "IELTS Academic Online Coaching – Champion Course with Free French" } },
-            { "@type": "Offer", itemOffered: { "@type": "Service", name: "Free Study Abroad Counselling" } },
-          ],
-          areaServed: ["Modasa","Himmatnagar","Idar","Bayad","Shamlaji","Bhiloda","Malpur","Dhansura","Meghraj","Talod","Prantij","Aambaliyasan","Mehsana","Vijapur"],
-        })}}
-      />
-
-      <Script
-        id="course-schema-modasa"
-        type="application/ld+json"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Course",
-          name: "IELTS Coaching in Modasa – Academic & General Training 2026 | ANU Education",
-          description: "Live IELTS Academic and General Training coaching for students in Modasa and Sabarkantha district. Beginner and Advanced batches, 15 full-length mock tests, 300+ grammar videos, Saturday test analysis, Sunday doubt-solving, and FREE French 4-week course with Champion pack.",
-          provider: { "@type": "EducationalOrganization", name: "ANU Education", telephone: "+917016497087", address: { "@type": "PostalAddress", addressLocality: "Modasa", addressRegion: "Gujarat", addressCountry: "IN" } },
-          educationalLevel: "Beginner to Advanced",
-          inLanguage: "en",
-          coursePrerequisites: "No prior preparation needed. Beginner batch starts from basics.",
-          offers: [
-{ "@type": "Offer", name: "Self Preparation Course", priceCurrency: "INR", price: "1875", description: "6-month access, 15 mock tests, 60 practice tests, no live classes" },
-          { "@type": "Offer", name: "Champion Course", priceCurrency: "INR", price: "5250", description: "6-month access, 15 mock tests, 60 practice tests, daily live classes, FREE French course" },
-          ],
-          hasCourseInstance: [
-            { "@type": "CourseInstance", name: "Beginner's Batch – Modasa", courseMode: ["Online","Blended"], location: { "@type": "Place", name: "ANU Education, Modasa", address: { "@type": "PostalAddress", addressLocality: "Modasa", addressRegion: "Gujarat", addressCountry: "IN" } } },
-            { "@type": "CourseInstance", name: "Advanced Batch – Modasa", courseMode: ["Online","Blended"], location: { "@type": "Place", name: "ANU Education, Modasa", address: { "@type": "PostalAddress", addressLocality: "Modasa", addressRegion: "Gujarat", addressCountry: "IN" } } },
-          ],
-        })}}
-      />
-
-
       <style jsx>{`
         @keyframes fadeInUp { from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);} }
         @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);} }
@@ -184,17 +155,17 @@ export default function IELTSModasaClient() {
             </nav>
             <div className="text-center">
               <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold mb-5 float">
-                📍 Modasa, Gujarat · 4.8 ★ · Free 5-Day Trial · Skill India Certified
+                📍 Modasa, Gujarat · Online Live Batches · Free 5-Day Trial
               </div>
               <h1 className="anim d1 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5">
-                Best IELTS Coaching in Modasa
+                IELTS Coaching in Modasa
                 <br />
                 <span className="bg-gradient-to-r from-yellow-300 to-green-300 bg-clip-text text-transparent">
-                  Academic &amp; General · Band 7+ in 2026
+                  Academic &amp; General · Online Live Batches
                 </span>
               </h1>
               <p className="anim d2 text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed mb-8">
-                Modasa's most trusted IELTS coaching institute — <strong className="text-white">live Beginner &amp; Advanced batches</strong>, 15 full-length mock tests, 60 practice tests, Saturday test analysis, Sunday doubt-solving sessions, and <strong className="text-white">FREE French 4-week course</strong> with Champion pack. Students from Himmatnagar, Idar, Bayad &amp; all of Sabarkantha district welcome.
+                ANU Education&apos;s IELTS programme for Modasa students — <strong className="text-white">live Beginner &amp; Advanced batches</strong>, 15 full-length mock tests, 60 practice tests, Saturday test analysis, Sunday doubt-solving sessions, and <strong className="text-white">a free French 4-week course</strong> with the Champion pack. Students from Himmatnagar, Idar, Bayad and across Aravalli, Sabarkantha and Mehsana districts are welcome online.
               </p>
               <div className="anim d3 flex flex-col sm:flex-row justify-center gap-4 mb-8">
                 <a href="https://study.anuedu.in/register" target="_blank" rel="noopener noreferrer"
@@ -209,10 +180,9 @@ export default function IELTSModasaClient() {
                 </a>
               </div>
               <div className="anim d4 flex flex-wrap justify-center gap-6 text-sm text-white/90">
-                <span>⭐ 4.8 Google Rating</span>
-                <span>✅ 1,100+ Students Guided</span>
-                <span>✅ 98% Success Rate</span>
-                <span>✅ Free Study Abroad Counselling</span>
+                <span>✅ 15 full-length mock tests</span>
+                <span>✅ 60 practice tests</span>
+                <span>✅ Free study abroad counselling</span>
               </div>
             </div>
           </div>
@@ -220,14 +190,14 @@ export default function IELTSModasaClient() {
 
         <div className="max-w-6xl mx-auto px-4 py-14 space-y-16">
 
-          {/* ══ STATS + GOOGLE REVIEW CTA ══ */}
+          {/* ══ WHAT THE COURSE INCLUDES ══ */}
           <section>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { stat: "4.8 ★", label: "Google rating · 120+ reviews" },
                 { stat: "15", label: "Full-length mock tests included" },
                 { stat: "60", label: "Section practice tests" },
                 { stat: "300+", label: "Grammar & vocabulary videos" },
+                { stat: "6", label: "Months of portal access" },
               ].map((s, i) => (
                 <div key={i} className="bg-blue-50 border border-blue-100 rounded-2xl p-5 text-center">
                   <div className="text-2xl font-black text-blue-700 mb-1">{s.stat}</div>
@@ -235,22 +205,15 @@ export default function IELTSModasaClient() {
                 </div>
               ))}
             </div>
-            {/* ✅ AUDIT FIX: Google Review CTA */}
-            <div className="bg-yellow-50 border border-yellow-200 rounded-2xl px-5 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <div>
-                <span className="font-semibold text-yellow-800 text-sm">⭐ Loved your IELTS experience with ANU Education?</span>
-                <span className="text-yellow-700 text-xs block mt-0.5">Your review helps Modasa students find us — and takes 30 seconds.</span>
-              </div>
-              <a
-                href="https://g.page/r/YOUR_PLACE_ID/review"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm whitespace-nowrap transition-colors flex-shrink-0"
-              >
-                ⭐ Leave a Google Review
-              </a>
-            </div>
           </section>
+
+          {/* ══ IELTS COURSE PRICING ══ */}
+          <IELTSPricingCards
+            packages={IELTS_MODASA_PRICING_PACKAGES}
+            heading="IELTS Course Packages in Modasa"
+            intro="Choose the package that matches your schedule and goals. All packages include 6-month access and a free demo class."
+            footnote="Prices include GST · 18% GST included. Course activation and portal access are completed manually after payment verification."
+          />
 
           {/* ══ WHY ANU MODASA ══ */}
           <section>
@@ -258,16 +221,16 @@ export default function IELTSModasaClient() {
               Why Choose ANU Education for IELTS Coaching in Modasa?
             </h2>
             <p className="text-center text-gray-500 text-sm mb-8 mt-4">
-              Modasa's only Skill India certified IELTS institute with free study abroad counselling
+              Live online IELTS coaching with free study abroad counselling
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {[
                 { icon: "🎥", title: "Live classes — not just recordings", desc: "Real-time interaction with experienced IELTS trainers across Morning, Afternoon, and Evening batches. Every session recorded for revision." },
                 { icon: "📊", title: "Beginner & Advanced — both batches", desc: "Tailored for your current level. Beginner batch (40 live hours) builds foundation; Advanced batch (60 live hours) targets Band 7+." },
-                { icon: "⭐", title: "Weekend Bonanza — Sat & Sun live sessions", desc: "Saturday test analysis (7:30 AM & 2:00 PM) + Sunday doubt-solving (9:00 AM). No other Modasa institute offers weekend live review." },
+                { icon: "⭐", title: "Weekend Bonanza — Sat & Sun live sessions", desc: "Saturday test analysis (7:30 AM & 2:00 PM) + Sunday doubt-solving (9:00 AM). Live review sessions are included with both packs." },
                 { icon: "📝", title: "15 full-length mock tests + 60 practice tests", desc: "Timed, exam-condition tests with expert mentor feedback in text and audio format — plus sectional analysis after every mock." },
                 { icon: "🗣️", title: "Daily speaking practice", desc: "Record cue card responses, get feedback from trainers. Speaking confidence is where Modasa students improve the most with us." },
-                { icon: "🎓", title: "Free study abroad counselling", desc: "Skill India certified counsellors for Canada, UK, Germany, Australia, France, UAE, Ireland & USA — included with every IELTS enrolment." },
+                { icon: "🎓", title: "Free study abroad counselling", desc: "Study abroad counsellors for Canada, UK, Germany, Australia, France, UAE, Ireland & USA — included with every IELTS enrolment." },
               ].map((item, i) => (
                 <div key={i} className="card bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                   <div className="text-4xl mb-3">{item.icon}</div>
@@ -368,7 +331,7 @@ export default function IELTSModasaClient() {
                 { icon: "🗣️", title: "Speaking Practice", desc: "Record cue card responses, get expert feedback in text and audio format at your own pace." },
                 { icon: "🧪", title: "Simulated Mock Tests", desc: "15 full-length timed tests + 60 sectional tests with expert analysis. Real exam conditions." },
                 { icon: "📅", title: "No Fixed Start Dates", desc: "Join any day — each session structured to help you catch up seamlessly from Day 1." },
-                { icon: "🌐", title: "Online + In-Person Flexible", desc: "Attend live from Modasa centre or join online from home — same classes, same trainers." },
+                { icon: "🌐", title: "Live Online Classes", desc: "Join live from Modasa or anywhere in Aravalli and nearby districts — same classes, same trainers, no travel required." },
                 { icon: "📝", title: "Writing Correction", desc: "Personalised feedback on Task 1 graphs and Task 2 essays with band score assessment." },
                 { icon: "🎁", title: "FREE French Course (Champion)", desc: "4-week live French language course free with Champion pack — unique in Modasa." },
               ].map((item, i) => (
@@ -515,7 +478,7 @@ export default function IELTSModasaClient() {
               IELTS vs PTE — Which is Better for Modasa Students?
             </h2>
             <p className="text-gray-600 text-sm mb-5 leading-relaxed">
-              Both IELTS and PTE are widely accepted for study abroad and Canada immigration. Here's a quick guide to help Sabarkantha students choose the right test.
+              Both IELTS and PTE are widely accepted for study abroad and Canada immigration. Here's a quick guide to help students in Modasa and nearby districts choose the right test.
             </p>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -534,7 +497,7 @@ export default function IELTSModasaClient() {
                     ["Canada immigration", "Accepted (IELTS General)", "PTE 60 = Canada SDS accepted ✅"],
                     ["Australia PR points", "Accepted", "65 = Competent · 79 = Proficient ✅"],
                     ["Exam fee (India)", "~₹18,000", "~₹18,000"],
-                    ["ANU Education teaches", "✅ Full batches", "✅ 4 course packs from ₹1,313"],
+                    ["ANU Education teaches", "✅ Full batches", `✅ 4 course packs from ${PTE_FROM_PRICE_DISPLAY}`],
                   ].map(([factor, ielts, pte], i) => (
                     <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-indigo-50/40"}>
                       <td className="px-3 py-2 font-medium text-gray-700 text-xs">{factor}</td>
@@ -557,48 +520,19 @@ export default function IELTSModasaClient() {
             </p>
           </section>
 
-          {/* ══ TESTIMONIALS — NEW SECTION ══ */}
-          <section>
-            <h2 className="text-3xl font-bold text-center mb-3 ua">
-              Modasa Students. Real Results.
-            </h2>
-            <p className="text-center text-gray-500 text-sm mb-8 mt-4">
-              Students from Modasa, Himmatnagar, Idar and across Sabarkantha — real band scores, real destinations
-            </p>
-            <div className="grid md:grid-cols-3 gap-5">
-              {testimonials.map((t, i) => (
-                <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center font-bold text-white text-sm flex-shrink-0">
-                      {t.name.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="font-bold text-gray-800 text-sm">{t.name}</div>
-                      <div className="text-xs text-gray-500">{t.course} · {t.city}</div>
-                    </div>
-                    <div className="ml-auto bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-lg whitespace-nowrap">
-                      {t.score}
-                    </div>
-                  </div>
-                  <p className="text-gray-600 text-xs leading-relaxed italic mb-3">"{t.text}"</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex gap-0.5">
-                      {[...Array(5)].map((_, j) => <span key={j} className="text-yellow-400 text-sm">★</span>)}
-                    </div>
-                    <span className="text-xs text-blue-600 font-medium">→ {t.dest}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+          {/* ══ TESTIMONIALS — approved data only ══ */}
+          <IELTSStudentStories
+            heading="Student Experiences"
+            intro="Approved student stories are published here once consent and score evidence are on file."
+          />
 
           {/* ══ LOCATIONS + MAP ══ */}
           <section className="bg-blue-50 border border-blue-100 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-3 text-center">
-              IELTS Coaching in Modasa — Serving All of Sabarkantha District
+              IELTS Coaching in Modasa — Serving Nearby Towns Across Aravalli, Sabarkantha and Mehsana
             </h2>
             <p className="text-center text-gray-600 text-sm mb-6">
-              ANU Education Modasa is the nearest IELTS coaching centre for students from all these towns. Online classes available for students further away.
+              ANU Education supports IELTS students from all these towns, with live online classes available wherever you are.
             </p>
             <div className="flex flex-wrap justify-center gap-2 mb-6">
               {["Modasa","Himmatnagar","Idar","Bayad","Shamlaji","Bhiloda","Malpur","Dhansura","Meghraj","Talod","Prantij","Aambaliyasan","Kathlal","Khedbrahma","Vadali","Vijapur","Unjha","Mehsana"].map(city => (
@@ -610,27 +544,25 @@ export default function IELTSModasaClient() {
 
             {/* ✅ AUDIT FIX: nearest test centres */}
             <div className="bg-white rounded-xl border border-blue-100 p-4 mb-5">
-              <h3 className="font-bold text-gray-800 text-sm mb-3">📍 Nearest IELTS Test Centres from Modasa</h3>
+              <h3 className="font-bold text-gray-800 text-sm mb-3">📍 IELTS Test Centres in Nearby Cities</h3>
               <div className="grid sm:grid-cols-3 gap-3 text-xs text-gray-700">
                 {[
-                  { centre: "IDP India — Ahmedabad", dist: "~65 km · 1 hr drive", type: "Paper + Computer" },
-                  { centre: "British Council — Ahmedabad", dist: "~65 km · 1 hr drive", type: "Paper + Computer" },
-                  { centre: "IDP India — Vadodara", dist: "~120 km · 1.5 hr drive", type: "Paper + Computer" },
-                ].map((c, i) => (
+                  "IDP India — Ahmedabad",
+                  "British Council — Ahmedabad",
+                  "IDP India — Vadodara",
+                ].map((centre, i) => (
                   <div key={i} className="bg-blue-50 rounded-lg p-3 border border-blue-100">
-                    <div className="font-semibold text-blue-800">{c.centre}</div>
-                    <div className="text-gray-500 mt-0.5">{c.dist}</div>
-                    <div className="text-gray-400 mt-0.5">{c.type}</div>
+                    <div className="font-semibold text-blue-800">{centre}</div>
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-gray-400 mt-3">ANU Education advises on test date selection and registration for both IDP India and British Council. Computer-delivered IELTS gives results in 3–5 days.</p>
+              <p className="text-xs text-gray-400 mt-3">Test dates, formats and centre availability change. Confirm current details with the official IELTS booking provider (IDP or British Council) before planning your exam date. ANU Education can advise on test date selection and registration.</p>
             </div>
 
             {/* Google Map */}
             <div className="rounded-2xl overflow-hidden border border-blue-200 shadow-sm">
               <iframe
-                title="ANU Education Modasa — IELTS Coaching Centre Location"
+                title="ANU Education Modasa office location"
                 src="https://www.google.com/maps?q=23.4675584,73.3084437&z=15&output=embed"
                 width="100%" height="280" style={{ border: 0 }}
                 loading="lazy" allowFullScreen
@@ -699,7 +631,7 @@ export default function IELTSModasaClient() {
           {/* ══ FINAL CTA ══ */}
           <section className="bg-gradient-to-br from-blue-800 via-blue-700 to-green-700 text-white rounded-3xl p-12 text-center">
             <div className="text-5xl mb-4 float">🎯</div>
-            <h2 className="text-3xl font-bold mb-3">Join Modasa's Best IELTS Coaching Today</h2>
+            <h2 className="text-3xl font-bold mb-3">Start IELTS Preparation with ANU Education</h2>
             <p className="text-blue-100 mb-3 max-w-xl mx-auto">
               Live Beginner &amp; Advanced batches · 15 mock tests · Weekend Bonanza · Free study abroad counselling.
             </p>
@@ -727,19 +659,21 @@ export default function IELTSModasaClient() {
           <div className="text-center text-sm text-gray-500 border-t border-gray-100 pt-8">
             <p className="mb-1 font-medium text-gray-600">Related pages:</p>
             <p className="flex flex-wrap justify-center gap-x-3 gap-y-1">
-              <Link href="/test-prep/ielts-online" className="text-blue-600 hover:underline">IELTS Online Coaching</Link>
+              <Link href="/test-prep/ielts-online" className="text-blue-600 hover:underline">Live online classes across India</Link>
               <span>·</span>
-              <Link href="/test-prep/ielts-coaching-ahmedabad" className="text-blue-600 hover:underline">IELTS Coaching Ahmedabad</Link>
+              <Link href="/test-prep/ielts-coaching-india" className="text-blue-600 hover:underline">Compare course options</Link>
               <span>·</span>
-              <Link href="/test-prep/ielts-coaching-gandhinagar" className="text-blue-600 hover:underline">IELTS Coaching Gandhinagar</Link>
+              <Link href="/test-prep/ielts/ielts-coaching-ahmedabad" className="text-blue-600 hover:underline">Ahmedabad learners</Link>
+              <span>·</span>
+              <Link href="/test-prep/ielts-coaching-gandhinagar" className="text-blue-600 hover:underline">Gandhinagar learners</Link>
               <span>·</span>
               <Link href="/test-prep/pte" className="text-blue-600 hover:underline">PTE Coaching</Link>
               <span>·</span>
-              <Link href="/language/french" className="text-blue-600 hover:underline">French Language Course</Link>
+              <Link href="/languages/french" className="text-blue-600 hover:underline">French Language Course</Link>
               <span>·</span>
               <Link href="/study-in/canada" className="text-blue-600 hover:underline">Study in Canada</Link>
               <span>·</span>
-              <Link href="/study-abroad" className="text-blue-600 hover:underline">Study Abroad</Link>
+              <Link href="/services/visa-assistance" className="text-blue-600 hover:underline">Visa Assistance</Link>
               <span>·</span>
               <Link href="/contact" className="text-blue-600 hover:underline">Contact ANU Education</Link>
             </p>
