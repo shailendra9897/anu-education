@@ -216,24 +216,24 @@ test("India client pricing cards derive from PriceView constants", () => {
   assert.ok(/price: "₹0"/.test(client), "FREE Demo card stays at ₹0");
 });
 
-test("India client routes Self Preparation to All Timings and Champion to One Batch PayU", () => {
+test("India client routes Self Preparation to the Self Prep PayU link and Champion to One Batch PayU", () => {
   const client = readFileSync(
     path.join(ROOT, "app/test-prep/ielts-coaching-india/IELTSCoachingIndiaClient.tsx"),
     "utf8",
   );
   const oneBatchPayuUrl = "https://u.payu.in/PAYUMN/BIInlBUFpA9I";
-  const allTimingsPayuUrl = "https://u.payu.in/PAYUMN/wIuPM83kT5li";
+  const selfPrepPayuUrl = "https://u.payu.in/PAYUMN/uIqbwdNTKrTp";
   assert.ok(
     client.includes(oneBatchPayuUrl),
     "India page must use the Champion — One Batch PayU link for the Champion card",
   );
   assert.ok(
-    client.includes(allTimingsPayuUrl),
-    "India page must use the Champion — All Timings PayU link for the Self Preparation card",
+    client.includes(selfPrepPayuUrl),
+    "India page must use the ₹1,999 Self Prep PayU link for the Self Preparation card",
   );
   assert.ok(
-    !client.includes("https://u.payu.in/PAYUMN/uIqbwdNTKrTp"),
-    "India page must not use the Self Prep PayU link",
+    !client.includes("https://u.payu.in/PAYUMN/wIuPM83kT5li"),
+    "India page must not use the Champion — All Timings PayU link",
   );
   assert.equal(
     client.split("IELTS_CHAMPION_ONE_BATCH_PAYU_URL").length - 1,
@@ -241,9 +241,9 @@ test("India client routes Self Preparation to All Timings and Champion to One Ba
     "the One Batch constant is declared once and used by the Champion CTA",
   );
   assert.equal(
-    client.split("IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL").length - 1,
+    client.split("IELTS_SELF_PREP_PAYU_URL").length - 1,
     2,
-    "the All Timings constant is declared once and used by the Self Preparation CTA",
+    "the Self Prep constant is declared once and used by the Self Preparation CTA",
   );
   assert.doesNotMatch(client, /#checkout/);
   assert.doesNotMatch(client, /IELTSCheckoutPanel/);

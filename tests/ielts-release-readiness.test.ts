@@ -246,9 +246,9 @@ test("PayU destinations and Buy Now labels are preserved", () => {
   for (const page of PAGES) {
     const source = read(page.clientFile);
     if (page.key === "india") {
+      assert.ok(source.includes("https://u.payu.in/PAYUMN/uIqbwdNTKrTp"));
       assert.ok(source.includes("https://u.payu.in/PAYUMN/BIInlBUFpA9I"));
-      assert.ok(source.includes("https://u.payu.in/PAYUMN/wIuPM83kT5li"));
-      assert.ok(!source.includes("https://u.payu.in/PAYUMN/uIqbwdNTKrTp"));
+      assert.ok(!source.includes("https://u.payu.in/PAYUMN/wIuPM83kT5li"));
     } else {
       for (const url of allThree) {
         assert.ok(source.includes(url), `${page.key}: ${url}`);

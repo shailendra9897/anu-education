@@ -9,13 +9,13 @@ import {
 import { faqs } from "@/lib/data/faq/ielts-india";
 import IELTSStudentStories from "@/components/testimonials/IELTSStudentStories";
 
-// The India page's Champion card uses the fixed Champion — One Batch PayU
-// link; its Self Preparation CTA uses the fixed Champion — All Timings PayU
-// link. The retired on-page checkout is never used.
+// The India page's Self Preparation card uses the fixed Self Prep PayU link;
+// its Champion card uses the fixed Champion — One Batch PayU link. The
+// retired on-page checkout is never used.
+const IELTS_SELF_PREP_PAYU_URL =
+  "https://u.payu.in/PAYUMN/uIqbwdNTKrTp";
 const IELTS_CHAMPION_ONE_BATCH_PAYU_URL =
   "https://u.payu.in/PAYUMN/BIInlBUFpA9I";
-const IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL =
-  "https://u.payu.in/PAYUMN/wIuPM83kT5li";
 
 export default function IELTSCoachingPage() {
   return (
@@ -447,7 +447,7 @@ export default function IELTSCoachingPage() {
                       </a>
                     ) : plan.name === "Self Preparation" ? (
                       <a
-                        href={IELTS_CHAMPION_ALL_TIMINGS_PAYU_URL}
+                        href={IELTS_SELF_PREP_PAYU_URL}
                         aria-label={`Buy ${plan.name} — open the secure PayU payment page`}
                         className="inline-flex w-full items-center justify-center rounded-xl px-5 py-3 text-sm font-bold transition-colors bg-blue-700 text-white hover:bg-blue-800"
                       >

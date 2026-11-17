@@ -320,12 +320,11 @@ test("PayU destinations are preserved on every page", () => {
   for (const key of PAGE_KEYS) {
     const source = read(CLIENT_FILES[key]);
     if (key === "india") {
-      // The India page keeps its existing two destinations: Champion — One
-      // Batch for the Champion card and Champion — All Timings for Self
-      // Preparation. This asymmetry is an unresolved business item.
+      // The India page uses the ₹1,999 Self Prep link for the Self
+      // Preparation card and Champion — One Batch for the Champion card.
+      assert.ok(source.includes("https://u.payu.in/PAYUMN/uIqbwdNTKrTp"));
       assert.ok(source.includes("https://u.payu.in/PAYUMN/BIInlBUFpA9I"));
-      assert.ok(source.includes("https://u.payu.in/PAYUMN/wIuPM83kT5li"));
-      assert.ok(!source.includes("https://u.payu.in/PAYUMN/uIqbwdNTKrTp"));
+      assert.ok(!source.includes("https://u.payu.in/PAYUMN/wIuPM83kT5li"));
     } else {
       for (const url of allThree) {
         assert.ok(source.includes(url), `${key}: missing PayU link ${url}`);
