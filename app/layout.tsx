@@ -16,6 +16,7 @@ const inter = Inter({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://www.anuedu.in"),
   title: "Study Abroad & IELTS Coaching | Germany, UK, Canada – ANU Education",
   description:
     "Book free demo classes for IELTS & German language. Expert counselling for Study in Germany, UK, Canada & Europe. Start your international education journey with ANU Education.",
